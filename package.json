@@ -1,0 +1,25 @@
+{
+  "name": "snake-loop-competition",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "贪吃蛇竞赛 Web 游戏（Vite 静态应用）",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0 --port 4173",
+    "lint": "eslint src tests",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:e2e": "node --test tests/blackbox/*.test.cjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "eslint": "^9.17.0",
+    "globals": "^15.14.0",
+    "jsdom": "^25.0.1",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.5",
+    "vitest": "^2.1.8"
+  }
+}

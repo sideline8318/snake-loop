@@ -1,35 +1,31 @@
-# snake-loop
+# snake-loop-competition
 
-A project repository.
+贪吃蛇竞赛 Web 游戏。零后端纯前端静态应用，由 Vite 构建。
 
-## Getting Started
+## 玩法
 
-To get started with this project, clone the repository and follow the setup instructions below.
+用方向键 / WASD 控制蛇移动，吃食物得分，撞墙或撞自己结束。
 
-### Prerequisites
+- 空格暂停，R 重新开始
+- 每吃 5 个食物升一级，蛇速加快，分数递增
+- 最高分本地持久化（localStorage）
 
-- [List any system requirements or dependencies]
-
-### Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/sideline8318/snake-loop.git
-cd snake-loop
-
-# [Add installation steps]
-```
-
-## Usage
+## 开发
 
 ```bash
-# [Add usage examples]
+npm install
+npm run dev        # 本地开发
+npm run build      # 生产构建到 dist/
+npm run preview    # 预览构建产物（0.0.0.0:4173）
 ```
 
-## Contributing
+## 质量门禁
 
-Contributions are welcome! Please feel free to submit a pull request or open an issue if you have any questions or suggestions.
+```bash
+npm run lint       # eslint
+npm run typecheck  # tsc --noEmit
+npm run test       # vitest 单元测试（引擎/输入/存储/UI）
+npm run test:e2e   # 黑盒集成 + 静态服务测试（针对 dist/ 真实产物）
+```
 
-## License
-
-[Specify your license here]
+工作流标记：`snake-loop-competition`（流程 d138728f）。
