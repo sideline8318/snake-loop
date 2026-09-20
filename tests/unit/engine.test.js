@@ -176,6 +176,52 @@ describe('Engine', () => {
     expect(engine.scene).toBe(SCENES.GAME_OVER);
   });
 
+  it('player two self collision ends the game against its own body', () => {
+    const engine = fresh();
+    engine.pendingDirection = null;
+    // Player one is far away and harmless; player two is about to run into itself.
+    engine.snake = [{ x: 1, y: 1 }];
+    engine.rivalSnake = [
+      { x: 15, y: 10 },
+      { x: 16, y: 10 },
+      { x: 16, y: 9 },
+      { x: 15, y: 9 },
+    ];
+    engine.rivalDirection = { x: -1, y: 0 };
+    engine.rivalPendingDirection = { x: -1, y: 0 };
+    // next head of player two is (14,10); force a turn so the next head lands on (16,10)
+    engine.rivalSnake = [
+      { x: 15, y: 10 },
+      { x: 15, y: 11 },
+      { x: 16, y: 11 },
+      { x: 16, y: 10 },
+    ];
+    engine.rivalDirection = { x: 1, y: 0 };
+    engine.rivalPendingDirection = { x: 1, y: 0 };
+    expect(engine.step()).toBe('dead');
+    expect(engine.collisionReason).toBe('撞到自己');
+    expect(engine.scene).toBe(SCENES.GAME_OVER);
+  });
+
+  it('player two is not declared dead by player one body when it moves away', () => {
+    const engine = fresh();
+    engine.pendingDirection = null;
+    engine.snake = [
+      { x: 5, y: 5 },
+      { x: 5, y: 6 },
+      { x: 5, y: 7 },
+    ];
+    // player two sits next to, but not on, player one and moves away from it
+    engine.rivalSnake = [
+      { x: 8, y: 8 },
+      { x: 9, y: 8 },
+      { x: 10, y: 8 },
+    ];
+    engine.rivalDirection = { x: 0, y: 1 };
+    engine.rivalPendingDirection = { x: 0, y: 1 };
+    expect(engine.step()).not.toBe('dead');
+  });
+
   it('generateFood stays on-grid and never on the snake', () => {
     const engine = fresh();
     for (let i = 0; i < 200; i++) {

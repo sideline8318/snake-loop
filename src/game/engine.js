@@ -141,8 +141,13 @@ export class Engine {
     return cell.x < 0 || cell.x >= this.gridSize || cell.y < 0 || cell.y >= this.gridSize;
   }
 
-  isSelfCollision(cell) {
-    return this.occupies(cell, this.snake);
+  // Self-collision must be evaluated against the snake that is moving. The
+  // previous signature hard-coded `this.snake`, so player two's self-collision
+  // was tested against player one's body (AC-002 regression found by the
+  // deployment audit). Callers pass the body explicitly; default keeps the
+  // player-one meaning for any legacy caller.
+  isSelfCollision(cell, snake = this.snake) {
+    return this.occupies(cell, snake);
   }
 
   occupies(cell, snake) {
