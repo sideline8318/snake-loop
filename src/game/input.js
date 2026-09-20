@@ -8,6 +8,7 @@ const DIRECTIONS = {
 };
 
 const DIRECTION_KEYS = new Set(['up', 'down', 'left', 'right']);
+const RIVAL_KEYS = new Set(['w', 'a', 's', 'd']);
 
 export function mapKey(key) {
   switch (key) {
@@ -51,7 +52,8 @@ export function createInput({ engine, ui }) {
       if (isDirection) {
         event.preventDefault();
         if (engine.scene === SCENES.PLAYING) {
-          engine.setDirection(DIRECTIONS[code]);
+          const playerId = RIVAL_KEYS.has(event.key.toLowerCase()) ? 'player2' : 'player1';
+          engine.setPlayerDirection(playerId, DIRECTIONS[code]);
         }
         return;
       }

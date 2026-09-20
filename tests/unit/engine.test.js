@@ -82,6 +82,30 @@ describe('Engine', () => {
     expect(engine.snake[0]).toEqual({ x: 10, y: 9 });
   });
 
+  it('keeps player two movement and score independent', () => {
+    const engine = fresh();
+    engine.setPlayerDirection('player2', { x: 0, y: 1 });
+    expect(engine.rivalPendingDirection).toEqual({ x: 0, y: 1 });
+    engine.food = { x: 10, y: 16 };
+
+    expect(engine.step()).toBe('ate');
+    expect(engine.rivalSnake[0]).toEqual({ x: 10, y: 16 });
+    expect(engine.scores).toEqual({ player1: 0, player2: 10 });
+    expect(engine.score).toBe(10);
+  });
+
+  it('ends the match when the two snakes collide', () => {
+    const engine = fresh();
+    engine.snake = [{ x: 5, y: 5 }];
+    engine.rivalSnake = [{ x: 7, y: 5 }];
+    engine.direction = { x: 1, y: 0 };
+    engine.rivalDirection = { x: -1, y: 0 };
+
+    expect(engine.step()).toBe('dead');
+    expect(engine.collisionReason).toBe('蛇身相撞');
+    expect(engine.scene).toBe(SCENES.GAME_OVER);
+  });
+
   it('ignores setDirection outside the playing scene', () => {
     const idle = new Engine();
     idle.setDirection({ x: 0, y: -1 });

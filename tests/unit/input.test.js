@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { mapKey } from '../../src/game/input.js';
+import { createInput, mapKey } from '../../src/game/input.js';
 
 describe('mapKey (WASD + arrow + control key normalisation) [regression for bug A]', () => {
   it('maps arrow keys to directions', () => {
@@ -31,5 +31,38 @@ describe('mapKey (WASD + arrow + control key normalisation) [regression for bug 
   it('passes unrelated keys through lowercased', () => {
     expect(mapKey('G')).toBe('g');
     expect(mapKey('?')).toBe('?');
+  });
+
+  it('routes arrow keys to player one and WASD to player two', () => {
+    const listeners = {};
+    const originalDocument = globalThis.document;
+    globalThis.document = {
+      addEventListener(type, listener) {
+        listeners[type] = listener;
+      },
+      removeEventListener() {},
+      querySelectorAll() {
+        return [];
+      },
+    };
+    const calls = [];
+    const engine = {
+      scene: 'playing',
+      setPlayerDirection(playerId, direction) {
+        calls.push({ playerId, direction });
+      },
+    };
+
+    try {
+      createInput({ engine, ui: { togglePause() {}, restart() {} } }).attach();
+      listeners.keydown({ key: 'ArrowUp', preventDefault() {} });
+      listeners.keydown({ key: 'w', preventDefault() {} });
+      expect(calls).toEqual([
+        { playerId: 'player1', direction: { x: 0, y: -1 } },
+        { playerId: 'player2', direction: { x: 0, y: -1 } },
+      ]);
+    } finally {
+      globalThis.document = originalDocument;
+    }
   });
 });
