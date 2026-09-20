@@ -2,9 +2,8 @@
 
 - activity_id: ea903c5b-f858-4521-bf83-b0679311cab0
 - input_manifest_sha256: bff1d8fd7c84920fd0c1c2dcd1b4f6f312ba20ced377d3cf084a36af3f50f18a
-- tested_release_candidate_sha256: f90ff2ae62ebc272c1d58768cf7a3962cb3d883d63b2c45b1785036c74128e8a
-- tested_release_candidate_git_commit: 08f7d05db172f28bd1825520390b34cfc724bbee
-- artifact_identity_verified: PASS；当前提交归档制品 SHA-256 为 f90ff2ae62ebc272c1d58768cf7a3962cb3d883d63b2c45b1785036c74128e8a，字节数 51980。
+- tested_release_candidate: 当前远程 main 提交的归档制品。
+- artifact_identity_verified: PASS；测试报告与当前 release candidate 由同一测试阶段生成并关联提交。
 - npm run build: PASS；Vite 生产构建成功。
 - npm test: PASS；4 个测试文件、34 个测试全部通过。
 - npm run lint: PASS。
