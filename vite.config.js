@@ -9,6 +9,6 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     port: 8080,
-    allowedHosts: ['.monkeycode-ai.online'],
+    allowedHosts: ['.monkeycode-ai.online', '.side419.cn'],
   },
 });
