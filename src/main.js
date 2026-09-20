@@ -23,6 +23,8 @@ function initGame() {
     engine,
     dom: {
       score: byId('score'),
+      player1Score: byId('player1Score'),
+      player2Score: byId('player2Score'),
       level: byId('level'),
       highScore: byId('highScore'),
       pauseBtn: byId('pauseBtn'),
@@ -34,6 +36,7 @@ function initGame() {
       recordBadge: byId('recordBadge'),
       finalScore: byId('finalScore'),
       finalLevel: byId('finalLevel'),
+      finalWinner: byId('finalWinner'),
     },
   });
   ui.init();
@@ -50,7 +53,7 @@ function initGame() {
     }
     ui.refreshScores();
     renderer.draw(engine);
-    const delay = engine.scene === SCENES.PLAYING ? engine.speed : 200;
+     const delay = engine.scene === SCENES.PLAYING ? engine.speed : 200;
     setTimeout(loop, delay);
   }
   loop();

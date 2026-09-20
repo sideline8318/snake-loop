@@ -5,14 +5,22 @@ export class Engine {
     this.gridSize = CONFIG.GRID_SIZE;
     this.scene = SCENES.MENU;
     this.snake = [];
+    this.rivalSnake = [];
     this.direction = { ...DIRECTIONS.RIGHT };
+    this.rivalDirection = { ...DIRECTIONS.LEFT };
     this.nextDirection = { ...DIRECTIONS.RIGHT };
+    this.rivalNextDirection = { ...DIRECTIONS.LEFT };
     this.food = { x: 0, y: 0 };
     this.score = 0;
+    this.rivalScore = 0;
+    this.scores = { player1: 0, player2: 0 };
     this.level = 1;
     this.foodEaten = 0;
     this.speed = CONFIG.INITIAL_SPEED;
     this.pendingDirection = null;
+    this.rivalPendingDirection = null;
+    this.winner = null;
+    this.collisionReason = '';
   }
 
   start() {
@@ -27,24 +35,39 @@ export class Engine {
     for (let i = 0; i < INITIAL_SNAKE_LENGTH; i++) {
       this.snake.push({ x: center - i, y: center });
     }
+    this.rivalSnake = [];
+    for (let i = 0; i < INITIAL_SNAKE_LENGTH; i++) {
+      this.rivalSnake.push({ x: center + i, y: center + 5 });
+    }
     this.direction = { ...DIRECTIONS.RIGHT };
+    this.rivalDirection = { ...DIRECTIONS.LEFT };
     this.nextDirection = { ...DIRECTIONS.RIGHT };
+    this.rivalNextDirection = { ...DIRECTIONS.LEFT };
     this.pendingDirection = null;
+    this.rivalPendingDirection = null;
     this.score = 0;
+    this.rivalScore = 0;
+    this.scores = { player1: 0, player2: 0 };
     this.level = 1;
     this.foodEaten = 0;
     this.speed = CONFIG.INITIAL_SPEED;
+    this.winner = null;
+    this.collisionReason = '';
     this.food = this.generateFood();
   }
 
   setDirection(dir) {
-    if (this.scene === SCENES.PLAYING) {
-      if (this.snake.length > 1 && isReverse(dir, this.direction)) {
-        // reverse direction rejected while moving
-      } else {
-        this.pendingDirection = dir;
-      }
-    }
+    this.setPlayerDirection('player1', dir);
+  }
+
+  setPlayerDirection(playerId, dir) {
+    if (this.scene !== SCENES.PLAYING) return;
+    const isPlayerOne = playerId === 'player1';
+    const snake = isPlayerOne ? this.snake : this.rivalSnake;
+    const direction = isPlayerOne ? this.direction : this.rivalDirection;
+    if (snake.length > 1 && isReverse(dir, direction)) return;
+    if (isPlayerOne) this.pendingDirection = dir;
+    else this.rivalPendingDirection = dir;
   }
 
   step() {
@@ -53,28 +76,56 @@ export class Engine {
       this.direction = this.pendingDirection;
       this.pendingDirection = null;
     }
-    const head = this.snake[0];
-    const next = { x: head.x + this.direction.x, y: head.y + this.direction.y };
-    if (this.isWallCollision(next)) {
-      this.scene = SCENES.GAME_OVER;
-      return 'dead';
+    if (this.rivalPendingDirection) {
+      this.rivalDirection = this.rivalPendingDirection;
+      this.rivalPendingDirection = null;
     }
-    if (this.isSelfCollision(next)) {
-      this.scene = SCENES.GAME_OVER;
-      return 'dead';
+    const nextOne = this.nextHead(this.snake, this.direction);
+    const nextTwo = this.nextHead(this.rivalSnake, this.rivalDirection);
+    if (this.isWallCollision(nextOne) || this.isWallCollision(nextTwo)) {
+      return this.endGame('撞墙');
     }
-    this.snake.unshift(next);
-    if (next.x === this.food.x && next.y === this.food.y) {
-      this.eatFood();
-      return 'ate';
+    if (this.isSelfCollision(nextOne, this.snake) || this.isSelfCollision(nextTwo, this.rivalSnake)) {
+      return this.endGame('撞到自己');
     }
-    this.snake.pop();
-    return 'none';
+    if (this.occupies(nextOne, this.rivalSnake) || this.occupies(nextTwo, this.snake) ||
+        (nextOne.x === nextTwo.x && nextOne.y === nextTwo.y)) {
+      return this.endGame('蛇身相撞');
+    }
+    const ateOne = this.sameCell(nextOne, this.food);
+    const ateTwo = this.sameCell(nextTwo, this.food);
+    this.advance(this.snake, nextOne, ateOne);
+    this.advance(this.rivalSnake, nextTwo, ateTwo);
+    if (ateOne) this.eatFood('player1');
+    else if (ateTwo) this.eatFood('player2');
+    return ateOne || ateTwo ? 'ate' : 'none';
   }
 
-  eatFood() {
-    this.score += this.eatScore();
+  nextHead(snake, direction) {
+    const head = snake[0];
+    return { x: head.x + direction.x, y: head.y + direction.y };
+  }
+
+  advance(snake, next, grows) {
+    snake.unshift(next);
+    if (!grows) snake.pop();
+  }
+
+  endGame(reason) {
+    this.scene = SCENES.GAME_OVER;
+    this.collisionReason = reason;
+    this.winner = this.scores.player1 === this.scores.player2 ? '平局' :
+      this.scores.player1 > this.scores.player2 ? '玩家 1 获胜' : '玩家 2 获胜';
+    return 'dead';
+  }
+
+  eatFood(playerId = 'player1') {
+    const points = this.eatScore();
+    this.scores[playerId] += points;
+    this.score = this.scores.player1 + this.scores.player2;
+    this.rivalScore = this.scores.player2;
     this.foodEaten += 1;
+    this.totalFoodEaten += 1;
     if (this.foodEaten % CONFIG.FOODS_PER_LEVEL === 0) {
       this.level += 1;
       this.speed = Math.max(CONFIG.MIN_SPEED, CONFIG.INITIAL_SPEED - (this.level - 1) * CONFIG.SPEED_STEP);
@@ -91,12 +142,20 @@ export class Engine {
   }
 
   isSelfCollision(cell) {
-    return this.snake.some((segment) => segment.x === cell.x && segment.y === cell.y);
+    return this.occupies(cell, this.snake);
+  }
+
+  occupies(cell, snake) {
+    return snake.some((segment) => this.sameCell(cell, segment));
+  }
+
+  sameCell(a, b) {
+    return a.x === b.x && a.y === b.y;
   }
 
   generateFood() {
     const total = this.gridSize * this.gridSize;
-    const occupied = new Set(this.snake.map((s) => s.y * this.gridSize + s.x));
+    const occupied = new Set([...this.snake, ...this.rivalSnake].map((s) => s.y * this.gridSize + s.x));
     if (occupied.size >= total) return { x: -1, y: -1 };
     let index = 0;
     do {
@@ -116,6 +175,7 @@ export class Engine {
   toMenu() {
     this.scene = SCENES.MENU;
     this.pendingDirection = null;
+    this.rivalPendingDirection = null;
   }
 
   get isGameOver() {

@@ -6,6 +6,7 @@ export const CONFIG = {
   SPEED_STEP: 8,
   FOODS_PER_LEVEL: 5,
   FOOD_SCORE: 10,
+  PLAYER_COUNT: 2,
 };
 
 export const SCENES = {
@@ -16,6 +17,9 @@ export const SCENES = {
 };
 
 export const DIRECTIONS = {
+  UP: { x: 0, y: -1 },
+  DOWN: { x: 0, y: 1 },
+  LEFT: { x: -1, y: 0 },
   RIGHT: { x: 1, y: 0 },
 };
 

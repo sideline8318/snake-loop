@@ -22,7 +22,7 @@ export class UI {
 
   startGame() {
     this.engine.start();
-    this.dom.gameOverModal.classList.remove('show');
+    this.dom.gameOverModal.classList.remove('show', 'hidden');
     this.dom.menuScreen.classList.add('hidden');
     this.dom.pauseBtn.textContent = '暂停';
     this.refreshScores();
@@ -42,6 +42,7 @@ export class UI {
   restart() {
     this.engine.toMenu();
     this.dom.gameOverModal.classList.remove('show');
+    this.dom.gameOverModal.classList.add('hidden');
     this.dom.menuScreen.classList.remove('hidden');
     this.dom.pauseBtn.textContent = '暂停';
     this.refreshScores();
@@ -50,12 +51,14 @@ export class UI {
   onGameOver() {
     this.dom.finalScore.textContent = String(this.engine.score);
     this.dom.finalLevel.textContent = String(this.engine.level);
+    if (this.dom.finalWinner) this.dom.finalWinner.textContent = this.engine.winner || '对战结束';
     if (this.engine.score > this.highScore) {
       this.highScore = saveHighScore(this.engine.score);
       this.dom.recordBadge.classList.remove('hidden');
     } else {
       this.dom.recordBadge.classList.add('hidden');
     }
+    this.dom.gameOverModal.classList.remove('hidden');
     this.dom.gameOverModal.classList.add('show');
     this.dom.pauseBtn.textContent = '暂停';
   }
@@ -65,5 +68,7 @@ export class UI {
     dom.score.textContent = String(engine.score);
     dom.level.textContent = String(engine.level);
     dom.highScore.textContent = String(this.highScore);
+    if (dom.player1Score) dom.player1Score.textContent = String(engine.scores.player1);
+    if (dom.player2Score) dom.player2Score.textContent = String(engine.scores.player2);
   }
 }

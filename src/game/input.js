@@ -68,6 +68,12 @@ export function createInput({ engine, ui }) {
 
   function attach() {
     document.addEventListener('keydown', onKeyDown);
+    document.querySelectorAll('[data-direction]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const code = button.dataset.direction;
+        if (DIRECTION_KEYS.has(code)) engine.setDirection(DIRECTIONS[code]);
+      });
+    });
   }
 
   function detach() {

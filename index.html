@@ -3,19 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="贪吃蛇竞赛 Web 游戏" />
+  <meta name="description" content="Web 端多人同屏贪吃蛇大战" />
   <meta name="workflow-marker" content="snake-loop-competition" />
-  <title>贪吃蛇竞赛</title>
+  <title>Web版多用户同屏贪吃蛇大战｜贪吃蛇竞赛</title>
   <script type="module" src="/src/main.js"></script>
 </head>
 <body>
   <div id="app">
+    <span id="highScore" hidden>0</span>
     <header class="hud">
-      <h1 class="title">贪吃蛇竞赛</h1>
+      <div class="eyebrow">REAL-TIME ARCADE / 02 PLAYERS</div>
+      <h1 class="title">Web版多用户同屏贪吃蛇大战</h1>
       <div class="stats">
-        <div class="stat"><span class="label">分数</span><span id="score" class="value">0</span></div>
-        <div class="stat"><span class="label">等级</span><span id="level" class="value">1</span></div>
-        <div class="stat"><span class="label">最高分</span><span id="highScore" class="value">0</span></div>
+        <div class="stat player-one"><span class="label">玩家 1 / 绿</span><span id="player1Score" class="value">0</span></div>
+        <div class="stat"><span class="label">总分</span><span id="score" class="value">0</span><small>等级 <span id="level">1</span></small></div>
+        <div class="stat player-two"><span class="label">玩家 2 / 金</span><span id="player2Score" class="value">0</span></div>
       </div>
       <div class="controls">
         <button id="pauseBtn" class="btn" type="button">暂停</button>
@@ -24,20 +26,30 @@
     </header>
 
     <main class="stage">
-      <canvas id="gameCanvas" width="480" height="480" aria-label="贪吃蛇游戏画布"></canvas>
+      <div class="canvas-wrap">
+        <canvas id="gameCanvas" width="480" height="480" aria-label="多人同屏贪吃蛇游戏画布"></canvas>
+        <div class="arena-tag">LIVE ARENA <span></span></div>
+      </div>
+
+      <section class="mobile-controls" aria-label="触屏方向控制">
+        <button class="direction-btn up" data-direction="up" type="button" aria-label="向上">↑</button>
+        <div><button class="direction-btn" data-direction="left" type="button" aria-label="向左">←</button><button class="direction-btn" data-direction="down" type="button" aria-label="向下">↓</button><button class="direction-btn" data-direction="right" type="button" aria-label="向右">→</button></div>
+      </section>
 
       <section id="menuScreen" class="overlay">
         <div class="panel">
-          <h2>贪吃蛇竞赛</h2>
-          <p>用方向键 / WASD 控制蛇移动，吃食物得分，撞墙或撞自己结束。</p>
-          <p>空格暂停，R 重新开始。</p>
+          <p class="panel-kicker">TWO SNAKES. ONE ARENA.</p>
+          <h2>准备开战</h2>
+          <p>玩家 1 使用方向键或下方控制盘，玩家 2 使用 WASD。吃到能量点获得分数，撞墙、撞身或相撞都会结束比赛。</p>
+          <p class="key-hint">SPACE 暂停 · R 重新开始</p>
           <button id="playBtn" class="btn primary" type="button">开始游戏</button>
         </div>
       </section>
 
       <div id="gameOverModal" class="overlay hidden" role="dialog" aria-modal="true" aria-label="游戏结束">
         <div class="panel">
-          <h2>游戏结束</h2>
+          <p class="panel-kicker">MATCH COMPLETE</p>
+          <h2 id="finalWinner">对战结束</h2>
           <div class="result-row">
             <span>得分 <strong id="finalScore">0</strong></span>
             <span>等级 <strong id="finalLevel">1</strong></span>
