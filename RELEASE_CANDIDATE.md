@@ -1,7 +1,7 @@
 # Release Candidate
 
-- activity_id: 31c634bc-5a1b-4388-8dc4-39e037a4168e
-- stage_run_id: 3c28c054-36b3-4ddf-a3b6-c92e4719c74b
+- activity_id: 1bd7c540-3774-4ea8-9516-7e8d78a3ca5b
+- stage_run_id: 669824d4-22e9-4a12-87fa-682718231324
 - workflow_id: ce72a1f3-cc69-43e1-af98-200903a59cd9
 - input_manifest_sha256: dc5e70b9219596f6b942d9e6d87f95655d19d92278b5d9c53b8e716d6d65a41c
 - parent_release_candidate_sha256: 2d72c595c8577c2a6e17028f930df079ae591ce5713518a4be434aae57b89140
