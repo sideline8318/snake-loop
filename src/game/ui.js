@@ -41,6 +41,7 @@ export class UI {
   }
 
   restart() {
+    this.engine.resetState();
     this.engine.toMenu();
     this.dom.gameOverModal.classList.remove('show');
     this.dom.gameOverModal.classList.add('hidden');

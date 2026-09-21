@@ -46,8 +46,8 @@ test('serves the single-page application over HTTP with correct types', async ()
   assert.match(cssRes.type, /text\/css/);
   const body = html.body.toString('utf8');
   assert.match(body, /snake-loop-competition/);
-    assert.match(body, /54d0b24f-1b46-4251-a80f-06574a15f631/);
-    assert.match(body, /Web版多用户同屏贪吃蛇大战/);
+  assert.match(body, /82cd3989-8762-4d92-9ad5-8f0218ce2863/);
+  assert.match(body, /Web版多用户同屏贪吃蛇大战/);
 });
 
 test('all assets referenced by index.html resolve 200', async () => {

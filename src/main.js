@@ -52,7 +52,7 @@ function initGame() {
     }
     ui.refreshScores();
     renderer.draw(engine);
-     const delay = engine.scene === SCENES.PLAYING ? engine.speed : 200;
+    const delay = engine.scene === SCENES.PLAYING ? engine.speed : 200;
     setTimeout(loop, delay);
   }
   loop();

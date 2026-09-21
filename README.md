@@ -28,6 +28,6 @@ npm run test       # vitest 单元测试（引擎/输入/存储/UI）
 npm run test:e2e   # 黑盒集成 + 静态服务测试（针对 dist/ 真实产物）
 ```
 
-用户可读项目标题：`E2E Git Identity Closure 20260921`
+用户可读项目标题：`Web版多用户同屏贪吃蛇大战 · postdeploy 893a5b1f`
 
-工作流标记：`snake-loop-competition`；当前 Workflow：`0f819d33-4d58-4982-bf1a-e3a2e53e03c5`。
+工作流标记：`snake-loop-competition`；当前 Workflow：`82cd3989-8762-4d92-9ad5-8f0218ce2863`。
