@@ -116,10 +116,11 @@ async function createGameWindow({ base = 'http://127.0.0.1:8541', mathRandom, lo
   return dom;
 }
 
-function lastHeadDraw(ctxLog) {
+function lastHeadDraw(ctxLog, colors = ['#7cf7c5', '#00e68a']) {
+  const headColors = new Set(colors);
   for (let i = ctxLog.length - 1; i >= 0; i--) {
     const r = ctxLog[i];
-    if (r.op === 'fillRect' && r.fillStyle === '#00e68a') return r;
+    if (r.op === 'fillRect' && headColors.has(r.fillStyle)) return r;
   }
   return null;
 }

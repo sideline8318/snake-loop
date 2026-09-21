@@ -15,7 +15,7 @@ function detectInsideSegment(seg) {
   };
   const cfgMatch = m(/const ([a-zA-Z])=\{GRID_SIZE:20/, 'cfg const');
   const scenesMatch = m(/([a-zA-Z])=\{MENU:"menu",PLAYING:"playing",PAUSED:"paused",GAME_OVER:"gameOver"\}/, 'scenes const');
-  const dirsMatch = m(/([a-zA-Z])=\{RIGHT:\{x:1,y:0\}\}/, 'dirs const');
+  const dirsMatch = m(/([a-zA-Z])=\{LEFT:\{x:-1,y:0\},RIGHT:\{x:1,y:0\}\}/, 'dirs const');
   const keyMatch = m(/([a-zA-Z])="snake-loop-high-score"/, 'storage key');
   const revMatch = m(/function ([a-zA-Z])\([a-zA-Z],[a-zA-Z]\)\{return [a-zA-Z]\.x\+[a-zA-Z]\.x===0&&[a-zA-Z]\.y\+[a-zA-Z]\.y===0\}/, 'isReverse fn');
   const engMatch = m(/class ([A-Z])\{constructor\(\)\{this\.gridSize=/, 'engine class');
