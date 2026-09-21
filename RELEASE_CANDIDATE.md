@@ -8,5 +8,5 @@
 - acceptance_report: ACCEPTANCE_REPORT.md；最终 SHA-256 由本阶段 artifact manifest 登记。
 - release_scope: 验收阶段确认标题、双玩家同屏、方向键与屏幕按钮、计分、碰撞结束和重新开始闭环。
 - acceptance_preview: 由本阶段 ActivityResult 登记
-- source_head_before_development: e3f8566
+- source_head_before_development: 1e553bb
 - git_commit_sha: 由本阶段 artifact manifest 登记推送后的提交 SHA。
