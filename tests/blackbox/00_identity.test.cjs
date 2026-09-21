@@ -28,10 +28,10 @@ test('built dist exists with correct layout', () => {
 
 test('shipped markup carries workflow markers', () => {
   const html = fs.readFileSync(path.join(DIST, 'index.html'), 'utf8');
-  assert.match(html, /snake-loop-competition/);
+  assert.match(html, /Web版多用户同屏贪吃蛇大战 · postdeploy 893a5b1f/);
   assert.match(html, new RegExp(WORKFLOW_ID));
   assert.match(html, /<title>Web版多用户同屏贪吃蛇大战 · postdeploy 893a5b1f<\/title>/);
-  assert.match(html, /<h1 class="title">Web版多用户同屏贪吃蛇大战<\/h1>/);
+  assert.match(html, /<h1 class="title">Web版多用户同屏贪吃蛇大战 · postdeploy 893a5b1f<\/h1>/);
 });
 
 test('built bundle is valid JS and contains engine + storage key', () => {
