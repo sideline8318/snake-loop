@@ -30,8 +30,8 @@ export class Renderer {
       this.canvas.height = size * dpr;
       this.ctx.scale(dpr, dpr);
       this.cellSize = Math.floor(size / CONFIG.GRID_SIZE);
-      this.canvas.style.width = `${size}px`;
-      this.canvas.style.height = `${size}px`;
+      this.canvas.style.width = '100%';
+      this.canvas.style.height = 'auto';
     }
     return dpr;
   }

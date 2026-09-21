@@ -47,8 +47,8 @@ button { font: inherit; }
 .stat small { margin-left: 7px; color: var(--muted); font-size: 0.72rem; }
 
 .stage { position: relative; overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius); background: #0c110f; box-shadow: 0 24px 80px rgba(0,0,0,0.35); }
-.canvas-wrap { position: relative; width: min(100%, 680px); margin: 0 auto; }
-#gameCanvas { display: block; width: 100%; height: auto; image-rendering: pixelated; }
+.canvas-wrap { position: relative; width: min(100%, 680px); max-width: 100%; margin: 0 auto; }
+#gameCanvas { display: block; width: 100%; max-width: 100%; height: auto; image-rendering: pixelated; }
 .arena-tag { position: absolute; top: 15px; left: 17px; color: rgba(244,241,232,0.6); font-size: 0.62rem; }
 .arena-tag span { display: inline-block; width: 6px; height: 6px; margin-left: 5px; border-radius: 50%; background: var(--pink); box-shadow: 0 0 12px var(--pink); }
 

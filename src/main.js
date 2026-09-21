@@ -1,4 +1,3 @@
-import './styles/style.css';
 import { Engine } from './game/engine.js';
 import { Renderer } from './game/render.js';
 import { UI } from './game/ui.js';
