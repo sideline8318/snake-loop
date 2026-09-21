@@ -65,4 +65,34 @@ describe('mapKey (WASD + arrow + control key normalisation) [regression for bug 
       globalThis.document = originalDocument;
     }
   });
+
+  it('routes screen buttons to the declared player', () => {
+    const listeners = [];
+    const originalDocument = globalThis.document;
+    const calls = [];
+    globalThis.document = {
+      addEventListener() {},
+      removeEventListener() {},
+      querySelectorAll() {
+        return [{
+          dataset: { player: 'player2', direction: 'left' },
+          addEventListener(_type, listener) { listeners.push(listener); },
+        }];
+      },
+    };
+    const engine = {
+      scene: 'playing',
+      setPlayerDirection(playerId, direction) {
+        calls.push({ playerId, direction });
+      },
+    };
+
+    try {
+      createInput({ engine, ui: { togglePause() {}, restart() {} } }).attach();
+      listeners[0]({ preventDefault() {} });
+      expect(calls).toEqual([{ playerId: 'player2', direction: { x: -1, y: 0 } }]);
+    } finally {
+      globalThis.document = originalDocument;
+    }
+  });
 });

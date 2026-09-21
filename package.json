@@ -6,15 +6,20 @@
   "description": "贪吃蛇竞赛 Web 游戏（Vite 静态应用）",
   "scripts": {
     "dev": "vite",
+    "prebuild": "node scripts/ensure-rollup-wasm.cjs",
     "build": "vite build",
+    "predev": "node scripts/ensure-rollup-wasm.cjs",
     "preview": "vite preview --host 0.0.0.0 --port 4173",
+    "prepreview": "node scripts/ensure-rollup-wasm.cjs",
     "lint": "eslint src tests",
     "typecheck": "tsc --noEmit",
+    "pretest": "node scripts/ensure-rollup-wasm.cjs",
     "test": "vitest run",
     "test:e2e": "node --test tests/blackbox/*.test.cjs"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
+    "@rollup/wasm-node": "^4.63.1",
     "eslint": "^9.17.0",
     "globals": "^15.14.0",
     "jsdom": "^25.0.1",

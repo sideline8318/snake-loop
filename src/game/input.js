@@ -74,7 +74,8 @@ export function createInput({ engine, ui }) {
       button.addEventListener('pointerdown', (event) => {
         event.preventDefault();
         const code = button.dataset.direction;
-        if (DIRECTION_KEYS.has(code)) engine.setDirection(DIRECTIONS[code]);
+        const playerId = button.dataset.player || 'player1';
+        if (DIRECTION_KEYS.has(code)) engine.setPlayerDirection(playerId, DIRECTIONS[code]);
       });
     });
   }
