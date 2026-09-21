@@ -6,6 +6,7 @@
 - input_manifest_sha256: dc5e70b9219596f6b942d9e6d87f95655d19d92278b5d9c53b8e716d6d65a41c
 - parent_artifact_sha256: 2d72c595c8577c2a6e17028f930df079ae591ce5713518a4be434aae57b89140
 - parent_deployment_artifact_sha256: 3046ee483af333b4800e633c5bf95883fde8cd889b0f6cf377863f5b23715df3
+- remote_head_before_final_acceptance: b4625a75a4ce8f512edbbcc8b4ca7b309eb17c14
 
 ## 验收结论
 
