@@ -16,6 +16,7 @@ export class Engine {
     this.scores = { player1: 0, player2: 0 };
     this.level = 1;
     this.foodEaten = 0;
+    this.totalFoodEaten = 0;
     this.speed = CONFIG.INITIAL_SPEED;
     this.pendingDirection = null;
     this.rivalPendingDirection = null;
@@ -50,6 +51,7 @@ export class Engine {
     this.scores = { player1: 0, player2: 0 };
     this.level = 1;
     this.foodEaten = 0;
+    this.totalFoodEaten = 0;
     this.speed = CONFIG.INITIAL_SPEED;
     this.winner = null;
     this.collisionReason = '';

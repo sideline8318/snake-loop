@@ -36,6 +36,7 @@ describe('Engine', () => {
     expect(engine.score).toBe(0);
     expect(engine.level).toBe(1);
     expect(engine.foodEaten).toBe(0);
+    expect(engine.totalFoodEaten).toBe(0);
     expect(engine.speed).toBe(CONFIG.INITIAL_SPEED);
     expect(engine.pendingDirection).toBeNull();
   });
@@ -123,6 +124,7 @@ describe('Engine', () => {
     expect(engine.snake.length).toBe(4);
     expect(engine.score).toBe(10);
     expect(engine.foodEaten).toBe(1);
+    expect(engine.totalFoodEaten).toBe(1);
     expect(engine.level).toBe(1);
     const onSnake = engine.snake.some((s) => s.x === engine.food.x && s.y === engine.food.y);
     expect(onSnake).toBe(false);
