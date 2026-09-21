@@ -1,12 +1,12 @@
 # Release Candidate
 
-- activity_id: 1bd7c540-3774-4ea8-9516-7e8d78a3ca5b
-- stage_run_id: 669824d4-22e9-4a12-87fa-682718231324
-- workflow_id: ce72a1f3-cc69-43e1-af98-200903a59cd9
-- input_manifest_sha256: dc5e70b9219596f6b942d9e6d87f95655d19d92278b5d9c53b8e716d6d65a41c
-- parent_release_candidate_sha256: 2d72c595c8577c2a6e17028f930df079ae591ce5713518a4be434aae57b89140
+- activity_id: f9b5cd29-479d-4187-baf4-ac779d1aa574
+- stage_run_id: 0e9332c7-b77b-49b2-881b-17b6440cf0d1
+- workflow_id: 0f819d33-4d58-4982-bf1a-e3a2e53e03c5
+- input_manifest_sha256: d2b76143a2f2dbf6d747c47f4e9aa15f167b02e958ee480224d7079e3bcee6cc
+- parent_release_candidate_sha256: 25661a5034d3b254a9ca719a6e6d38c40131ec7771bbf3cda77ba300e424ba04
 - acceptance_report: ACCEPTANCE_REPORT.md；最终 SHA-256 由本阶段 artifact manifest 登记。
 - release_scope: 验收阶段确认标题、双玩家同屏、方向键与屏幕按钮、计分、碰撞结束和重新开始闭环。
-- acceptance_preview: https://preview.mcode.side419.cn:30029
-- source_head_before_acceptance: 6c2ed1a2a9f34ab02b81c329968f6b2b3239b5c5
+- acceptance_preview: 由本阶段 ActivityResult 登记
+- source_head_before_development: e3f8566
 - git_commit_sha: 由本阶段 artifact manifest 登记推送后的提交 SHA。
