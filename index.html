@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b1220" />
+    <title>Snake Arena / 竞速竞技场</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <span class="sr-only" data-workflow-marker="6b06ba62-a7bf-471c-90ec-9acd37811162">6b06ba62-a7bf-471c-90ec-9acd37811162</span>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="Snake Arena 首页"><span class="brand-mark">S</span><span>snake<span class="accent">/</span>arena</span></a>
+        <div class="topbar-meta"><span class="live-dot"></span><span>SEASON 04</span><span class="divider"></span><span>RANKED PLAY</span></div>
+        <button class="profile-button" type="button"><span class="avatar">YOU</span><span>访客选手</span><span class="chevron">⌄</span></button>
+      </header>
+
+      <main class="content-grid">
+        <aside class="sidebar">
+          <div class="eyebrow">PLAYGROUND</div>
+          <h1>选择你的<br /><em>战场。</em></h1>
+          <p class="intro">快一点，准一点。每一步都在刷新你的极限。</p>
+          <div class="mode-list">
+            <button class="mode-card active" type="button" data-mode="solo"><span class="mode-icon">↗</span><span><strong>单人冲刺</strong><small>SOLO SPRINT</small></span><span class="arrow">→</span></button>
+            <button class="mode-card" type="button" data-mode="duo"><span class="mode-icon">◎</span><span><strong>双人对决</strong><small>LOCAL DUEL</small></span><span class="arrow">→</span></button>
+            <button class="mode-card" type="button" data-mode="ai"><span class="mode-icon">✦</span><span><strong>AI 挑战</strong><small>VS ADAPTIVE BOT</small></span><span class="arrow">→</span></button>
+          </div>
+          <div class="sidebar-rule"></div>
+          <div class="eyebrow">TOP PLAYERS <span class="season-pill">S04</span></div>
+          <div id="leaderboard" class="leaderboard"></div>
+          <p class="sidebar-footnote">排行榜每局结束后自动更新<br />本地保存你的最佳表现</p>
+        </aside>
+
+        <section class="arena-panel">
+          <div class="arena-heading"><div><div class="eyebrow">CURRENT MATCH <span id="statusBadge" class="status-badge">READY</span></div><h2 id="modeTitle">单人冲刺</h2><p id="modeSubtitle">在无尽竞技场里刷新你的最高分</p></div><div class="match-id">MATCH <strong>#0428</strong><span>● ONLINE</span></div></div>
+          <div class="score-strip"><div><span>YOUR SCORE</span><strong id="scoreValue">000</strong></div><div><span>LEVEL</span><strong id="levelValue">01</strong></div><div><span>COMBO</span><strong id="comboValue">x0</strong></div><div id="opponentPanel" class="opponent-score hidden"><span>OPPONENT</span><strong id="opponentScore">000</strong></div></div>
+          <div class="game-stage"><div class="stage-label left">NORTH GRID / 20 × 20</div><div class="stage-label right">LIVE FEED <span class="green-dot"></span></div><canvas id="gameCanvas" aria-label="贪吃蛇竞技场"></canvas><div class="stage-corner corner-tl"></div><div class="stage-corner corner-br"></div></div>
+          <div class="control-row"><div class="control-hint"><span class="keycap">W</span><span class="keycap">A</span><span class="keycap">S</span><span class="keycap">D</span><span>或方向键移动</span></div><div class="action-buttons"><button id="pauseBtn" class="text-button" type="button">暂停</button><button id="restartBtn" class="text-button" type="button">重新开始</button><button id="startBtn" class="primary-button" type="button">开始对局 <span>↗</span></button></div></div>
+          <div class="mobile-controls"><button data-direction="up" type="button">↑</button><div><button data-direction="left" type="button">←</button><button data-direction="down" type="button">↓</button><button data-direction="right" type="button">→</button></div></div>
+        </section>
+      </main>
+      <footer class="footer"><span>© 2026 SNAKE ARENA</span><span>BUILT FOR THE QUICK &amp; CURIOUS</span><span>WORKFLOW <strong>6B06BA</strong></span></footer>
+    </div>
+    <div id="resultModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="resultTitle"><div class="modal-card"><button id="closeModalBtn" class="modal-close" type="button">×</button><div id="resultKicker" class="eyebrow">RUN COMPLETE</div><h2 id="resultTitle">漂亮的一局</h2><div id="resultScore" class="result-score">000</div><p id="resultMeta">1 级 · 0 秒 · 单人冲刺</p><button id="playAgainBtn" class="primary-button" type="button">再来一局 <span>↗</span></button></div></div>
+    <script type="module" src="/game.js"></script>
+  </body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "snake-arena",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "lint": "node scripts/lint.mjs",
+    "typecheck": "node --check game.js",
+    "test": "node scripts/test.mjs"
+  },
+  "devDependencies": {
+    "vite": "^7.1.5",
+    "vitest": "^3.2.4"
+  }
+}
