@@ -22,7 +22,8 @@ export class UI {
 
   startGame() {
     this.engine.start();
-    this.dom.gameOverModal.classList.remove('show', 'hidden');
+    this.dom.gameOverModal.classList.remove('show');
+    this.dom.gameOverModal.classList.add('hidden');
     this.dom.menuScreen.classList.add('hidden');
     this.dom.pauseBtn.textContent = '暂停';
     this.refreshScores();

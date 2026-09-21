@@ -85,6 +85,7 @@ describe('UI game-over flow [regression for bug B: finalScore/finalLevel wired i
     ui.init();
     ui.startGame();
     expect(engine.scene).toBe(SCENES.PLAYING);
+    expect(dom.gameOverModal.classList.calls).toContainEqual(['add', 'hidden']);
     expect(dom.menuScreen.classList.calls).toContainEqual(['add', 'hidden']);
     expect(dom.pauseBtn.textContent).toBe('暂停');
   });
