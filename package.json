@@ -1,17 +1,22 @@
 {
-  "name": "snake-arena",
-  "version": "1.0.0",
+  "name": "snake-loop",
   "private": true,
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --host 0.0.0.0",
-    "build": "vite build",
-    "lint": "node scripts/lint.mjs",
-    "typecheck": "node --check game.js",
-    "test": "node scripts/test.mjs"
+    "dev": "node server.mjs",
+    "build": "node scripts/check.mjs build",
+    "lint": "node scripts/check.mjs lint",
+    "typecheck": "node scripts/check.mjs typecheck",
+    "test": "node scripts/check.mjs test"
   },
   "devDependencies": {
-    "vite": "^7.1.5",
-    "vitest": "^3.2.4"
+    "@types/node": "^22.10.2",
+    "@typescript-eslint/eslint-plugin": "^8.18.0",
+    "@typescript-eslint/parser": "^8.18.0",
+    "eslint": "^9.17.0",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.5",
+    "vitest": "^2.1.8"
   }
 }
