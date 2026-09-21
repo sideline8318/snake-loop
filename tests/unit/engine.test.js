@@ -5,6 +5,7 @@ import { CONFIG, SCENES, isReverse } from '../../src/game/config.js';
 function fresh() {
   const engine = new Engine();
   engine.start();
+  engine.food = { x: 0, y: 0 };
   return engine;
 }
 

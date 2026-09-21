@@ -1,23 +1,23 @@
 # 部署记录
 
-- activity_id: ca816591-fbce-46a8-8e21-38d6571870bf
-- stage_run_id: e7b0ce93-13db-4a06-82ed-21cf4e146f6a
+- activity_id: 064cf092-6b69-4a2b-9c03-641cc04a5b14
+- stage_run_id: 1b9d7230-b092-4c93-b9e1-5d56c637aa9e
 - workflow_id: 0f819d33-4d58-4982-bf1a-e3a2e53e03c5
 - input_manifest_sha256: f4276ecaa47d0cb721bbf3eb4afc5fd1434b08529f2439b488c5cfd2f86d3c23
 - parent_test_report_sha256: 0fae23b11bb9f424897511f17cb4124d8c370486cde3b120e37010fc155b4616
 - parent_release_candidate_sha256: b1d5bb54bd1c8cfe6f553bad4408b03ace28b8d13221fefe0691fe4075f26130
-- parent_release_candidate_git_commit: 3101e1f09f1ed487f89258e59ee9750365dc0818
+- parent_release_candidate_git_commit: 0e24c5e7eb94f081a45b0c5beb16c769e27c1907
 - deployment_target: Vite production preview
 - deployment_port: 4173
-- health_check: PASS; 本地 HTTP 200 与平台预览 HTTP 200，页面标题、项目标记、画布、双玩家计分字段、两组屏幕按钮、开始游戏、再玩一次和重新开始控件均已验证
-- acceptance_url: https://preview.mcode.side419.cn:30073
-- platform_preview_http_url: http://preview.mcode.side419.cn:30073
-- platform_https_probe: BLOCKED_BY_PLATFORM_PROXY; HTTPS 替换入口返回 TLS wrong version number，原始 HTTP 入口可访问并返回当前构建产物
-- rollback_handle: git revert to 3101e1f09f1ed487f89258e59ee9750365dc0818
+- health_check: PASS; 本地 HTTP 200，页面项目标题、画布、双玩家计分字段、两组屏幕按钮、开始游戏、再玩一次和重新开始控件均已验证
+- acceptance_url: http://preview.mcode.side419.cn:30087
+- platform_preview_http_url: http://preview.mcode.side419.cn:30087
+- platform_https_probe: BLOCKED_BY_PLATFORM_PROXY; https://preview.mcode.side419.cn:30087 返回 TLS wrong version number，HTTP 入口返回 200 并包含本次构建页面
+- rollback_handle: git revert to 0e24c5e7eb94f081a45b0c5beb16c769e27c1907
 - build: PASS; npm run build
 - lint: PASS; npm run lint
 - typecheck: PASS; npm run typecheck
 - unit_tests: PASS; 4 files and 37 tests
 - blackbox_tests: PASS; 31 tests
-- artifact_identity: PASS; dist/index.html sha256 2da9427f1d71fc4dd2ce0889802a0c1240116ab255fbdb3b772f10ac17e86448；dist/assets/index-D2fi2HwD.js sha256 4753bb8fc302846639855b9e4e9f2ea36c47214010e14dc65a720917735ed082；dist/assets/index-Dg-7wL2f.css sha256 30033c79fc339576f73bd116c6a17d05fbd15024475b0cab496693df60ba616e
+- artifact_identity: PASS; dist/index.html sha256 a307038ff3d98a902de26ee9449633c686094ffbf7b320ace1277a978e915f01；dist/assets/index-Bg6mpRhq.js sha256 475fe2f03fc4a5b3e36ca91b856516c4e8e3522e6188ecb33fee1b769f834a69；dist/assets/index-Dg-7wL2f.css sha256 30033c79fc339576f73bd116c6a17d05fbd15024475b0cab496693df60ba616e
 - git_commit_pushed: 由本阶段 artifact manifest 登记推送后的提交 SHA。
