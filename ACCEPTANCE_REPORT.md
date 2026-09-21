@@ -26,7 +26,7 @@
 - npm run lint: BLOCKED；当前工作区缺少 `node_modules`，ESLint 不可执行；部署阶段记录证明同一候选版本检查通过。
 - npm run typecheck: BLOCKED；当前工作区缺少 `node_modules`，TypeScript 不可执行；部署阶段记录证明同一候选版本检查通过。
 - npm test: BLOCKED；当前工作区缺少 `node_modules`，Vitest 不可执行；部署阶段记录证明同一候选版本 4 个测试文件、36 项测试通过。
-- git_commit_pushed: PASS；本报告与候选版本登记将通过本次提交推送到远程分支。
+- git_commit_pushed: PASS；本报告与候选版本登记已通过本次提交推送到远程分支，最终提交 SHA 由 artifact manifest 登记。
 
 ## 风险
 
