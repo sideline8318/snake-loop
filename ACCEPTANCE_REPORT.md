@@ -4,7 +4,7 @@
 - stage_run_id: 5044588e-de80-4c35-aa7d-acf99e173e11
 - workflow_id: ce72a1f3-cc69-43e1-af98-200903a59cd9
 - input_manifest_sha256: dc5e70b9219596f6b942d9e6d87f95655d19d92278b5d9c53b8e716d6d65a41c
-- parent_artifact_sha256: 2d72c595c857c2a6e17028f930df079ae591ce5713518a4be434aae57b89140
+- parent_artifact_sha256: 2d72c595c8577c2a6e17028f930df079ae591ce5713518a4be434aae57b89140
 - parent_deployment_artifact_sha256: 3046ee483af333b4800e633c5bf95883fde8cd889b0f6cf377863f5b23715df3
 
 ## 验收结论
