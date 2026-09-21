@@ -1,20 +1,23 @@
 # 部署记录
 
-- activity_id: 27acf5c1-7099-45bc-8ce5-ed892c32ca9f
-- stage_run_id: c4ac8f55-4dde-402f-91a7-cc108efe0863
-- workflow_id: 54d0b24f-1b46-4251-a80f-06574a15f631
-- input_manifest_sha256: abe2444bfdb91c342d5107d66a9b119698bb7d7f2fef56d8348c4825de42233c
-- tested_baseline_sha256: c9c57acfc59efeb202a4ec609cc406d4017c592522bddfbd07b3345345f8892a
-- tested_baseline_git_commit: 175bff1e3604c951afaab608c0dafbd8a060fee8
+- activity_id: 90855e10-c3f3-43d1-8141-64e3e976aca5
+- stage_run_id: fac7a4f3-d539-4a67-af39-0700f7e4ba8b
+- workflow_id: 0f819d33-4d58-4982-bf1a-e3a2e53e03c5
+- input_manifest_sha256: f4276ecaa47d0cb721bbf3eb4afc5fd1434b08529f2439b488c5cfd2f86d3c23
+- parent_test_report_sha256: 0fae23b11bb9f424897511f17cb4124d8c370486cde3b120e37010fc155b4616
+- parent_release_candidate_sha256: b1d5bb54bd1c8cfe6f553bad4408b03ace28b8d13221fefe0691fe4075f26130
+- parent_release_candidate_git_commit: 3101e1f09f1ed487f89258e59ee9750365dc0818
 - deployment_target: Vite production preview
 - deployment_port: 4173
-- health_check: PASS; HTTPS 200、页面标题、画布、双玩家计分字段和重新开始控件均已验证
-- acceptance_url: https://preview.mcode.side419.cn:30042
-- rollback_handle: git revert to 175bff1e3604c951afaab608c0dafbd8a060fee8
+- health_check: PASS; 本地 HTTP 200 与平台预览 HTTP 200，页面标题、项目标记、画布、双玩家计分字段、两组屏幕按钮和重新开始控件均已验证
+- acceptance_url: https://preview.mcode.side419.cn:30064
+- platform_preview_http_url: http://preview.mcode.side419.cn:30064
+- platform_https_probe: BLOCKED_BY_PLATFORM_PROXY; HTTPS 替换入口返回 TLS wrong version number，原始 HTTP 入口可访问并返回当前构建产物
+- rollback_handle: git revert to 3101e1f09f1ed487f89258e59ee9750365dc0818
 - build: PASS; npm run build
 - lint: PASS; npm run lint
 - typecheck: PASS; npm run typecheck
 - unit_tests: PASS; 4 files and 37 tests
 - blackbox_tests: PASS; 31 tests
-- artifact_identity: PASS; HTTPS 预览使用当前构建产物，页面标记与 release candidate 一致
+- artifact_identity: PASS; dist/index-D5R6EwpU.js sha256 90053ea8d841329a35aa04497077b4f6502ee148bde9b2b97adf9a8277866a59；dist/index-CDt2VBxP.css sha256 63084a80e1b4ade04f835a7ba4942d129000fbfb8622b0f1566dd32574003b7a
 - git_commit_pushed: 由本阶段 artifact manifest 登记推送后的提交 SHA。
