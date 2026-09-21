@@ -8,4 +8,4 @@
 - release_scope: 验收阶段确认标题、双玩家同屏、方向键与屏幕按钮、计分、碰撞结束和重新开始闭环。
 - acceptance_preview: https://preview.mcode.side419.cn:30023
 - source_head_before_acceptance: 48fea910d1e6f4755bcbbef31d8d2584d730eb3b
-- git_commit_sha: 由本次验收提交产生，并在 ActivityManifest 中登记。
+- git_commit_sha: 83c72b365e0c8cc0ce3d37cbf912fcfa772d8324
