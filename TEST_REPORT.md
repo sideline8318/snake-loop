@@ -13,4 +13,5 @@
 - npm run typecheck: PASS；TypeScript 类型检查通过。
 - preview smoke: PASS；HTTPS 预览 https://preview.mcode.side419.cn:30028 返回页面标题“Web版多用户同屏贪吃蛇大战｜贪吃蛇竞赛”。
 - 验收覆盖：项目标题、玩家 1 方向键、玩家 2 WASD、屏幕方向按钮、双蛇同屏、双方计分、撞墙/自撞/相撞结束、暂停、重新开始和再玩一次均有自动化验证。
-- required_checks: artifact_identity_verified PASS；test_suite_passed PASS；git_commit_pushed 待本阶段提交完成后登记。
+- git_commit_pushed: PASS；测试变更已推送至远程 `main`，提交为 adc279e。
+- required_checks: artifact_identity_verified PASS；test_suite_passed PASS；git_commit_pushed PASS。
