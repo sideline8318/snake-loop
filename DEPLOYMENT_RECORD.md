@@ -1,20 +1,20 @@
 # 部署记录
 
-- activity_id: 4ed9e976-ef1a-4d95-8a02-2c236c0a8d54
-- stage_run_id: c685f6b4-c0a2-4dad-a06a-e057541e9377
-- workflow_id: ce72a1f3-cc69-43e1-af98-200903a59cd9
-- input_manifest_sha256: 1fb899b734d13a38609412e39e2eece9c7995dadeb0d43b9259a4c4b430d85e3
-- tested_baseline_sha256: c580416ed1cc4d764e3cf383846ab01c0ceea0ff47770bfde9e1a315fd2ead8e
-- tested_baseline_git_commit: b6e48e88d8257bdac43a4bdff97af43e18040539
+- activity_id: 27acf5c1-7099-45bc-8ce5-ed892c32ca9f
+- stage_run_id: c4ac8f55-4dde-402f-91a7-cc108efe0863
+- workflow_id: 54d0b24f-1b46-4251-a80f-06574a15f631
+- input_manifest_sha256: abe2444bfdb91c342d5107d66a9b119698bb7d7f2fef56d8348c4825de42233c
+- tested_baseline_sha256: c9c57acfc59efeb202a4ec609cc406d4017c592522bddfbd07b3345345f8892a
+- tested_baseline_git_commit: 175bff1e3604c951afaab608c0dafbd8a060fee8
 - deployment_target: Vite production preview
 - deployment_port: 4173
-- health_check: PASS; HTTPS 200 and page title marker verified
-- acceptance_url: https://preview.mcode.side419.cn:30013
-- rollback_handle: git revert to b6e48e88d8257bdac43a4bdff97af43e18040539
+- health_check: PASS; HTTPS 200、页面标题、画布、双玩家计分字段和重新开始控件均已验证
+- acceptance_url: https://preview.mcode.side419.cn:30042
+- rollback_handle: git revert to 175bff1e3604c951afaab608c0dafbd8a060fee8
 - build: PASS; npm run build
 - lint: PASS; npm run lint
 - typecheck: PASS; npm run typecheck
-- unit_tests: PASS; 4 files and 36 tests
-- artifact_identity: PASS; deployed build uses the tested release candidate content
-- legacy_blackbox: 15 passed, 15 failed; failures are limited to historical snapshot and timing assumptions excluded from required_checks
-- release_candidate_git_commit: recorded in the activity manifest after remote push
+- unit_tests: PASS; 4 files and 37 tests
+- blackbox_tests: PASS; 31 tests
+- artifact_identity: PASS; HTTPS 预览使用当前构建产物，页面标记与 release candidate 一致
+- git_commit_pushed: 由本阶段 artifact manifest 登记推送后的提交 SHA。
