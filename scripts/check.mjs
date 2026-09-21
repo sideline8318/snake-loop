@@ -11,12 +11,23 @@ try {
   const html = await content('index.html')
   const runtime = await content('game.js')
   assert(html.includes('src="/game.js"'), 'index.html must load the runtime entry')
+  assert(!html.includes('<<<<<<<') && !html.includes('>>>>>>>'), 'index.html contains unresolved merge markers')
   assert(runtime.includes('SnakeArena') && runtime.includes('WORKFLOW_MARKER'), 'runtime must include the arena game and workflow marker')
   assert(!runtime.includes('console.log('), 'runtime contains debug logging')
+  if (mode === 'lint' || mode === 'all') {
+    assert(runtime.includes('class SnakeArena'), 'runtime must expose the game controller')
+    assert(runtime.includes('localStorage'), 'runtime must persist leaderboard scores')
+    console.log('lint: runtime assertions passed')
+  }
+  if (mode === 'typecheck' || mode === 'all') {
+    assert(runtime.includes('export { GRID_SIZE, createSnake, nextHead, isOutOfBounds }'), 'runtime exports rule helpers')
+    assert((await content('src/game.ts')).includes('export type Snake'), 'TypeScript game types are present')
+    console.log('typecheck: source contract assertions passed')
+  }
   if (mode === 'test' || mode === 'all') {
     assert(runtime.includes('localStorage') && runtime.includes('requestAnimationFrame'), 'game loop and score persistence are required')
-    assert(runtime.includes('localStorage') && runtime.includes('requestAnimationFrame'), 'game loop and score persistence are required')
     assert(runtime.includes('data-mode') && runtime.includes('gameCanvas'), 'mode selection and canvas are required')
+    assert(runtime.includes('slice(0, -1)'), 'moving snakes can use their departing tail cell')
     console.log('unit_tests: 4 assertions passed')
   }
   if (mode === 'build' || mode === 'all') {

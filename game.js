@@ -160,8 +160,9 @@ class SnakeArena {
     if (!contender.alive) return;
     contender.direction = contender.nextDirection;
     const head = nextHead(contender.snake, contender.direction);
-    const allBodies = [...this.player.snake, ...(this.currentMode === 'solo' ? [] : this.opponent.snake)];
-    const hitBody = allBodies.some((segment, index) => !samePoint(segment, contender.snake[contender.snake.length - 1]) || index < contender.snake.length - 1 ? samePoint(segment, head) : false);
+    const ownBody = contender.snake.slice(0, -1);
+    const rivalBody = this.currentMode === 'solo' ? [] : contender === this.player ? this.opponent.snake : this.player.snake;
+    const hitBody = [...ownBody, ...rivalBody].some((segment) => samePoint(segment, head));
     if (isOutOfBounds(head) || hitBody) {
       contender.alive = false;
       return;
