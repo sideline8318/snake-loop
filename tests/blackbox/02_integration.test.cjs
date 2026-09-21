@@ -56,13 +56,13 @@ test('page loads with all required controls and workflow markers', async () => {
       'recordBadge',
     ]) assert.ok(document.getElementById(id), 'missing #' + id);
     assert.ok(document.getElementById('gameCanvas') instanceof dom.window.HTMLCanvasElement);
-    assert.match(document.title, /Web版多用户同屏贪吃蛇大战/);
+    assert.match(document.title, /Web版多用户同屏贪吃蛇大战 · postdeploy 893a5b1f/);
     assert.match(document.querySelector('footer').textContent, /snake-loop-competition/);
     assert.match(
       document
         .querySelector('meta[name="workflow-marker"]')
         .getAttribute('content'),
-      /snake-loop-competition/
+      /Web版多用户同屏贪吃蛇大战 · postdeploy 893a5b1f/
     );
   } finally {
     dom.window.close();
