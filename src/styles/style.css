@@ -53,6 +53,8 @@ button { font: inherit; }
 .arena-tag span { display: inline-block; width: 6px; height: 6px; margin-left: 5px; border-radius: 50%; background: var(--pink); box-shadow: 0 0 12px var(--pink); }
 
 .mobile-controls { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 16px 16px 20px; background: rgba(255,255,255,0.035); }
+.control-label { color: var(--muted); font-size: 0.68rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+.rival-controls { border-top: 1px solid var(--line); }
 .mobile-controls > div { display: flex; gap: 6px; }
 .direction-btn { width: 52px; height: 42px; border: 1px solid var(--line); border-radius: 10px; color: var(--ink); background: rgba(255,255,255,0.08); cursor: pointer; font-size: 1.2rem; touch-action: manipulation; }
 .direction-btn:hover, .direction-btn:focus-visible { border-color: var(--green); background: var(--green-deep); outline: none; }
@@ -73,7 +75,9 @@ button { font: inherit; }
 
 @media (min-width: 720px) {
   body { padding-top: 52px; }
-  .mobile-controls { position: absolute; right: 18px; bottom: 18px; z-index: 1; width: 188px; border: 1px solid rgba(244,241,232,0.13); border-radius: 15px; padding: 10px; background: rgba(12,17,15,0.74); backdrop-filter: blur(8px); }
+  .mobile-controls { position: absolute; right: 18px; z-index: 1; width: 188px; border: 1px solid rgba(244,241,232,0.13); border-radius: 15px; padding: 10px; background: rgba(12,17,15,0.74); backdrop-filter: blur(8px); }
+  .mobile-controls:not(.rival-controls) { bottom: 132px; }
+  .rival-controls { bottom: 18px; border-top: 1px solid rgba(244,241,232,0.13); }
 }
 
 @media (max-width: 560px) {

@@ -35,9 +35,16 @@
         <div class="arena-tag">LIVE ARENA <span></span></div>
       </div>
 
-      <section class="mobile-controls" aria-label="触屏方向控制">
-        <button class="direction-btn up" data-direction="up" type="button" aria-label="向上">↑</button>
-        <div><button class="direction-btn" data-direction="left" type="button" aria-label="向左">←</button><button class="direction-btn" data-direction="down" type="button" aria-label="向下">↓</button><button class="direction-btn" data-direction="right" type="button" aria-label="向右">→</button></div>
+      <section class="mobile-controls" aria-label="玩家 1 触屏方向控制">
+        <span class="control-label">玩家 1 · 方向键</span>
+        <button class="direction-btn up" data-player="player1" data-direction="up" type="button" aria-label="玩家 1 向上">↑</button>
+        <div><button class="direction-btn" data-player="player1" data-direction="left" type="button" aria-label="玩家 1 向左">←</button><button class="direction-btn" data-player="player1" data-direction="down" type="button" aria-label="玩家 1 向下">↓</button><button class="direction-btn" data-player="player1" data-direction="right" type="button" aria-label="玩家 1 向右">→</button></div>
+      </section>
+
+      <section class="mobile-controls rival-controls" aria-label="玩家 2 触屏方向控制">
+        <span class="control-label">玩家 2 · WASD</span>
+        <button class="direction-btn up" data-player="player2" data-direction="up" type="button" aria-label="玩家 2 向上">↑</button>
+        <div><button class="direction-btn" data-player="player2" data-direction="left" type="button" aria-label="玩家 2 向左">←</button><button class="direction-btn" data-player="player2" data-direction="down" type="button" aria-label="玩家 2 向下">↓</button><button class="direction-btn" data-player="player2" data-direction="right" type="button" aria-label="玩家 2 向右">→</button></div>
       </section>
 
       <section id="menuScreen" class="overlay">
