@@ -4,6 +4,7 @@
 - StageRun ID: `3580a7e6-fdc2-4339-a9e2-92862bc60503`
 - Workflow ID: `6b06ba62-a7bf-471c-90ec-9acd37811162`
 - 输入清单 SHA-256: `7d36014810b9f62954629c750d035eb2c447c845aae055a183eacc986c68f5b9`
+- 验收提交重试记录: 平台远程 HEAD 校验发生一次 TLS 超时，随后保留同一验收结论并刷新制品上传。
 - 上游 release candidate SHA-256: `8a6c9210790afe2a05e1c7b99b283cbc06023b510618d9a90c8dfafcf7cc54a9`
 - 上游 deployment record SHA-256: `7fe8f6ebde424d981525bd4c06851fcf0d61cb3485a3ccad62b3cdae246af788`
 
