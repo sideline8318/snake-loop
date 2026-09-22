@@ -1,21 +1,23 @@
 # 测试报告
 
-- activity_id: 735c327a-577b-4af7-9c65-505e0c8565c8
-- stage_run_id: 48b3a25f-2973-4db1-9e6f-a03250151630
-- workflow_id: 82cd3989-8762-4d92-9ad5-8f0218ce2863
-- input_manifest_sha256: 62fff2383831afd99cf1f10c72e09c56fa89ec1f281763d3c6b130bfcb9360fc
-- parent_release_candidate_sha256: f2c32c707ed5ee5d55592daeeb6d79123d2603cb3947f3a52fec9e9f55030184
-- parent_release_candidate_git: 30635e342591f158f300d0cefc2d41956c9d357c
-- artifact_identity_verified: PASS；报告引用了上游 release candidate 制品哈希与提交。
+- activity_id: 3fae8744-e47b-4652-881c-512ab34e627c
+- stage_run_id: 4c187519-c3bc-480d-8081-c765717002ca
+- workflow_id: c88d84d9-6883-4279-b55b-4966054a097e
+- input_manifest_sha256: 0789810dd1f4ab0f43f41b743090deb883d59aa274d48338098e6c0e1eb750ea
+- parent_baseline_uri: artifact://development-summary.md
+- parent_baseline_sha256: 2d60e28e736c7fa1f26457c4e94a5124c171430ca85c4db7b0167678093a233f
+- parent_baseline_git: 02265971c07b2eef4abaa862db3b7b24806de11d
+- artifact_identity_verified: PASS；已绑定上游 development release candidate 制品哈希与提交。
 - build: PASS；Vite 生产构建成功。
-- npm_test_equivalent: PASS；4 个单元测试文件、37 项测试全部通过。
-- test_e2e_equivalent: PASS；4 个黑盒文件、31 项测试全部通过。
+- unit_tests: PASS；4 个单元测试文件、37 项测试全部通过。
+- blackbox_tests: PASS；4 个黑盒文件、31 项测试全部通过。
 - lint: PASS；ESLint 检查通过。
 - typecheck: PASS；TypeScript 类型检查通过。
 - acceptance_scope: PASS；验证项目标题、双玩家同屏、方向键与屏幕按钮控制、WASD 控制、计分、吃食物、撞墙/自撞/相撞结束、暂停、重新开始和再玩一次。
-- http_preview: PASS；http://preview.mcode.side419.cn:30105 返回页面并包含目标标题。
-- https_preview: BLOCKED；同端口 HTTPS 握手返回 TLS wrong version number，属于预览网关协议风险。
-- build_artifacts: dist/index.html=3f2f40fae8c40860e73917be988687228b372d1ddfcba734cd4beba4078cfbd4；dist/assets/index-EO9ClrBK.js=475fe2f03fc4a5b3e36ca91b856516c4e8e3522e6188ecb33fee1b769f834a69；dist/assets/index-DT_odxNQ.css=b0795c460398ea7d3120dfa8c3d37f072a384ee3893880a103af0193bbc359c3。
+- local_preview: PASS；http://127.0.0.1:8080/ 返回 200，页面包含目标标题与 workflow marker。
+- platform_preview: http://preview.mcode.side419.cn:30110
+- https_preview: BLOCKED；https://preview.mcode.side419.cn:30110 连接失败，平台预览网关未建立 TLS 连接。
+- build_artifacts: dist/index.html=e0f7430e4840c7df618c64f9aaed6847276d54efdc844be21ec9dc374c435f14；dist/assets/index-CG_HjHcC.js=3fc98947035e08d7f458e4308469b4216fff6ea91828fc4c16bb0f8d16ede1bb；dist/assets/index-CdmV6boD.css=d89c0723a7589f7a394aa933eeac1af81e6c4f1bc658838a46e4b3dab918091c
 - implementation_defects: 0；本阶段未发现需要修改游戏实现的缺陷。
 - required_checks: artifact_identity_verified PASS；test_suite_passed PASS；git_commit_pushed PASS。
 - git_commit_pushed: 本报告与 release candidate 已提交并推送，提交 SHA 由 artifact manifest 登记。
