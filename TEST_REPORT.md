@@ -3,20 +3,19 @@
 - parent_baseline_uri: artifact://development-summary.md
 - parent_baseline_sha256: 2d60e28e736c7fa1f26457c4e94a5124c171430ca85c4db7b0167678093a233f
 - parent_baseline_git: 02265971c07b2eef4abaa862db3b7b24806de11d
-- activity_id: 82787966-ce7c-4335-b1d6-70d2a93abd73
-- stage_run_id: b165bf39-540c-47bd-b2d8-a7a3e1028436
+- activity_id: 16bb1b47-57ea-46c8-9375-ac8286ce2b4d
+- stage_run_id: c665b45c-30d1-499d-b923-e7b1b77a2c0d
 - workflow_id: c88d84d9-6883-4279-b55b-4966054a097e
-- input_manifest_sha256: 0789810dd1f4ab0f43f41b743090deb883d59aa274d48338098e6c0e1eb750ea
+- input_manifest_sha256: 737d43d9a00dcc35c27339080828c750930a189d4fc1d1741f38159969f044e2
 - artifact_identity_verified: PASS；页面源码、构建产物和黑盒断言统一使用当前标题与 Workflow 标记。
-- npm run build: PASS；Vite 生产构建成功，生成 index.html、JavaScript 与 CSS 产物。
+- npm run build: PASS；Vite 生产构建成功。
 - npm test: PASS；4 个测试文件、37 项测试全部通过。
 - npm run test:e2e: PASS；4 个黑盒文件、31 项测试全部通过。
 - npm run lint: PASS；ESLint 检查通过。
 - npm run typecheck: PASS；TypeScript 类型检查通过。
-- acceptance_scope: PASS；验证标题“Web版多用户同屏贪吃蛇大战 · postdeploy 4046dbc8”、方向键、屏幕按钮、双玩家同屏、计分、吃食物、撞墙/自撞/相撞结束、暂停、重新开始和再玩一次。
+- acceptance_scope: PASS；验证标题“Web版多用户同屏贪吃蛇大战 · postdeploy 4046dbc8”、方向键、WASD、两组屏幕按钮、双玩家同屏、计分、吃食物、撞墙/自撞/相撞结束、暂停、重新开始和再玩一次。
 - build_artifacts: dist/index.html sha256=718109f66fd2248d907fc838d10acd81746dafd891ffd9a8de3f38f43941f62b；dist/assets/index-BjlDay39.js sha256=3fc98947035e08d7f458e4308469b4216fff6ea91828fc4c16bb0f8d16ede1bb；dist/assets/index-DgKMJGDq.css sha256=8ee30570518c10a07f2a4015ba4631e969419cc9c0bf875e523f50611cb696d4。
 - preview_health: PASS；本地生产预览 `http://127.0.0.1:4173/` 返回 HTTP 200，页面包含标题、双玩家计分、两组方向按钮、开始游戏和再玩一次控件。
-- platform_preview: `https://preview.mcode.side419.cn:30113`；平台返回 HTTP 入口，Runner 对 HTTPS 地址探测连接失败，已记录为预览平台风险。
-- implementation_defects: 1；修复页面和黑盒测试沿用旧 postdeploy 标记的问题，游戏逻辑未发现缺陷。
-- required_checks: artifact_identity_verified PASS；test_suite_passed PASS；git_commit_pushed PASS。
-- git_commit_pushed: ed3f7d1 已推送至 origin/main；最终 release candidate 以本次远程提交为候选版本。
+- platform_preview: `https://preview.mcode.side419.cn:30121`；request_preview 返回 HTTP 入口，HTTPS 探测返回 `wrong version number`，记录为平台 TLS 风险。
+- implementation_defects: 0；本次测试未发现功能缺陷。
+- required_checks: artifact_identity_verified PASS；test_suite_passed PASS；git_commit_pushed 待本阶段提交并推送后由 artifact manifest 登记。
