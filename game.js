@@ -70,7 +70,7 @@ function defaultLeaderboard() {
 }
 
 function saveLeaderboard(entries) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(entries.slice(0, 8)));
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(entries.slice(0, 8))); } catch { /* memory fallback */ }
 }
 
 class SnakeArena {
@@ -178,8 +178,29 @@ class SnakeArena {
       const head = nextHead(this.opponent.snake, name);
       return !isOutOfBounds(head) && !this.player.snake.some((segment) => samePoint(segment, head)) && !this.opponent.snake.some((segment, index) => index > 0 && samePoint(segment, head));
     });
-    const target = safe.sort((a, b) => this.distance(nextHead(this.opponent.snake, a), this.food) - this.distance(nextHead(this.opponent.snake, b), this.food))[0];
+    if (this.difficulty === 'rookie' && Math.random() < 0.35) {
+      this.opponent.nextDirection = safe[Math.floor(Math.random() * safe.length)] || this.opponent.direction;
+      return;
+    }
+    const ranked = safe.sort((a, b) => this.distance(nextHead(this.opponent.snake, a), this.food) - this.distance(nextHead(this.opponent.snake, b), this.food));
+    const target = this.difficulty === 'master'
+      ? ranked.find((name) => this.hasOpenRoute(nextHead(this.opponent.snake, name))) || ranked[0]
+      : ranked[0];
     this.opponent.nextDirection = target || this.opponent.direction;
+  }
+
+  hasOpenRoute(start) {
+    const blocked = new Set([...this.opponent.snake, ...this.player.snake].map((point) => `${point.x},${point.y}`));
+    const queue = [start];
+    const visited = new Set();
+    while (queue.length && visited.size < 80) {
+      const point = queue.shift();
+      const key = `${point.x},${point.y}`;
+      if (visited.has(key) || isOutOfBounds(point) || blocked.has(key)) continue;
+      visited.add(key);
+      Object.keys(DIRECTIONS).forEach((direction) => queue.push(nextHead([point], direction)));
+    }
+    return visited.size > 18;
   }
 
   resolveFood() {
