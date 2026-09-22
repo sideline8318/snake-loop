@@ -46,8 +46,8 @@ test('serves the single-page application over HTTP with correct types', async ()
   assert.match(cssRes.type, /text\/css/);
   const body = html.body.toString('utf8');
   assert.match(body, /snake-loop-competition/);
-  assert.match(body, /82cd3989-8762-4d92-9ad5-8f0218ce2863/);
-  assert.match(body, /Web版多用户同屏贪吃蛇大战 · postdeploy 893a5b1f/);
+  assert.match(body, /c88d84d9-6883-4279-b55b-4966054a097e/);
+  assert.match(body, /Web版多用户同屏贪吃蛇大战 · postdeploy 4046dbc8/);
 });
 
 test('all assets referenced by index.html resolve 200', async () => {
@@ -68,5 +68,5 @@ test('deployment smoke: marker present in the served HTML head', async () => {
   const html = await get('/index.html');
   assert.equal(html.status, 200);
   const body = html.body.toString('utf8');
-  assert.match(body, /<meta name="workflow-marker" content="Web版多用户同屏贪吃蛇大战 · postdeploy 893a5b1f"/);
+  assert.match(body, /<meta name="workflow-marker" content="Web版多用户同屏贪吃蛇大战 · postdeploy 4046dbc8"/);
 });
