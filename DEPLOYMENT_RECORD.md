@@ -1,23 +1,23 @@
 # 部署记录
 
-- activity_id: b8723e7e-8a8b-4a4a-a760-a7acf88669ae
-- stage_run_id: 419bfd3f-fc92-4e36-aac0-c03177aa786b
-- workflow_id: ce72a1f3-cc69-43e1-af98-200903a59cd9
-- input_manifest_sha256: a2e9872011d93af98b01ab3a0b8ea6bf11932e3006b9d06366b0fd778b0d7ae7
-- parent_test_report_sha256: c5bd90f2cc8beed2718e3757e2ba158f65e6f5fde081b82d173ed3544643d09b
-- parent_release_candidate_sha256: c580416ed1cc4d764e3cf383846ab01c0ceea0ff47770bfde9e1a315fd2ead8e
-- parent_release_candidate_git_commit: b6e48e88d8257bdac43a4bdff97af43e18040539
+- activity_id: 69fae03c-aa71-44fe-ab8d-f1471a64a489
+- stage_run_id: 1594ad05-c8d7-4c72-97b6-7fa11e780d8c
+- workflow_id: c88d84d9-6883-4279-b55b-4966054a097e
+- input_manifest_sha256: 13bb97b1dccd721e0e6cb927ed76f6e776a6a3a9efe6fe14ff268eb85ca10afe
+- parent_test_report_sha256: 92cad28ee4a12ab683ab3b3f256fdab345119ea9b26c12169a270d0cb539eccd
+- parent_release_candidate_sha256: f4d8a7ef9254d158da963b7ac59bacdcff510d0fd2bf5b258d8dcfb9e20b8071
+- parent_release_candidate_git_commit: 49f988a3e61d1e539cc8efc42e403ec5de160f8c
 - deployment_target: Vite production preview
 - deployment_port: 4173
-- health_check: PASS; 本地生产预览 HTTP 200，页面标题、画布、双玩家计分字段、两组屏幕按钮、开始游戏、再玩一次和重新开始控件均已验证
-- acceptance_url: https://4173-4ecae74160333c2b.preview.mcode.side419.cn
-- platform_preview_https_url: https://4173-4ecae74160333c2b.preview.mcode.side419.cn
-- platform_https_probe: 平台返回内部 HTTPS 预览地址；Runner 内 DNS 无法回环解析该平台域名，本地健康检查 HTTP 200
-- rollback_handle: git revert 0ba4a3b837d662f5d64cca1114076a28517143b5
+- health_check: PASS; 本地生产预览 HTTP 200，页面标题、工作流标记、画布、双玩家计分字段、两组屏幕按钮、开始游戏、再玩一次和重新开始控件均已验证
+- acceptance_url: https://preview.mcode.side419.cn:30119
+- platform_preview_url: http://preview.mcode.side419.cn:30119
+- platform_https_probe: FAIL; 将 request_preview 返回地址转换为 HTTPS 后，Runner 探测返回 OpenSSL wrong version number；平台 HTTP 入口可访问
+- rollback_handle: git revert <release_candidate_git_commit>
 - build: PASS; npm run build
 - lint: PASS; npm run lint
 - typecheck: PASS; npm run typecheck
 - unit_tests: PASS; 4 files and 37 tests
 - blackbox_tests: PASS; 31 tests
-- artifact_identity: PASS; dist/index.html sha256 39e074787e413e4c77de65fbef88aaa2b2f0d9ab32d7ac29199869230a74bec1；dist/assets/index-Bg6mpRhq.js sha256 475fe2f03fc4a5b3e36ca91b856516c4e8e3522e6188ecb33fee1b769f834a69；dist/assets/index-Dg-7wL2f.css sha256 30033c79fc339576f73bd116c6a17d05fbd15024475b0cab496693df60ba616e
-- git_commit_pushed: 0ba4a3b837d662f5d64cca1114076a28517143b5 已推送至 origin/main。
+- artifact_identity: PASS; dist/index.html sha256 3bc1bd97f56f579acbf1bc375e39bffdae4afac3e745fa51d2d882ea675af47b；dist/assets/index-CG_HjHcC.js sha256 3fc98947035e08d7f458e4308469b4216fff6ea91828fc4c16bb0f8d16ede1bb；dist/assets/index-CdmV6boD.css sha256 d89c0723a7589f7a394aa933eeac1af81e6c4f1bc658838a46e4b3dab918091c
+- git_commit_pushed: 待本阶段提交并推送后登记远程 HEAD。
