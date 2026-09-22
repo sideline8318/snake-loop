@@ -34,6 +34,7 @@ function makeDomStub() {
     recordBadge: { classList: classListSpy() },
     finalScore: { textContent: '0' },
     finalLevel: { textContent: '1' },
+    finalReason: { textContent: '' },
   };
 }
 
@@ -44,7 +45,7 @@ beforeEach(() => {
 describe('UI game-over flow [regression for bug B: finalScore/finalLevel wired into DOM map]', () => {
   it('a new record renders final score/level, shows modal + badge and persists', () => {
     const engine = new Engine();
-    Object.assign(engine, { scene: SCENES.GAME_OVER, score: 130, level: 2 });
+    Object.assign(engine, { scene: SCENES.GAME_OVER, score: 130, level: 2, collisionReason: '撞墙' });
     const dom = makeDomStub();
     const ui = new UI({ engine, dom });
     ui.highScore = 0;
@@ -53,6 +54,7 @@ describe('UI game-over flow [regression for bug B: finalScore/finalLevel wired i
 
     expect(dom.finalScore.textContent).toBe('130');
     expect(dom.finalLevel.textContent).toBe('2');
+    expect(dom.finalReason.textContent).toBe('结束原因：撞墙');
     ui.refreshScores();
     expect(dom.highScore.textContent).toBe('130');
     expect(localStorage.getItem('snake-loop-high-score')).toBe('130');

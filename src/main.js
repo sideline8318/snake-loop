@@ -36,6 +36,7 @@ function initGame() {
       finalScore: byId('finalScore'),
       finalLevel: byId('finalLevel'),
       finalWinner: byId('finalWinner'),
+      finalReason: byId('finalReason'),
     },
   });
   ui.init();

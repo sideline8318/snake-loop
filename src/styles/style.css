@@ -64,6 +64,7 @@ button { font: inherit; }
 .overlay:not(.hidden) { display: flex; }
 .panel { width: min(100%, 470px); border: 1px solid rgba(244,241,232,0.16); border-radius: 16px; padding: clamp(24px, 5vw, 42px); background: rgba(23,28,25,0.94); box-shadow: 0 25px 80px rgba(0,0,0,0.35); text-align: center; }
 .panel h2 { margin: 9px 0 15px; font-size: clamp(1.6rem, 5vw, 2.4rem); letter-spacing: -0.04em; }
+.final-reason { margin: -4px 0 18px; color: var(--pink); font-size: 0.82rem; font-weight: 800; letter-spacing: 0.08em; }
 .panel p:not(.panel-kicker):not(.key-hint) { color: var(--muted); font-size: 0.94rem; line-height: 1.7; }
 .key-hint { margin-top: 18px; color: var(--green); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; }
 .panel .btn { margin-top: 25px; padding-inline: 27px; }

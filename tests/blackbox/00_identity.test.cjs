@@ -61,6 +61,7 @@ test('HUD ids referenced by markup resolve in the bundle wiring', () => {
     'recordBadge',
     'finalScore',
     'finalLevel',
+    'finalReason',
   ]) {
     assert.ok(html.includes('id="' + id + '"'), 'index.html missing #' + id);
   }

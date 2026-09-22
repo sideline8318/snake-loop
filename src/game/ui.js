@@ -54,6 +54,7 @@ export class UI {
     this.dom.finalScore.textContent = String(this.engine.score);
     this.dom.finalLevel.textContent = String(this.engine.level);
     if (this.dom.finalWinner) this.dom.finalWinner.textContent = this.engine.winner || '对战结束';
+    if (this.dom.finalReason) this.dom.finalReason.textContent = `结束原因：${this.engine.collisionReason || '比赛结束'}`;
     if (this.engine.score > this.highScore) {
       this.highScore = saveHighScore(this.engine.score);
       this.dom.recordBadge.classList.remove('hidden');
