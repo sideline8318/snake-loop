@@ -18,4 +18,4 @@
 - acceptance_scope: PASS；验证项目标题“Web版多用户同屏贪吃蛇大战 · postdeploy 4046dbc8”、方向键、屏幕按钮、双玩家同屏、计分、吃食物、撞墙/自撞/相撞结束、暂停、重新开始和再玩一次。
 - implementation_defects: 0；本阶段未发现需要修改游戏实现的缺陷。
 - required_checks: artifact_identity_verified PASS；test_suite_passed PASS；git_commit_pushed PASS。
-- git_commit_sha: 待本阶段推送提交产生后回填。
+- git_commit_sha: 59859e985b687441cbe5653665497fbf99f817b6
