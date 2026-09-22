@@ -26,4 +26,4 @@
 
 - 稳定回滚提交：`d912e70bc9bf99bb78534771bbceb23b4311e6c1`
 - 回滚方式：将部署分支恢复到该提交后重新执行 `npm run build` 与 `npm run dev`
-- 部署提交：`2711308`
+- 部署提交：`748b8de4e682a9d38d5f582bf75ef0d9cbdf255f`
