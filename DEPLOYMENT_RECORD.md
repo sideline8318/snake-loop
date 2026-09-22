@@ -13,11 +13,11 @@
 - acceptance_url: https://4173-4ecae74160333c2b.preview.mcode.side419.cn
 - platform_preview_https_url: https://4173-4ecae74160333c2b.preview.mcode.side419.cn
 - platform_https_probe: 平台返回内部 HTTPS 预览地址；Runner 内 DNS 无法回环解析该平台域名，本地健康检查 HTTP 200
-- rollback_handle: git revert to the git_commit_sha recorded in the release_candidate artifact
+- rollback_handle: git revert 0ba4a3b837d662f5d64cca1114076a28517143b5
 - build: PASS; npm run build
 - lint: PASS; npm run lint
 - typecheck: PASS; npm run typecheck
 - unit_tests: PASS; 4 files and 37 tests
 - blackbox_tests: PASS; 31 tests
 - artifact_identity: PASS; dist/index.html sha256 39e074787e413e4c77de65fbef88aaa2b2f0d9ab32d7ac29199869230a74bec1；dist/assets/index-Bg6mpRhq.js sha256 475fe2f03fc4a5b3e36ca91b856516c4e8e3522e6188ecb33fee1b769f834a69；dist/assets/index-Dg-7wL2f.css sha256 30033c79fc339576f73bd116c6a17d05fbd15024475b0cab496693df60ba616e
-- git_commit_pushed: 本阶段提交并推送后由 artifact manifest 登记最终 SHA。
+- git_commit_pushed: 0ba4a3b837d662f5d64cca1114076a28517143b5 已推送至 origin/main。

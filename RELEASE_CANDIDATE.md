@@ -12,7 +12,7 @@
 - quality_gate: npm run build、npm run lint、npm run typecheck、npm run test（37/37）、npm run test:e2e（31/31）全部通过。
 - deployed_artifact: dist/index.html、dist/assets/index-Bg6mpRhq.js、dist/assets/index-Dg-7wL2f.css。
 - preview_url: https://4173-4ecae74160333c2b.preview.mcode.side419.cn
-- rollback_handle: git revert to the git_commit_sha recorded in this release candidate artifact
-- git_commit_sha: 由本阶段 artifact manifest 登记推送后的提交 SHA。
+- rollback_handle: git revert 0ba4a3b837d662f5d64cca1114076a28517143b5
+- git_commit_sha: 0ba4a3b837d662f5d64cca1114076a28517143b5
 - project_title: Web版多用户同屏贪吃蛇大战
 - deployed_artifact_sha256: dist/index.html 39e074787e413e4c77de65fbef88aaa2b2f0d9ab32d7ac29199869230a74bec1；dist/assets/index-Bg6mpRhq.js 475fe2f03fc4a5b3e36ca91b856516c4e8e3522e6188ecb33fee1b769f834a69；dist/assets/index-Dg-7wL2f.css 30033c79fc339576f73bd116c6a17d05fbd15024475b0cab496693df60ba616e
