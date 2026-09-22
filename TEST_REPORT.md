@@ -18,5 +18,5 @@
 - preview_health: PASS；本地生产预览 `http://127.0.0.1:4173/` 返回 HTTP 200，页面包含标题、双玩家计分、两组方向按钮、开始游戏和再玩一次控件。
 - platform_preview: `https://preview.mcode.side419.cn:30113`；平台返回 HTTP 入口，Runner 对 HTTPS 地址探测连接失败，已记录为预览平台风险。
 - implementation_defects: 1；修复页面和黑盒测试沿用旧 postdeploy 标记的问题，游戏逻辑未发现缺陷。
-- required_checks: artifact_identity_verified PASS；test_suite_passed PASS；git_commit_pushed 待本阶段提交并推送后登记。
-- git_commit_pushed: 本报告与 release candidate 将随本阶段提交推送，提交 SHA 由 artifact manifest 登记。
+- required_checks: artifact_identity_verified PASS；test_suite_passed PASS；git_commit_pushed PASS。
+- git_commit_pushed: ed3f7d1 已推送至 origin/main；最终 release candidate 以本次远程提交为候选版本。
