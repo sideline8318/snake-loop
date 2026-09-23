@@ -15,6 +15,7 @@
 - npm run test:e2e: PASS；4 个黑盒文件、31 项测试全部通过。
 - npm run lint: PASS；ESLint 检查通过。
 - npm run typecheck: PASS；TypeScript 类型检查通过。
+- build_artifacts: dist/index.html sha256=b50d2c01b100b7e033c8dced85ce460fa10982daa998aeaebfa256476062de28；dist/assets/index-BjlDay39.js sha256=3fc98947035e08d7f458e4308469b4216fff6ea91828fc4c16bb0f8d16ede1bb；dist/assets/index-DgKMJGDq.css sha256=8ee30570518c10a07f2a4015ba4631e969419cc9c0bf875e523f50611cb696d4。
 - acceptance_scope: PASS；验证标题“Web版多用户同屏贪吃蛇大战 · postdeploy 893a5b1f”、方向键、屏幕按钮、双玩家同屏、计分、吃食物、撞墙、自撞、相撞结束、暂停、重新开始和再玩一次。
 - implementation_defects: 0；复测未发现游戏实现缺陷。
 - required_checks: artifact_identity_verified PASS；test_suite_passed PASS；git_commit_pushed PASS。

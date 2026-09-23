@@ -10,10 +10,10 @@
 - parent_test_report_sha256: 0fae23b11bb9f424897511f17cb4124d8c370486cde3b120e37010fc155b4616
 - parent_release_candidate_sha256: 313cbaf3795fea2a668873db66bf96cf48e2f8fd9da0aad37fd5d522afa61747
 - parent_release_candidate_git: ad4d961c3bf41fe29b6863e7266cf7de7cf4071c
-- test_report: 本阶段 test_report 制品哈希 22cf41617fba95a9de5cfc4cbef7fbbb37e77717acb80484927970ec40a66fea。
+- test_report: 本阶段 test_report 制品哈希 b576d9f8924380d13b2d94b2304ee4d17b2e4b0afb5ce853999b550dea957981。
 - release_scope: 验证生产构建与完整交互闭环，覆盖标题、双玩家同屏、键盘与屏幕按钮控制、计分、撞墙/自撞/相撞结束、暂停、重新开始和再玩一次。
 - quality_gate: npm test 37/37、npm run test:e2e 31/31、lint、typecheck、build 全部通过。
-- built_artifact: dist/index.html、dist/assets/index-Bg6mpRhq.js、dist/assets/index-Dg-7wL2f.css。
-- built_artifact_sha256: dist/index.html 83abc286ab818afe57458e10b7e57829ba04faac4e0897d7070b3fc7bd55c68b；dist/assets/index-Bg6mpRhq.js 475fe2f03fc4a5b3e36ca91b856516c4e8e3522e6188ecb33fee1b769f834a69；dist/assets/index-Dg-7wL2f.css 30033c79fc339576f73bd116c6a17d05fbd15024475b0cab496693df60ba616e
+- built_artifact: dist/index.html、dist/assets/index-BjlDay39.js、dist/assets/index-DgKMJGDq.css。
+- built_artifact_sha256: dist/index.html b50d2c01b100b7e033c8dced85ce460fa10982daa998aeaebfa256476062de28；dist/assets/index-BjlDay39.js 3fc98947035e08d7f458e4308469b4216fff6ea91828fc4c16bb0f8d16ede1bb；dist/assets/index-DgKMJGDq.css 8ee30570518c10a07f2a4015ba4631e969419cc9c0bf875e523f50611cb696d4
 - project_title: Web版多用户同屏贪吃蛇大战 · postdeploy 893a5b1f
 - git_commit_sha: 待本阶段提交并推送后登记。

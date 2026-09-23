@@ -28,6 +28,6 @@ npm run test       # vitest 单元测试（引擎/输入/存储/UI）
 npm run test:e2e   # 黑盒集成 + 静态服务测试（针对 dist/ 真实产物）
 ```
 
-用户可读项目标题：`Web版多用户同屏贪吃蛇大战 · postdeploy 4046dbc8`
+用户可读项目标题：`Web版多用户同屏贪吃蛇大战 · postdeploy 893a5b1f`
 
-工作流标记：`Web版多用户同屏贪吃蛇大战 · postdeploy 4046dbc8`；当前 Workflow：`c88d84d9-6883-4279-b55b-4966054a097e`。
+工作流标记：`Web版多用户同屏贪吃蛇大战 · postdeploy 893a5b1f`；当前 Workflow：`82cd3989-8762-4d92-9ad5-8f0218ce2863`。
