@@ -1,23 +1,25 @@
-# 部署记录
+# 部署记录 — 消消乐 · 3D 三消（部署阶段）
 
-- activity_id: 69fae03c-aa71-44fe-ab8d-f1471a64a489
-- stage_run_id: 1594ad05-c8d7-4c72-97b6-7fa11e780d8c
-- workflow_id: c88d84d9-6883-4279-b55b-4966054a097e
-- input_manifest_sha256: 13bb97b1dccd721e0e6cb927ed76f6e776a6a3a9efe6fe14ff268eb85ca10afe
-- parent_test_report_sha256: 92cad28ee4a12ab683ab3b3f256fdab345119ea9b26c12169a270d0cb539eccd
-- parent_release_candidate_sha256: f4d8a7ef9254d158da963b7ac59bacdcff510d0fd2bf5b258d8dcfb9e20b8071
-- parent_release_candidate_git_commit: 49f988a3e61d1e539cc8efc42e403ec5de160f8c
-- deployment_target: Vite production preview
+- activity_id: 0c9d1266-25f0-4181-8f1a-f546a25aecc5
+- stage_run_id: ea31850a-91ea-4d33-9d37-1faa312054c0
+- workflow_id: a3d16e35-bd65-41e1-b430-995f7151e2a6
+- input_manifest_sha256: d21809e452381689faa264659528fbb5ad64b2b6ad380feedcb358508e91d561
+- parent_release_candidate_sha256: a4c405cb6e5ae0bae207222635468d83f8a5e69284fd87b52903fd6ff37de3ac
+- parent_release_candidate_git_commit: 880f06f20f137d1792f536fecd96c9b8529cc1d3
+- parent_test_report_sha256: f995ef256fcf4bb038a7c39e6796a43534a2312905c84c680b036311219aca16
+- deployment_target: Vite production preview (静态 dist 产物)
+- deployment_bind: 0.0.0.0:4173
 - deployment_port: 4173
-- health_check: PASS; 本地生产预览 HTTP 200，页面标题、工作流标记、画布、双玩家计分字段、两组屏幕按钮、开始游戏、再玩一次和重新开始控件均已验证
-- acceptance_url: https://preview.mcode.side419.cn:30119
-- platform_preview_url: http://preview.mcode.side419.cn:30119
-- platform_https_probe: FAIL; 将 request_preview 返回地址转换为 HTTPS 后，Runner 探测返回 OpenSSL wrong version number；平台 HTTP 入口可访问
-- rollback_handle: git revert <release_candidate_git_commit>
+- health_check: PASS; 本地生产预览 `/` 与 `/three-match/` 均 HTTP 200，页面含 workflow 标记、canvas 与 score HUD；three-match JS 资源 HTTP 200
+- platform_preview_url: http://preview.mcode.side419.cn:30035/three-match/
+- platform_preview_root: http://preview.mcode.side419.cn:30035/
+- platform_https_probe: FAIL; 将 request_preview 返回地址转换为 HTTPS 后 Runner 探测返回 OpenSSL wrong version number，平台 HTTP 入口可访问（沿用上游 open_risk）
+- rollback_handle: `git revert <release_candidate_git_commit>`；如需回退到上一可用版本，reset 至 880f06f20f137d1792f536fecd96c9b8529cc1d3 后重新执行 `npm ci && npm run build && npm run preview`
 - build: PASS; npm run build
-- lint: PASS; npm run lint
-- typecheck: PASS; npm run typecheck
-- unit_tests: PASS; 4 files and 37 tests
-- blackbox_tests: PASS; 31 tests
-- artifact_identity: PASS; dist/index.html sha256 3bc1bd97f56f579acbf1bc375e39bffdae4afac3e745fa51d2d882ea675af47b；dist/assets/index-CG_HjHcC.js sha256 3fc98947035e08d7f458e4308469b4216fff6ea91828fc4c16bb0f8d16ede1bb；dist/assets/index-CdmV6boD.css sha256 d89c0723a7589f7a394aa933eeac1af81e6c4f1bc658838a46e4b3dab918091c
-- git_commit_pushed: 待本阶段提交并推送后登记远程 HEAD。
+- lint: PASS; npm run lint (exit 0)
+- typecheck: PASS; npm run typecheck (exit 0)
+- unit_tests: PASS; 5 files and 58 tests
+- blackbox_tests: PASS; 41 tests（含 AC-001~AC-006 验收）
+- artifact_identity: PASS; dist/three-match/index.html sha256 9b62627c0d88a0555707533b941dd0f55e8df30128d6725c89675ce6c2910099；dist/index.html sha256 047a172a09c0ca1393bd09753c5f28facd0856b849abc08f04b87d95aa941207；dist/assets/threeMatch-DoSQ6UAJ.js sha256 ca2d1ded940fcfe3bad1f376d357be2d0d8d37d293c791d257d7e85ec7e9a009；dist/assets/threeMatch-i5Vbh66S.css sha256 fff67ee6204fb04ef0c18606fa907cabee81660b94ffa6cf02928190e4f7a8dd
+- git_commit_pushed: 待本阶段提交并推送后登记远程 HEAD（见下）
+- git_remote_head: （由本阶段提交推进）
