@@ -21,11 +21,19 @@ export function bootstrap({ canvas, doc = globalThis.document }) {
       else if (result.reason === 'no-match') hud.toast('这样换不能消除哦', 'warn');
       return;
     }
+    boardView.swapVisual(from, to);
     resolveTimer = 0;
   }
 
-  const input = createInput({ canvas, camera, boardView, game, onAttempt });
+  const input = createInput({ canvas, camera, boardView, game, onAttempt, onRestart });
   input.attach();
+
+  function onRestart() {
+    game.start();
+    boardView.syncFromBoard(game.board);
+    hud.reset();
+    resize();
+  }
 
   hud.bind({
     onStart: () => {
@@ -34,12 +42,7 @@ export function bootstrap({ canvas, doc = globalThis.document }) {
       hud.reset();
       resize();
     },
-    onRestart: () => {
-      game.start();
-      boardView.syncFromBoard(game.board);
-      hud.reset();
-      resize();
-    },
+    onRestart,
   });
   game.start();
   boardView.syncFromBoard(game.board);
@@ -67,7 +70,9 @@ export function bootstrap({ canvas, doc = globalThis.document }) {
           const events = game.tick();
           boardView.applyEvents(events);
           hud.refresh();
-          if (game.combo > 1 && events.some((e) => e.type === 'clear')) {
+          if (events.some((e) => e.type === 'shuffle')) {
+            hud.toast('没有可消除的组合，已自动洗牌', 'shuffle');
+          } else if (game.combo > 1 && events.some((e) => e.type === 'clear')) {
             hud.toast(`连锁 x${game.combo}`, 'combo');
           }
           resolveTimer = 0;
@@ -75,7 +80,8 @@ export function bootstrap({ canvas, doc = globalThis.document }) {
       } else {
         identicalFrames += 1;
         if (identicalFrames % 240 === 0 && !game.canInteract()) {
-          game.ensurePlayable(false);
+          const shuffleToast = game.ensurePlayable(false);
+          if (shuffleToast) hud.toast(shuffleToast.text, 'shuffle');
         }
       }
     } else {

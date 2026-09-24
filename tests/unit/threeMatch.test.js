@@ -127,6 +127,35 @@ describe('collapse', () => {
     expect(board[1][1]).toBe(4);
   });
 
+  it('tags every spawned cell with the kind actually written to the board', () => {
+    const board = boardFrom([
+      'null null 2',
+      '1 null 3',
+      '4 5 6',
+    ]);
+    const kinds = 6;
+    const { spawns } = collapse(board, kinds);
+    expect(spawns.length).toBe(3);
+    for (const spawn of spawns) {
+      expect(Number.isInteger(spawn.kind)).toBe(true);
+      expect(spawn.kind).toBeGreaterThanOrEqual(0);
+      expect(spawn.kind).toBeLessThan(kinds);
+      expect(board[spawn.row][spawn.col]).toBe(spawn.kind);
+    }
+  });
+
+  it('marks spawns with the correct kind when a fixed random source is injected', () => {
+    const board = boardFrom([
+      'null',
+      'null',
+      '7',
+    ]);
+    const { spawns } = collapse(board, 6, () => 0.5);
+    expect(spawns.map((s) => s.kind)).toEqual([3, 3]);
+    expect(board[0][0]).toBe(3);
+    expect(board[1][0]).toBe(3);
+  });
+
   it('refills the top of a column that was already bottom-packed', () => {
     const board = boardFrom([
       'null null',
@@ -240,6 +269,37 @@ describe('GameState', () => {
     expect(game.score).toBeGreaterThan(0);
     expect(game.combo).toBe(1);
     expect(game.busy).toBe(true);
+  });
+
+  it('carries gem kinds on clear and fall events so the view can render colours', () => {
+    const game = new GameState();
+    game.start();
+    game.board = matchBoard();
+    game.trySwap({ row: 0, col: 1 }, { row: 1, col: 1 });
+    const clearEvents = [];
+    const fallSpawnKinds = [];
+    let guard = 0;
+    while (game.busy && guard < 2000) {
+      for (const event of game.tick()) {
+        if (event.type === 'clear') clearEvents.push(event);
+        if (event.type === 'fall') {
+          for (const spawn of event.spawns) {
+            fallSpawnKinds.push(spawn.kind);
+            // 生成时刻 kind 必须与棋盘写入值一致
+            expect(game.board[spawn.row][spawn.col]).toBe(spawn.kind);
+          }
+        }
+      }
+      guard += 1;
+    }
+    expect(clearEvents.length).toBeGreaterThan(0);
+    for (const event of clearEvents) {
+      for (const cell of event.cells) {
+        expect(Number.isInteger(cell.kind)).toBe(true);
+      }
+    }
+    expect(fallSpawnKinds.length).toBeGreaterThan(0);
+    expect(fallSpawnKinds.every((k) => Number.isInteger(k))).toBe(true);
   });
 
   it('runs the full resolve loop back to idle', () => {

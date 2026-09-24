@@ -92,7 +92,7 @@ export class GameState {
       this.phase = PHASE.CLEARING;
       this.lastEvents.push({
         type: 'clear',
-        cells: matches.cells,
+        cells: cleared,
         groups: matches.groups,
         combo: this.combo,
         score: this.score,
@@ -119,7 +119,7 @@ export class GameState {
         this.phase = PHASE.CLEARING;
         this.lastEvents.push({
           type: 'clear',
-          cells: matches.cells,
+          cells: cleared,
           groups: matches.groups,
           combo: this.combo,
           score: this.score,

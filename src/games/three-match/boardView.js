@@ -109,9 +109,37 @@ export class BoardView {
         for (const cell of event.cells) this.popGem(cell.row, cell.col, cell.kind);
       } else if (event.type === 'fall') {
         for (const fall of event.falls) this.moveGem(fall.from, fall.to);
-        for (const spawn of event.spawns) this.addGem(spawn.row, spawn.col, null, spawn.offset);
+        for (const spawn of event.spawns) this.addGem(spawn.row, spawn.col, spawn.kind, spawn.offset);
       }
     }
+  }
+
+  swapVisual(a, b) {
+    const ea = this.gems.get(this.key(a.row, a.col));
+    const eb = this.gems.get(this.key(b.row, b.col));
+    if (ea) {
+      this.gems.delete(this.key(a.row, a.col));
+      ea.row = b.row;
+      ea.col = b.col;
+      this.gems.set(this.key(b.row, b.col), ea);
+    }
+    if (eb) {
+      this.gems.delete(this.key(b.row, b.col));
+      eb.row = a.row;
+      eb.col = a.col;
+      this.gems.set(this.key(a.row, a.col), eb);
+    }
+    this.retarget(ea);
+    this.retarget(eb);
+  }
+
+  retarget(entity) {
+    if (!entity) return;
+    entity.from.copy(entity.mesh.position);
+    entity.target = tileToWorld(entity.row, entity.col, this.size);
+    entity.progress = 0;
+    entity.speed = 6.5;
+    entity.spawn = false;
   }
 
   popGem(row, col, kind) {

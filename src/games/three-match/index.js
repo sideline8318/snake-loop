@@ -1,12 +1,18 @@
 import { GAME } from './config.js';
 import { bootstrap } from './main3d.js';
 
-document.addEventListener('DOMContentLoaded', () => {
-  document.title = GAME.DISPLAY_TITLE;
-  const canvas = document.getElementById('gameCanvas');
-  if (!canvas) {
+export function initThreeMatch({ canvas, doc = document } = {}) {
+  doc.title = GAME.DISPLAY_TITLE;
+  const target = canvas || doc.getElementById('gameCanvas');
+  if (!target) {
     console.error('[three-match] missing #gameCanvas');
-    return;
+    return null;
   }
-  bootstrap({ canvas });
-});
+  return bootstrap({ canvas: target, doc });
+}
+
+if (typeof document !== 'undefined' && document.addEventListener) {
+  document.addEventListener('DOMContentLoaded', () => {
+    initThreeMatch({ doc: document });
+  });
+}

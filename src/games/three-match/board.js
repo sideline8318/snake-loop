@@ -116,8 +116,9 @@ export function collapse(board, kinds = GAME.GEM_KINDS, random = Math.random) {
     }
     let spawnOffset = 1;
     for (let row = writeRow; row >= 0; row--) {
-      board[row][col] = Math.floor(random() * kinds) % kinds;
-      spawns.push({ row, col, offset: spawnOffset++ });
+      const kind = Math.floor(random() * kinds) % kinds;
+      board[row][col] = kind;
+      spawns.push({ row, col, kind, offset: spawnOffset++ });
     }
   }
   return { falls, spawns };

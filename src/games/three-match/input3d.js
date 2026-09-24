@@ -1,15 +1,16 @@
 import * as THREE from 'three';
-import { tileToWorld } from './scene3d.js';
 
-export function createInput({ canvas, camera, boardView, game, onAttempt }) {
+export function createInput({ canvas, camera, boardView, game, onAttempt, onRestart }) {
   const raycaster = new THREE.Raycaster();
   const pointer = new THREE.Vector2();
   const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
   const hit = new THREE.Vector3();
   let dragging = false;
   let startCell = null;
+  let pressedCell = null;
   let startPoint = { x: 0, y: 0 };
   let hoverCell = null;
+  let suppressClick = false;
 
   function cellFromEvent(event) {
     const rect = canvas.getBoundingClientRect();
@@ -25,18 +26,13 @@ export function createInput({ canvas, camera, boardView, game, onAttempt }) {
     return { row, col };
   }
 
-  function cellToScreen(cell) {
-    const world = tileToWorld(cell.row, cell.col, game.size);
-    const projected = world.clone().project(camera);
-    return { x: projected.x, y: projected.y };
-  }
-
   function onPointerDown(event) {
     if (!game.canInteract()) return;
     const cell = cellFromEvent(event);
     if (!cell) return;
     dragging = true;
-    startCell = cell;
+    suppressClick = false;
+    pressedCell = cell;
     startPoint = { x: event.clientX, y: event.clientY };
     boardView.highlightCell(cell.row, cell.col);
     canvas.setPointerCapture?.(event.pointerId);
@@ -58,10 +54,14 @@ export function createInput({ canvas, camera, boardView, game, onAttempt }) {
     const dx = event.clientX - startPoint.x;
     const dy = event.clientY - startPoint.y;
     if (Math.hypot(dx, dy) < 14) return;
-    const target = resolveSwipeTarget(startCell, dx, dy);
+    const from = pressedCell;
+    const target = resolveSwipeTarget(from, dx, dy);
     dragging = false;
+    pressedCell = null;
+    startCell = null;
+    suppressClick = true;
     boardView.clearHighlight();
-    attempt(startCell, target);
+    attempt(from, target);
   }
 
   function resolveSwipeTarget(cell, dx, dy) {
@@ -72,40 +72,33 @@ export function createInput({ canvas, camera, boardView, game, onAttempt }) {
   }
 
   function onClick(event) {
+    if (suppressClick) {
+      suppressClick = false;
+      return;
+    }
     if (!game.canInteract()) return;
     const cell = cellFromEvent(event);
     if (!cell) return;
-    if (!startCell || !sameCell(startCell, cell)) {
+    if (!startCell) {
       startCell = cell;
       boardView.highlightCell(cell.row, cell.col);
       return;
     }
+    if (sameCell(startCell, cell)) {
+      startCell = null;
+      boardView.clearHighlight();
+      return;
+    }
+    const from = startCell;
     startCell = null;
+    boardView.clearHighlight();
+    attempt(from, cell);
   }
 
   function onPointerUp(event) {
-    if (dragging && startCell) {
-      const cell = cellFromEvent(event);
-      if (cell && !sameCell(cell, startCell)) {
-        attempt(startCell, cell);
-      } else {
-        const target = adjacentFromRelease(startCell, event);
-        if (target) attempt(startCell, target);
-      }
-    }
     dragging = false;
+    pressedCell = null;
     canvas.releasePointerCapture?.(event.pointerId);
-  }
-
-  function adjacentFromRelease(cell, event) {
-    const from = cellToScreen(cell);
-    const rect = canvas.getBoundingClientRect();
-    const nx = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-    const ny = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-    const dx = nx - from.x;
-    const dy = ny - from.y;
-    if (Math.hypot(dx, dy) < 0.02) return null;
-    return resolveSwipeTarget(cell, dx, -dy);
   }
 
   function attempt(from, to) {
@@ -118,8 +111,8 @@ export function createInput({ canvas, camera, boardView, game, onAttempt }) {
 
   function onKeyDown(event) {
     if (event.key === 'r' || event.key === 'R') {
-      game.start();
-      onAttempt?.({ type: 'restart' });
+      if (onRestart) onRestart();
+      else game.start();
     }
   }
 
