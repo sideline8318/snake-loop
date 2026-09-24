@@ -1,6 +1,6 @@
 # 技术设计：消消乐（三消）Web 在线小游戏
 
-> 本文件为阶段 technical_design（ActivityRun `f38b4b40-f79e-4083-8e1f-4abce19a40cb`）的权威制品，
+> 本文件为阶段 technical_design（StageRun `404a4192-401b-42d8-b555-27cea173eb8d`，ActivityRun `5324acb4-e023-4142-8c26-e0974082fb61`）的权威制品，
 > 直接承接产品设计基线（sha256=`9b344dff044976d46f6d8a509835a3fd68efc46d8c2c44ae1590f33320cc0fc4`，
 > ActivityRun `95cea790-22bb-453b-af15-d0013c17891b`）与验收标准 AC-001~AC-006；
 > 其内容哈希、byte_size 与 artifact_uri 以 `loop.complete_activity` 提交的 ArtifactManifest 为准。
@@ -10,14 +10,15 @@
 - artifact_type: technical_design
 - artifact_name: three-match-technical-design
 - activity_key: technical_design.work.1
-- activity_id: f38b4b40-f79e-4083-8e1f-4abce19a40cb
+- activity_id: 5324acb4-e023-4142-8c26-e0974082fb61
 - stage: technical_design
-- stage_run_id: d6d315b8-b391-46a1-9618-9c6b39cc4771
+- stage_run_id: 404a4192-401b-42d8-b555-27cea173eb8d
+- attempt_no: 2
 - workflow_id: a3d16e35-bd65-41e1-b430-995f7151e2a6
 - input_manifest_sha256: 9ab024f784119e92bc88487e6c8c23d0b0bd95c4e279087784939a1fab625ff3
-- request_intent_sha256: 499921999f08dd706ed035d996f271b80538711719629312d96e9fff3871042e
+- request_intent_sha256: 850e6822609045db85b99eb5cb8b9d6b5b78a6798d6227f0ad8431a241a3ff93
 - upstream_baseline_sha256: 9b344dff044976d46f6d8a509835a3fd68efc46d8c2c44ae1590f33320cc0fc4
-- upstream_git_commit_sha: 44ed3624837a3c23194d27af14919982214a592b
+- upstream_git_commit_sha: 5170612806e90d003bc75598ec793430702d7767
 - generation: 1
 - primary_repo: https://github.com/sideline8318/snake-loop
 - project_name: snake-loop-competition
@@ -255,7 +256,7 @@ graph TD
 ### 9.1 本阶段追溯链
 
 - 上游输入：product_design，sha256=9b344dff044976d46f6d8a509835a3fd68efc46d8c2c44ae1590f33320cc0fc4（ActivityRun 95cea790-22bb-453b-af15-d0013c17891b）。
-- 本制品：technical_design，由本文件内容计算 sha256 与 byte_size，登记 artifact_uri、input_manifest_sha256=9ab024f784119e92bc88487e6c8c23d0b0bd95c4e279087784939a1fab625ff3 与 activity_id=f38b4b40-f79e-4083-8e1f-4abce19a40cb。
+- 本制品：technical_design，由本文件内容计算 sha256 与 byte_size，登记 artifact_uri、input_manifest_sha256=9ab024f784119e92bc88487e6c8c23d0b0bd95c4e279087784939a1fab625ff3 与 activity_id=5324acb4-e023-4142-8c26-e0974082fb61。
 - 追溯关系：upstream_baseline_to_artifact（9b344dff... 到本制品）、input_manifest_to_artifact（9ab024f7... 到本制品）、artifact_to_commit（本制品到本阶段提交 SHA）。
 - 承载检查：api_data_security_reviewed（第 7 章）、test_rollback_plan_ready（第 8 章）。
 
