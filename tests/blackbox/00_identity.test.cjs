@@ -40,7 +40,8 @@ test('built bundle is valid JS and contains engine + storage key', () => {
   assert.match(src, /"snake-loop-high-score"/);
   assert.match(src, /get isGameOver/);
   assert.match(src, /Canvas 2D 上下文不可用/);
-  assert.doesNotThrow(() => new Function(src.replaceAll('</', '<\\/')), 'bundle syntax error');
+  const evaluable = src.replace(/^import[^;]+;/gm, '');
+  assert.doesNotThrow(() => new Function(evaluable.replaceAll('</', '<\\/')), 'bundle syntax error');
 });
 
 test('HUD ids referenced by markup resolve in the bundle wiring', () => {

@@ -20,16 +20,28 @@ function sha256(buf) {
 
 function distAssets() {
   const html = fs.readFileSync(path.join(DIST, 'index.html'), 'utf8');
-  const js = html.match(/\/assets\/(index-[^"]+\.js)/)[1];
-  const css = html.match(/\/assets\/(index-[^"]+\.css)/)[1];
+  const js = html.match(/\/assets\/([^"]+\.js)/)[1];
+  const css = html.match(/\/assets\/([^"]+\.css)/)[1];
   return { html, js, css };
+}
+
+function distAssetsFor(relPath) {
+  const html = fs.readFileSync(path.join(DIST, relPath), 'utf8');
+  const jsFiles = [...html.matchAll(/\/assets\/([^"]+\.js)/g)].map((m) => m[1]);
+  const cssFiles = [...html.matchAll(/\/assets\/([^"]+\.css)/g)].map((m) => m[1]);
+  const primary = jsFiles.filter((f) => !f.startsWith('modulepreload'))[0] || jsFiles[0];
+  return { html, js: primary, jsFiles, css: cssFiles[0] || null, cssFiles };
 }
 
 function createStaticServer(port, distDir = DIST) {
   const server = http.createServer((req, res) => {
     let p = decodeURIComponent(req.url.split('?')[0]);
     if (p === '/') p = '/index.html';
-    const file = path.join(distDir, p);
+    const indexed = p.endsWith('/') ? p + 'index.html' : p;
+    let file = path.join(distDir, indexed);
+    if (!fs.existsSync(file) && fs.existsSync(path.join(distDir, p, 'index.html'))) {
+      file = path.join(distDir, p, 'index.html');
+    }
     if (!file.startsWith(distDir) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) {
       res.writeHead(404, { 'Content-Type': 'text/plain' });
       res.end('not found');
@@ -37,6 +49,13 @@ function createStaticServer(port, distDir = DIST) {
     }
     const ext = path.extname(file);
     res.writeHead(200, { 'Content-Type': MIME[ext] || 'application/octet-stream' });
+    if (ext === '.js') {
+      // jsdom executes the bundle as a classic script; strip the module-level
+      // polyfill import that Vite adds for multi-entry builds.
+      const code = fs.readFileSync(file, 'utf8').replace(/^import[^;]+;/gm, '');
+      res.end(code);
+      return;
+    }
     fs.createReadStream(file).pipe(res);
   });
   return new Promise((resolve) => server.listen(port, '127.0.0.1', () => resolve(server)));
@@ -143,6 +162,7 @@ module.exports = {
   ROOT,
   DIST,
   distAssets,
+  distAssetsFor,
   createStaticServer,
   createGameWindow,
   createCtxStub,

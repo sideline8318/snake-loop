@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="消消乐 · 3D 三消 Web 小游戏，交换相邻宝石连成三个以上即可消除得分" />
+  <meta name="workflow-marker" content="消消乐 · 3D 三消 | workflow a3d16e35-bd65-41e1-b430-995f7151e2a6" />
+  <meta name="workflow-id" content="a3d16e35-bd65-41e1-b430-995f7151e2a6" />
+  <title>消消乐 · 3D 三消</title>
+  <link rel="stylesheet" href="/src/games/three-match/style.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="hud">
+      <p class="eyebrow">MATCH-3 · 3D ARCADE</p>
+      <div>
+        <h1 class="title">消消乐 · 3D 三消</h1>
+        <p class="subtitle">交换相邻宝石，连成三个以上即可消除得分</p>
+      </div>
+      <div class="actions">
+        <button id="restartBtn" class="btn" type="button">重新开始</button>
+      </div>
+      <div class="stats">
+        <div class="stat"><span class="label">当前得分</span><span id="score" class="value">0</span></div>
+        <div class="stat"><span class="label">最高分</span><span id="bestScore" class="value">0</span></div>
+        <div class="stat combo"><span class="label">连锁</span><span id="combo" class="value">—</span></div>
+      </div>
+    </header>
+
+    <main class="stage">
+      <div class="canvas-wrap">
+        <canvas id="gameCanvas" aria-label="3D 三消游戏棋盘"></canvas>
+        <p id="toast" class="toast hidden" role="status" aria-live="polite"></p>
+      </div>
+
+      <section id="menuOverlay" class="overlay">
+        <div class="panel">
+          <p class="kicker">SWAP · MATCH · CASCADE</p>
+          <h2>准备好消除宝石了吗？</h2>
+          <p>点击或拖动交换相邻宝石，凑成三个及以上同色连线即可消除得分。</p>
+          <div class="rules">
+            <span>· 点击两颗相邻宝石完成交换</span>
+            <span>· 无效的交换会自动回退</span>
+            <span>· 消除后宝石下落补位，可触发连锁</span>
+            <span>· 无可消除组合时自动洗牌</span>
+          </div>
+          <button id="startBtn" class="btn primary" type="button">开始游戏</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">three-match · 消消乐 3D · 工作流 a3d16e35-bd65-41e1-b430-995f7151e2a6</footer>
+  </div>
+  <script type="module" src="/src/games/three-match/index.js"></script>
+</body>
+</html>

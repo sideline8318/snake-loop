@@ -18,7 +18,7 @@ function detectInsideSegment(seg) {
   const dirsMatch = m(/([a-zA-Z])=\{LEFT:\{x:-1,y:0\},RIGHT:\{x:1,y:0\}\}/, 'dirs const');
   const keyMatch = m(/([a-zA-Z])="snake-loop-high-score"/, 'storage key');
   const revMatch = m(/function ([a-zA-Z])\([a-zA-Z],[a-zA-Z]\)\{return [a-zA-Z]\.x\+[a-zA-Z]\.x===0&&[a-zA-Z]\.y\+[a-zA-Z]\.y===0\}/, 'isReverse fn');
-  const engMatch = m(/class ([A-Z])\{constructor\(\)\{this\.gridSize=/, 'engine class');
+  const engMatch = m(/class ([a-zA-Z])\{constructor\(\)\{this\.gridSize=/, 'engine class');
   return {
     cfgName: cfgMatch[1],
     scenesName: scenesMatch[1],
@@ -31,7 +31,8 @@ function detectInsideSegment(seg) {
 
 function regenerateSnapshot() {
   fs.mkdirSync(path.dirname(SNAPSHOT), { recursive: true });
-  const src = fs.readFileSync(path.join(DIST, 'assets', distAssets().js), 'utf8');
+  const raw = fs.readFileSync(path.join(DIST, 'assets', distAssets().js), 'utf8');
+  const src = raw.replace(/^import[^;]+;/gm, '');
 
   const cfgIdx = src.lastIndexOf('const ', src.indexOf('GRID_SIZE:20'));
   assert.ok(cfgIdx >= 0, 'cfg segment start not found');
