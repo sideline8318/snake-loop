@@ -21,5 +21,5 @@
 - unit_tests: PASS; 5 files and 58 tests
 - blackbox_tests: PASS; 41 tests（含 AC-001~AC-006 验收）
 - artifact_identity: PASS; dist/three-match/index.html sha256 9b62627c0d88a0555707533b941dd0f55e8df30128d6725c89675ce6c2910099；dist/index.html sha256 047a172a09c0ca1393bd09753c5f28facd0856b849abc08f04b87d95aa941207；dist/assets/threeMatch-DoSQ6UAJ.js sha256 ca2d1ded940fcfe3bad1f376d357be2d0d8d37d293c791d257d7e85ec7e9a009；dist/assets/threeMatch-i5Vbh66S.css sha256 fff67ee6204fb04ef0c18606fa907cabee81660b94ffa6cf02928190e4f7a8dd
-- git_commit_pushed: 待本阶段提交并推送后登记远程 HEAD（见下）
-- git_remote_head: （由本阶段提交推进）
+- git_commit_pushed: PASS; 提交 e9a413fed417e239f2a9d620d08e4e2013105d56 已推送至 origin/main（880f06f -> e9a413f）
+- git_remote_head: e9a413fed417e239f2a9d620d08e4e2013105d56（origin/main，与本地 HEAD 一致）
