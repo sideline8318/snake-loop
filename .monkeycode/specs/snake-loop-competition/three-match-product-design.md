@@ -1,11 +1,15 @@
 # 产品设计：消消乐（三消）Web 在线小游戏
 
+> 本文件为阶段 product_design（ActivityRun `95cea790-22bb-453b-af15-d0013c17891b`）的权威制品，
+> 完整承接需求基线 `ff352105...0cfdc` 与验收标准 AC-001~AC-006；
+> 其内容哈希、byte_size 与 artifact_uri 以 `loop.complete_activity` 提交的 ArtifactManifest 为准。
+
 ## 1. 制品元数据
 
 - artifact_type: product_design
-- artifact_name: product_design_match3
-- activity_id: 95cea790-22bb-453b-af15-d0013c17891b
+- artifact_name: three-match-product-design
 - activity_key: product_design.work.1
+- activity_id: 95cea790-22bb-453b-af15-d0013c17891b
 - stage: product_design
 - stage_run_id: 9cf5c12e-a543-4383-853b-64253a5cb356
 - workflow_id: a3d16e35-bd65-41e1-b430-995f7151e2a6
@@ -21,11 +25,15 @@
 
 本制品以需求基线 `requirement_baseline`（sha256=ff35210507ef825f4e3acadb22d1155f07d0b48a37b674c35f8d3a8c9cc0cfdc）为唯一上游输入，承接其冻结范围（IN-01~IN-10 / OUT-01~OUT-05 / AS-01~AS-04）与需求条目（REQ-ENTRY-01~REQ-VISUAL-01），将需求转化为可直接实施的产品与交互设计，并给出需求到验收标准（AC-001~AC-006）的完整映射。本阶段不引入任何超出冻结范围的新功能。
 
+### 1.1 前序制品说明
+
+本仓库中曾存在另一份三消产品设计制品 `.monkeycode/specs/snake-loop-competition/product_design_match3.md`，其未绑定 AC-001~AC-006，且自造 REQ 编号与上游需求基线不一致，已随本次提交移除，视为无效制品。本文件为本阶段唯一权威制品，并以需求基线 `ff352105...` 为其上游依赖。
+
 ## 2. 产品定位与设计目标
 
 ### 2.1 一句话定位
 
-一款零后端依赖、打开即玩的 3D 消消乐（三消）Web 小游戏：8x8 棋盘上 6 色宝石，点击或拖拽交换相邻宝石，凑成三个及以上同色连线即消除得分，消除后宝石下落补位可触发连锁，棋盘无可消除组合时自动洗牌，最高分本地持久化，视觉清爽、节奏轻快。
+一款零后端依赖、打开即玩的 3D 三消休闲游戏：在 8x8 宝石棋盘上点击或拖动交换相邻宝石，凑成三个及以上同色连线即可消除得分，消除后宝石自动下落补位并可触发连锁，棋面无解时自动洗牌保证可持续游玩。
 
 ### 2.2 设计目标
 
