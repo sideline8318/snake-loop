@@ -3,9 +3,15 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('fs');
 const path = require('path');
-const { DIST, distAssets } = require('../blackbox/helpers.cjs');
+const { DIST, distAssetsFor } = require('../blackbox/helpers.cjs');
 
 const SNAPSHOT = path.join(__dirname, 'dist-snapshot', 'engine.shipped.cjs');
+const SNAKE_PAGE = 'legacy-snake/index.html';
+
+function snakeBundle() {
+  const { jsFiles } = distAssetsFor(SNAKE_PAGE);
+  return jsFiles.find((f) => !f.startsWith('modulepreload')) || jsFiles[0];
+}
 
 function detectInsideSegment(seg) {
   const m = (re, label) => {
@@ -31,7 +37,7 @@ function detectInsideSegment(seg) {
 
 function regenerateSnapshot() {
   fs.mkdirSync(path.dirname(SNAPSHOT), { recursive: true });
-  const raw = fs.readFileSync(path.join(DIST, 'assets', distAssets().js), 'utf8');
+  const raw = fs.readFileSync(path.join(DIST, 'assets', snakeBundle()), 'utf8');
   const src = raw.replace(/^import[^;]+;/gm, '');
 
   const cfgIdx = src.lastIndexOf('const ', src.indexOf('GRID_SIZE:20'));

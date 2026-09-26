@@ -6,7 +6,8 @@ const path = require('path');
 const { spawnSync } = require('child_process');
 const { ROOT, DIST, distAssetsFor, sha256 } = require('../blackbox/helpers.cjs');
 
-const PAGE = 'three-match/index.html';
+const PAGE = 'index.html';
+const ALIAS_PAGE = 'three-match/index.html';
 
 // 通过 node 子进程导入 ESM 源码模块，避免在 blackbox（CJS）中直接 import。
 function runEsm(script) {
@@ -20,13 +21,26 @@ function runEsm(script) {
   return JSON.parse(result.stdout.trim().split('\n').pop());
 }
 
-test('AC-001: page opens directly with no build step and exposes start/restart controls', () => {
+test('AC-001: release root opens directly as three-match with start/restart controls', () => {
   const { html } = distAssetsFor(PAGE);
+  assert.match(html, /<title>消消乐 · 3D 三消<\/title>/);
+  assert.doesNotMatch(html, /Web版多用户同屏贪吃蛇大战/);
   assert.match(html, /<button id="restartBtn"/);
   assert.match(html, /<button id="startBtn"/);
   assert.match(html, /id="gameCanvas"/);
-  // 入口页面独立可访问，不依赖外部构建命令
+  // 发布根入口独立可访问，不依赖外部构建命令
   assert.ok(fs.existsSync(path.join(DIST, PAGE)));
+});
+
+test('AC-001/AC-003: release root and the three-match alias render the same app', () => {
+  const root = distAssetsFor(PAGE).html;
+  const alias = distAssetsFor(ALIAS_PAGE).html;
+  assert.match(alias, /<title>消消乐 · 3D 三消<\/title>/);
+  // 两者复用同一套 HUD 契约与控制入口
+  for (const id of ['gameCanvas', 'score', 'bestScore', 'combo', 'startBtn', 'restartBtn']) {
+    assert.ok(root.includes('id="' + id + '"'), 'release root missing #' + id);
+    assert.ok(alias.includes('id="' + id + '"'), 'alias missing #' + id);
+  }
 });
 
 test('AC-002: deterministic 8x8 board starts without any ready match and provides a move', () => {

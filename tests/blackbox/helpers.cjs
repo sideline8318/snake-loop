@@ -7,6 +7,7 @@ const { JSDOM } = require('jsdom');
 
 const ROOT = path.join(__dirname, '..', '..');
 const DIST = path.join(ROOT, 'dist');
+const DIST_LEGACY = path.join(DIST, 'legacy-snake');
 
 const MIME = {
   '.html': 'text/html; charset=utf-8',
@@ -19,10 +20,7 @@ function sha256(buf) {
 }
 
 function distAssets() {
-  const html = fs.readFileSync(path.join(DIST, 'index.html'), 'utf8');
-  const js = html.match(/\/assets\/([^"]+\.js)/)[1];
-  const css = html.match(/\/assets\/([^"]+\.css)/)[1];
-  return { html, js, css };
+  return distAssetsFor('index.html');
 }
 
 function distAssetsFor(relPath) {
@@ -90,17 +88,17 @@ function createCtxStub() {
   return ctx;
 }
 
-function pageHtmlForJsdom() {
-  let html = fs.readFileSync(path.join(DIST, 'index.html'), 'utf8');
+function pageHtmlForJsdom(relPath = 'index.html') {
+  let html = fs.readFileSync(path.join(DIST, relPath), 'utf8');
   html = html.replace(
     /<script\s+type="module"\s+crossorigin\s+src="\/assets\/[^"]+\.js"/,
-    '<script src="/assets/' + distAssets().js + '"'
+    '<script src="/assets/' + distAssetsFor(relPath).js + '"'
   );
   return html;
 }
 
-async function createGameWindow({ base = 'http://127.0.0.1:8541', mathRandom, localStorageSeed } = {}) {
-  const html = pageHtmlForJsdom();
+async function createGameWindow({ base = 'http://127.0.0.1:8541', mathRandom, localStorageSeed, page = 'index.html' } = {}) {
+  const html = pageHtmlForJsdom(page);
   const dom = await new Promise((resolve, reject) => {
     const d = new JSDOM(html, {
       url: base + '/index.html',
@@ -161,6 +159,7 @@ async function waitFor(fn, { timeout = 4000, interval = 30 } = {}) {
 module.exports = {
   ROOT,
   DIST,
+  DIST_LEGACY,
   distAssets,
   distAssetsFor,
   createStaticServer,

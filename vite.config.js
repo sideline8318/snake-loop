@@ -17,6 +17,7 @@ export default defineConfig({
       input: {
         main: new URL('./index.html', import.meta.url).pathname,
         threeMatch: new URL('./three-match/index.html', import.meta.url).pathname,
+        legacySnake: new URL('./legacy-snake/index.html', import.meta.url).pathname,
       },
     },
   },

@@ -38,8 +38,14 @@ function doc(dom) {
   return dom.window.document;
 }
 
-test('page loads with all required controls and workflow markers', async () => {
-  const dom = await createGameWindow({ base: BASE });
+// The snake game now lives off the release root at /legacy-snake/;
+// integration tests exercise it through that page while the root serves three-match.
+function openSnake(extra = {}) {
+  return createGameWindow({ base: BASE, page: 'legacy-snake/index.html', ...extra });
+}
+
+test('legacy snake page loads with all required controls and workflow markers', async () => {
+  const dom = await openSnake();
   try {
     const { document } = dom.window;
     for (const id of [
@@ -70,7 +76,7 @@ test('page loads with all required controls and workflow markers', async () => {
 });
 
 test('menu is the initial screen; HUD defaults 0/1/0', async () => {
-  const dom = await createGameWindow({ base: BASE });
+  const dom = await openSnake();
   try {
     const d = doc(dom);
     assert.equal(d.getElementById('menuScreen').classList.contains('hidden'), false);
@@ -85,7 +91,7 @@ test('menu is the initial screen; HUD defaults 0/1/0', async () => {
 });
 
 test('start game hides menu and begins loop', async () => {
-  const dom = await createGameWindow({ base: BASE });
+  const dom = await openSnake();
   try {
     const d = doc(dom);
     d.getElementById('playBtn').click();
@@ -99,7 +105,7 @@ test('start game hides menu and begins loop', async () => {
 });
 
 test('arrow keys steer (ArrowUp -> head y decreases)', async () => {
-  const dom = await createGameWindow({ base: BASE });
+  const dom = await openSnake();
   try {
     doc(dom).getElementById('playBtn').click();
     await waitFor(() => headCell(dom));
@@ -116,7 +122,7 @@ test('arrow keys steer (ArrowUp -> head y decreases)', async () => {
 });
 
 test('screen direction buttons steer player one', async () => {
-  const dom = await createGameWindow({ base: BASE });
+  const dom = await openSnake();
   try {
     const d = doc(dom);
     d.getElementById('playBtn').click();
@@ -141,7 +147,7 @@ test('WASD keys steer correctly [regression: bug A fixed]', async () => {
     { key: 's', expect: (before, after) => after.y === before.y + 1 && after.x === before.x },
   ];
   for (const { key, expect } of cases) {
-      const dom = await createGameWindow({ base: BASE });
+      const dom = await openSnake();
       try {
         doc(dom).getElementById('playBtn').click();
         await waitFor(() => headCell(dom, 'player2'));
@@ -161,7 +167,7 @@ test('WASD keys steer correctly [regression: bug A fixed]', async () => {
 });
 
 test('a keeps player two moving left and reverse d is rejected [regression: bug A fixed]', async () => {
-  const dom = await createGameWindow({ base: BASE });
+  const dom = await openSnake();
   try {
     const d = doc(dom);
     d.getElementById('playBtn').click();
@@ -184,7 +190,7 @@ test('a keeps player two moving left and reverse d is rejected [regression: bug 
 });
 
 test('pause/resume toggles label and freezes movement', async () => {
-  const dom = await createGameWindow({ base: BASE });
+  const dom = await openSnake();
   try {
     const d = doc(dom);
     d.getElementById('playBtn').click();
@@ -203,7 +209,7 @@ test('pause/resume toggles label and freezes movement', async () => {
 });
 
 test('wall collision shows game-over modal with final score; play-again resets [regression: bug B fixed]', async () => {
-  const dom = await createGameWindow({ base: BASE });
+  const dom = await openSnake();
   try {
     const d = doc(dom);
     d.getElementById('playBtn').click();
@@ -226,7 +232,7 @@ test('wall collision shows game-over modal with final score; play-again resets [
 });
 
 test('restart button returns to menu', async () => {
-  const dom = await createGameWindow({ base: BASE });
+  const dom = await openSnake();
   try {
     const d = doc(dom);
     d.getElementById('playBtn').click();
@@ -248,7 +254,7 @@ test('restart button returns to menu', async () => {
 test('eating raises score/level, records and persists the new high score end-to-end', async () => {
   const foodQueue = [];
   for (let k = 0; k < 20; k++) foodQueue.push((211 + k) / 400);
-  const dom = await createGameWindow({ base: BASE, mathRandom: foodQueue });
+  const dom = await openSnake({ mathRandom: foodQueue });
   try {
     const d = doc(dom);
     d.getElementById('playBtn').click();
@@ -278,7 +284,7 @@ test('eating raises score/level, records and persists the new high score end-to-
 });
 
 test('pre-existing high score restored on load', async () => {
-  const dom = await createGameWindow({ base: BASE, localStorageSeed: { 'snake-loop-high-score': 42 } });
+  const dom = await openSnake({ localStorageSeed: { 'snake-loop-high-score': 42 } });
   try {
     assert.equal(doc(dom).getElementById('highScore').textContent, '42');
   } finally {
@@ -287,7 +293,7 @@ test('pre-existing high score restored on load', async () => {
 });
 
 test('space toggles pause and R restarts from keyboard', async () => {
-  const dom = await createGameWindow({ base: BASE });
+  const dom = await openSnake();
   try {
     const d = doc(dom);
     d.getElementById('playBtn').click();
