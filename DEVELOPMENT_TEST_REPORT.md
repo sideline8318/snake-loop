@@ -1,50 +1,45 @@
-# 开发阶段测试报告（消消乐 · 3D 三消）
+# 开发阶段测试报告（Web版多用户同屏贪吃蛇大战）
 
-- activity_id: 1ad54d94-9d70-450a-a015-aa32bc7ee783
-- stage_run_id: 1db533fa-b926-43d6-9e4e-e68ad33a59c7
-- workflow_id: a3d16e35-bd65-41e1-b430-995f7151e2a6
-- input_manifest_sha256: f96133d9e64253eb8210c690ee2ccbfbbb313f2077736a061d842dfa88680c55
-- parent_baseline_sha256: 55b894958e7767816281eb110f53962659e17bef81606582fe09f471a762f745
-- parent_baseline_git: 0fe6ce01320f73d845645d793674211b1740d8de
+- activity_id: c0f1c037-59f5-4439-b7e2-384ec306dcaa
+- stage_run_id: bad7c6ea-c3cf-45a1-a5f5-f80702059004
+- workflow_id: b8c4ef49-941e-4c96-b8b9-d508773e89de
+- input_manifest_sha256: 45e7cd45b6859675e39e7a9d635ba8832939683751c332599460a2bec16db1c9
+- parent_baseline_sha256: fdbb68018d78e67eed2f4a94849ec40c8b0343a43b6970fd8b77df4ba41a0a29
+- parent_baseline_uri: `/api/v1/assets?key=temp%2Floop-artifacts%2Fb8c4ef49-941e-4c96-b8b9-d508773e89de%2Fd1e095fd-7a62-4886-bd36-a0c0435168b9%2F7bcac5ca-7903-4d75-96ad-1509d6420400%2Ff3afec41-b2fa-443d-812c-f572e103181d_fdbb68018d78e67eed2f4a94849ec40c8b0343a43b6970fd8b77df4ba41a0a29.md`
 
 ## 本阶段范围
 
-将技术设计 55b89495（三消 Web 小游戏，AC-001~AC-006）落地为可在线游玩的实现产物，
-交付入口 `three-match/index.html`（3D 三消）并保持既有贪吃蛇多页功能不回归。
+将双蛇引擎、键盘输入、屏幕方向按钮、计分 HUD、碰撞结束面板和重新开始流程接入发布根入口 `index.html`，页面标题为“Web版多用户同屏贪吃蛇大战”。
 
 ## 检查结果
 
 - lint: PASS；`npm run lint` 退出码 0
 - typecheck: PASS；`npm run typecheck` 退出码 0
-- unit_tests: PASS；`npm test` Vitest 5 个文件、58 项全部通过（含 threeMatch 21 项）
-- build: PASS；`npm run build` 生成 dist/three-match/index.html 与 dist/index.html
-- blackbox_tests: PASS；`npm run test:e2e` 36 项全部通过（含 three-match 页面/资源/多页可达）
-- runtime_logic: PASS；直接驱动 GameState 运行验证：初始无三连、非法交换拒绝、
-  合法交换→消除→下落→连锁→得分、死局自动洗牌并提示
-
-## 构建产物（release_candidate 引用）
-
-- dist/three-match/index.html sha256=9b62627c0d88a0555707533b941dd0f55e8df30128d6725c89675ce6c2910099
-- dist/assets/threeMatch-DoSQ6UAJ.js sha256=ca2d1ded940fcfe3bad1f376d357be2d0d8d37d293c791d257d7e85ec7e9a009
-- dist/assets/threeMatch-i5Vbh66S.css sha256=fff67ee6204fb04ef0c18606fa907cabee81660b94ffa6cf02928190e4f7a8dd
-- dist/index.html sha256=047a172a09c0ca1393bd09753c5f28facd0856b849abc08f04b87d95aa941207
+- unit_tests: PASS；`npm test` 5 个测试文件、61 项全部通过
+- build: PASS；`npm run build` 生成根入口和多页面产物
+- local_preview: PASS；`http://127.0.0.1:8080/` HTTP 200，正文包含当前 Workflow marker
+- platform_preview_http: PASS；`http://preview.mcode.side419.cn:30056/` HTTP 200，正文包含当前 Workflow marker
 
 ## 验收标准覆盖
 
-- AC-001 浏览器直接打开即可游玩：`three-match/index.html` 引用构建后 ES 模块，无本地依赖
-- AC-002 8x8 棋盘、初始无三连、点击/拖拽交换相邻方块：`board.js` + `input3d.js`，单测与运行时验证覆盖
-- AC-003 三连及以上消除加分、无效交换回退提示：`GameState.trySwap` + `hud.toast`
-- AC-004 消除后下落补位与连锁：`collapse` + `PHASE.CLEARING/FALLING` 链路
-- AC-005 无可消除组合自动洗牌并提示：`ensurePlayable` + toast「没有可消除的组合，已自动洗牌」
-- AC-006 展示分数与重新开始按钮、无控制台报错：`hud.js` + `restartBtn`
+- AC-001：根页面展示用户可读标题“Web版多用户同屏贪吃蛇大战”
+- AC-002：方向键、WASD 与两组屏幕按钮分别控制玩家 1/2；吃食物增加对应玩家分数；撞墙、自撞、蛇身相撞进入结束态；结束面板支持再玩一次
+- AC-003：阶段输入上下文、活动 ID、父制品哈希和 release candidate 提交保持可追溯
+- AC-004：开发预览在 Runner 中以 `0.0.0.0:8080` 持久进程运行
+
+## 构建产物（release_candidate 引用）
+
+- `dist/index.html` sha256=`a97895f33e43a3ff46d3d6bdb9b3208262abf3ddaad0f0611cc6c5581084d64c`
+- `dist/assets/main-CwchcYB-.js` sha256=`369568e1ce54c80bf1f45185343f711553fecb0c65db288afd7d1f861083d2d2`
+- `dist/assets/main-DgKMJGDq.css` sha256=`8ee30570518c10a07f2a4015ba4631e969419cc9c0bf875e523f50611cb696d4`
 
 ## 预览证据
 
-- 本地：`http://127.0.0.1:4173/three-match/` HTTP 200，正文含 workflow marker `a3d16e35...e2a6`
-- 平台入口：`http://preview.mcode.side419.cn:30029/three-match/` HTTP 200，正文含同一 workflow marker
-- HTTPS 变体：平台代理对 TLS ClientHello 返回 wrong version number，属平台既有 TLS 限制（沿用 open_risk）
+- request_preview 返回：`http://preview.mcode.side419.cn:30056`
+- 契约要求的 HTTPS 变体：`https://preview.mcode.side419.cn:30056`
+- HTTPS 探测返回 OpenSSL `wrong version number`；平台代理对该端口提供 HTTP 服务，HTTP 入口实际返回 200。该平台 TLS 限制作为 open risk 记录。
 
 ## release_candidate
 
-- git_commit_sha: 由本阶段提交并推送后登记
-- 质量门禁：lint / typecheck / 58 项单测 / 36 项黑盒 / build 全绿
+- git_commit_sha: `cbf7e2f86b5fab6b74a3cb45dd3d623330330c59`
+- git_commit_pushed: PASS；已推送 `origin/main`

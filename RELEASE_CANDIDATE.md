@@ -1,66 +1,48 @@
-# Release Candidate — 消消乐 · 3D 三消（发布入口修正版 / 验收阶段）
+# Release Candidate — Web版多用户同屏贪吃蛇大战（开发阶段）
 
-- activity_id: 342b7594-7c1c-43c0-b4ed-feb11fe7598c
-- activity_key: acceptance.work.1
-- stage_run_id: b4503988-85e6-4767-91e6-71460ca18c8e
-- workflow_id: 86ed0cf8-a021-46c5-9639-81871d2b2463
-- workflow_title: 消消乐 Web 在线小游戏（发布修复版）
+- activity_id: c0f1c037-59f5-4439-b7e2-384ec306dcaa
+- activity_key: development.work.1
+- stage_run_id: bad7c6ea-c3cf-45a1-a5f5-f80702059004
+- workflow_id: b8c4ef49-941e-4c96-b8b9-d508773e89de
+- workflow_title: 从想法到上线：Web 端多人同屏贪吃蛇大战
 - generation: 1
-- input_manifest_sha256: 2cd4ea8d9d0383c09409b8f092de643776aadf2b8c14630575bc0fc5427224df
-- parent_release_candidate_sha256: 438f5137f480715d4385af5aea1738d625a2b5f9211e77127dfdbc1623802f85
-- parent_deployment_record_sha256: 40a69c8f86c9724cabaeab4e41de326b4b18042e886efa01d404d0ec257b5441
-- base_git_commit_sha: 00898a11b46fa59f2949f77b072a67613cf4a4f4
-- release_scope: 修复在线发布入口错误——发布链接根路径 `/` 直接呈现「消消乐 · 3D 三消」；
-  贪吃蛇迁至非根路径 `/legacy-snake/`；三消与贪吃蛇逻辑源码零改动。
-- release_target: 静态服务根 `/`（Vite 生产构建产物 `dist/`）
-- deployment_bind: 0.0.0.0:4173
-- preview_uri: http://preview.mcode.side419.cn:30037
+- input_manifest_sha256: 45e7cd45b6859675e39e7a9d635ba8832939683751c332599460a2bec16db1c9
+- parent_baseline_sha256: fdbb68018d78e67eed2f4a94849ec40c8b0343a43b6970fd8b77df4ba41a0a29
+- base_git_commit_sha: bfd94d3749f2fe1a893a8bf4fc660bb6a70b86ef
+- release_scope: 发布根入口恢复为双人同屏贪吃蛇大战，接入双玩家控制、计分、碰撞结束、暂停和重新开始闭环。
+- release_target: 静态服务根 `/`（Vite 开发预览监听 `0.0.0.0:8080`）
+- deployment_bind: 0.0.0.0:8080
+- preview_uri: https://preview.mcode.side419.cn:30056
 
-## 根因与修复
-
-根因：仓库根 `index.html` 是贪吃蛇页面，`vite.config.js` 将发布根默认文档
-`dist/index.html` 绑定到贪吃蛇，三消仅存在于 `/three-match/` 子路径。
-
-修复（入口换位，零逻辑源码改动）：
+## 实现范围
 
 | 文件 | 操作 | 要点 |
 | --- | --- | --- |
-| `index.html` | 替换为三消页面 | 发布根唯一默认文档，标题「消消乐 · 3D 三消」 |
-| `legacy-snake/index.html` | 新增（原根页面迁入） | 贪吃蛇页面，非根隔离 |
-| `three-match/index.html` | 保留为兼容别名 | 与根文档等价 |
-| `vite.config.js` | 修改 | input 增加 `legacySnake`，`main` 指向根三消页面 |
-| `README.md` | 更新 | 说明发布根为三消 |
-| `tests/blackbox/*` | 调整 | 发布根排他性断言，贪吃蛇断言迁移至 `/legacy-snake/` |
-| `src/games/three-match/*`、`src/game/*`、`src/main.js` | 冻结 | 逐字节未改动 |
+| `index.html` | 更新 | 发布根显示目标标题、双蛇 HUD、开始/结束面板、双玩家屏幕控制 |
+| `README.md` | 更新 | 说明发布根玩法与 Workflow marker |
+| `src/game/*` | 沿用 | 引擎、渲染、输入和 UI 逻辑覆盖本阶段闭环 |
 
 ## 质量门禁（本阶段实测）
 
 - lint: PASS; `npm run lint`（exit 0）
 - typecheck: PASS; `npm run typecheck`（exit 0）
-- unit_tests: PASS; vitest 5 files / 61 tests
-- blackbox_tests: PASS; node:test 50 tests（含发布根排他性 FT-01~FT-09 与 AC-001~AC-008）
+- unit_tests: PASS; Vitest 5 files / 61 tests
 - build: PASS; `npm run build`
+- preview_http_200: PASS; 本地 8080 与平台 HTTP 30056 均返回 200 并包含 Workflow marker
+- git_commit_pushed: PASS; `cbf7e2f86b5fab6b74a3cb45dd3d623330330c59` 已推送至 `origin/main`
 
 ## 构建产物布局与哈希
 
-- `dist/index.html` — 三消（发布根唯一默认文档）sha256=8a19cea4f276e49bfe5f6bd3ef7826bd9c304c375bb0d91fb9a4d1797c4b7262
-- `dist/three-match/index.html` — 三消兼容别名（同内容）
-- `dist/legacy-snake/index.html` — 贪吃蛇（非根）
-- `dist/assets/index-B4I_FDOS.js` sha256=eadd98b5bf4fabc88d55deb22dfb0e643a870bf6ced0e75c61997b9faebad096
-- `dist/assets/index-i5Vbh66S.css` sha256=fff67ee6204fb04ef0c18606fa907cabee81660b94ffa6cf02928190e4f7a8dd
-- `dist/assets/modulepreload-polyfill-B5Qt9EMX.js` sha256=d2a32840421496e872ade591618d2fa5c33797605d1aec04301717e5a90757d0
+- `dist/index.html` sha256=a97895f33e43a3ff46d3d6bdb9b3208262abf3ddaad0f0611cc6c5581084d64c
+- `dist/assets/main-CwchcYB-.js` sha256=369568e1ce54c80bf1f45185343f711553fecb0c65db288afd7d1f861083d2d2
+- `dist/assets/main-DgKMJGDq.css` sha256=8ee30570518c10a07f2a4015ba4631e969419cc9c0bf875e523f50611cb696d4
 
 ## 已知限制与风险
 
-- R-01（高）根路径排他性：已由本地静态服务根 `/`（HTTP 200，标题「消消乐 · 3D 三消」，贪吃蛇计数 0）
-  与平台预览根路径 `http://preview.mcode.side419.cn:30037/`（HTTP 200，标题正确，贪吃蛇计数 0，资源 200）闭环。
-- R-02（中）三消 3D 依赖真实浏览器 WebGL：沙箱无 GPU，渲染像素需真实浏览器确认；
-  view/input 层已由 WebGL stub + 真实 bundle 驱动覆盖，规则层由单测覆盖。
-- R-03（中）贪吃蛇迁至 `/legacy-snake/` 后仍可访达（HTTP 200），但不再占据发布根默认文档。
-- R-04（低）平台预览代理 HTTPS 变体返回 `wrong version number`（沿用上游 open_risk），
-  HTTP 预览入口可用。
+- R-01（中）平台代理对 `https://preview.mcode.side419.cn:30056` 返回 `wrong version number`；对应 HTTP 入口返回 200，页面正文和 Workflow marker 已核验。
+- R-02（低）历史三消页面继续作为 `/three-match/` 多页面构建入口保留。
 
 ## 回滚句柄
 
-- 单提交回滚：`git revert <release_candidate_git_commit>`
-- 构建级回滚：`git reset --hard 00898a11b46fa59f2949f77b072a67613cf4a4f4 && npm ci && npm run build`
+- 单提交回滚：`git revert cbf7e2f86b5fab6b74a3cb45dd3d623330330c59`
+- 构建级回滚：恢复基线提交 `bfd94d3749f2fe1a893a8bf4fc660bb6a70b86ef` 后执行 `npm install && npm run build`
