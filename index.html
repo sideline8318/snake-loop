@@ -3,55 +3,76 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="消消乐 · 3D 三消 Web 小游戏，交换相邻宝石连成三个以上即可消除得分" />
-  <meta name="workflow-marker" content="消消乐 · 3D 三消 | workflow a3d16e35-bd65-41e1-b430-995f7151e2a6" />
-  <meta name="workflow-id" content="a3d16e35-bd65-41e1-b430-995f7151e2a6" />
-  <meta name="workflow-release" content="86ed0cf8-a021-46c5-9639-81871d2b2463 / release-root-fix" />
-  <title>消消乐 · 3D 三消</title>
-  <link rel="stylesheet" href="/src/games/three-match/style.css" />
+  <meta name="description" content="Web版多用户同屏贪吃蛇大战，支持双人方向控制、计分、碰撞结束与重新开始" />
+  <meta name="workflow-marker" content="Web版多用户同屏贪吃蛇大战 | workflow b8c4ef49-941e-4c96-b8b9-d508773e89de" />
+  <meta name="workflow-id" content="b8c4ef49-941e-4c96-b8b9-d508773e89de" />
+  <meta name="workflow-release" content="development.work.1" />
+  <title>Web版多用户同屏贪吃蛇大战</title>
+  <link rel="stylesheet" href="/src/styles/style.css" />
 </head>
 <body>
   <div id="app">
+    <span id="highScore" hidden>0</span>
     <header class="hud">
-      <p class="eyebrow">MATCH-3 · 3D ARCADE</p>
-      <div>
-        <h1 class="title">消消乐 · 3D 三消</h1>
-        <p class="subtitle">交换相邻宝石，连成三个以上即可消除得分</p>
-      </div>
-      <div class="actions">
-        <button id="restartBtn" class="btn" type="button">重新开始</button>
-      </div>
+      <div class="eyebrow">REAL-TIME ARCADE / 02 PLAYERS</div>
+      <p class="project-title">Web版多用户同屏贪吃蛇大战</p>
+      <h1 class="title">Web版多用户同屏贪吃蛇大战</h1>
       <div class="stats">
-        <div class="stat"><span class="label">当前得分</span><span id="score" class="value">0</span></div>
-        <div class="stat"><span class="label">最高分</span><span id="bestScore" class="value">0</span></div>
-        <div class="stat combo"><span class="label">连锁</span><span id="combo" class="value">—</span></div>
+        <div class="stat player-one"><span class="label">玩家 1 / 绿</span><span id="player1Score" class="value">0</span></div>
+        <div class="stat"><span class="label">总分</span><span id="score" class="value">0</span><small>等级 <span id="level">1</span></small></div>
+        <div class="stat player-two"><span class="label">玩家 2 / 金</span><span id="player2Score" class="value">0</span></div>
+      </div>
+      <div class="controls">
+        <button id="pauseBtn" class="btn" type="button">暂停</button>
+        <button id="restartBtn" class="btn" type="button">重新开始</button>
       </div>
     </header>
 
     <main class="stage">
       <div class="canvas-wrap">
-        <canvas id="gameCanvas" aria-label="3D 三消游戏棋盘"></canvas>
-        <p id="toast" class="toast hidden" role="status" aria-live="polite"></p>
+        <canvas id="gameCanvas" width="480" height="480" aria-label="多人同屏贪吃蛇游戏画布"></canvas>
+        <div class="arena-tag">LIVE ARENA <span></span></div>
       </div>
 
-      <section id="menuOverlay" class="overlay">
+      <section class="mobile-controls" aria-label="玩家 1 触屏方向控制">
+        <span class="control-label">玩家 1 · 方向键</span>
+        <button class="direction-btn up" data-player="player1" data-direction="up" type="button" aria-label="玩家 1 向上">↑</button>
+        <div><button class="direction-btn" data-player="player1" data-direction="left" type="button" aria-label="玩家 1 向左">←</button><button class="direction-btn" data-player="player1" data-direction="down" type="button" aria-label="玩家 1 向下">↓</button><button class="direction-btn" data-player="player1" data-direction="right" type="button" aria-label="玩家 1 向右">→</button></div>
+      </section>
+
+      <section class="mobile-controls rival-controls" aria-label="玩家 2 触屏方向控制">
+        <span class="control-label">玩家 2 · WASD</span>
+        <button class="direction-btn up" data-player="player2" data-direction="up" type="button" aria-label="玩家 2 向上">↑</button>
+        <div><button class="direction-btn" data-player="player2" data-direction="left" type="button" aria-label="玩家 2 向左">←</button><button class="direction-btn" data-player="player2" data-direction="down" type="button" aria-label="玩家 2 向下">↓</button><button class="direction-btn" data-player="player2" data-direction="right" type="button" aria-label="玩家 2 向右">→</button></div>
+      </section>
+
+      <section id="menuScreen" class="overlay">
         <div class="panel">
-          <p class="kicker">SWAP · MATCH · CASCADE</p>
-          <h2>准备好消除宝石了吗？</h2>
-          <p>点击或拖动交换相邻宝石，凑成三个及以上同色连线即可消除得分。</p>
-          <div class="rules">
-            <span>· 点击两颗相邻宝石完成交换</span>
-            <span>· 无效的交换会自动回退</span>
-            <span>· 消除后宝石下落补位，可触发连锁</span>
-            <span>· 无可消除组合时自动洗牌</span>
-          </div>
-          <button id="startBtn" class="btn primary" type="button">开始游戏</button>
+          <p class="panel-kicker">TWO SNAKES. ONE ARENA.</p>
+          <h2>准备开战</h2>
+          <p>玩家 1 使用方向键或上方控制盘，玩家 2 使用 WASD 或下方控制盘。吃到能量点获得分数，撞墙、撞身或相撞都会结束比赛。</p>
+          <p class="key-hint">SPACE 暂停 · R 重新开始</p>
+          <button id="playBtn" class="btn primary" type="button">开始游戏</button>
         </div>
       </section>
+
+      <div id="gameOverModal" class="overlay hidden" role="dialog" aria-modal="true" aria-label="游戏结束">
+        <div class="panel">
+          <p class="panel-kicker">MATCH COMPLETE</p>
+          <h2 id="finalWinner">对战结束</h2>
+          <p id="finalReason" class="final-reason" aria-live="polite"></p>
+          <div class="result-row">
+            <span>得分 <strong id="finalScore">0</strong></span>
+            <span>等级 <strong id="finalLevel">1</strong></span>
+          </div>
+          <p id="recordBadge" class="record hidden">新纪录！</p>
+          <button id="playAgainBtn" class="btn primary" type="button">再玩一次</button>
+        </div>
+      </div>
     </main>
 
-    <footer class="footer">three-match · 消消乐 3D · 工作流 a3d16e35-bd65-41e1-b430-995f7151e2a6</footer>
+    <footer class="footer">snake-loop-competition · workflow b8c4ef49-941e-4c96-b8b9-d508773e89de · development.work.1</footer>
   </div>
-  <script type="module" src="/src/games/three-match/index.js"></script>
+  <script type="module" src="/src/main.js"></script>
 </body>
 </html>
