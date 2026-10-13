@@ -7,7 +7,8 @@
 - ActivityRun：f8e717fa-a8e1-4afb-a373-87d1363cf730
 - 输入清单 SHA-256：8407117980345614b9a4880eb9b4f3a3ef72ed1c043997113e78ccc5b3667bf8
 - 工作分支：loop-20260928-f5a936
-- 本阶段最终提交：eb4cbe84e15da53f4106c79bd824d835ec9bfb3a（远程工作分支 HEAD，已核验）
+- 本阶段代码修复提交：e5f390a094a42cc7047af3e12db8575d2166ce5e（已推送）
+- 本阶段文档收尾提交：dee68c6dde7a3dc2e9e7d7693687b85af13bfb9d（已推送）
 
 ## 本阶段修复的缺陷
 
