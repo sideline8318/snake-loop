@@ -15,7 +15,8 @@
     "typecheck": "tsc --noEmit",
     "pretest": "node scripts/ensure-rollup-wasm.cjs",
     "test": "vitest run",
-    "test:e2e": "node --test tests/blackbox/*.test.cjs"
+    "test:e2e": "node --test tests/blackbox/*.test.cjs",
+    "three-match": "vite build --config vite.three-match.config.js"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
