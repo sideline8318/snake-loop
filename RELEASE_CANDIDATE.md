@@ -1,29 +1,23 @@
-# Release Candidate · 阶段开发（development.work.1）
+# Release Candidate · 测试阶段（test.work.1）
 
 ## 概览
 
 - Workflow：7cc101c5-927c-49c2-affe-230fd2effb6d（SOW AI 可见性 E2E canary 20260928）
-- StageRun：a1288fa7-4609-49a1-99da-cdb0185f30c0（development / work）
-- ActivityRun：f8e717fa-a8e1-4afb-a373-87d1363cf730
-- 输入清单 SHA-256：8407117980345614b9a4880eb9b4f3a3ef72ed1c043997113e78ccc5b3667bf8
+- StageRun：38efffa5-25a5-41c8-afef-85d771273d2d（test / work）
+- ActivityRun：d0cdf9d0-4c7c-450e-90f1-bdd2f89d5d54
+- 输入清单 SHA-256：37a9255aa4ccbcfecfc10adbf09f0d2e9bca8009ea76ef2ef5e8da4ecde3215b
 - 工作分支：loop-20260928-f5a936
-- 本阶段代码修复提交：e5f390a094a42cc7047af3e12db8575d2166ce5e（已推送）
-- 本阶段文档收尾提交：dee68c6dde7a3dc2e9e7d7693687b85af13bfb9d（已推送）
+- 上游 release_candidate：2c3ee8053fd06d367e59f022209a087ee12721ec028c71ec4432b17848e8f65f（commit 7b219474d604c7585c0f491a4332b7b85ac77cb4）
 
-## 本阶段修复的缺陷
+## 本阶段修复的缺陷（就地修改代码）
 
-前 4 次 Attempt 均因「发布根应呈现三消」相关契约不满足而失败。本阶段定位到根因并修复：
-
-1. 源文件 `three-match/index.html` 指向 `/src/games/three-match/index.js`，而既有黑盒用例 06 依赖该页面的**内联构建 bundle**才能拿到 `window.__THREE_MATCH__`；旧页脚本引用导致 06 无法建立运行时句柄。
-2. Vite 多入口同时产出 `dist/index.html`（贪吃蛇）与 `dist/three-match/index.html`（三消），二者产物命名与模块预加载行为相互冲突，`dist/index.html` 始终是贪吃蛇身份，与「根路径 `/` 呈现三消」的发布契约矛盾。
-
-修复方案：
-
-- 重写 `three-match/index.html`：补齐 `startBtn`/`restartBtn` 等控制入口与 HUD 契约 id（`gameCanvas`/`score`/`bestScore`/`combo`/`toast`/`menuOverlay`），作为唯一事实来源。
-- 新增 `src/three-match-entry.js`：在 `DOMContentLoaded` 初始化 3D 三消，并暴露 `globalThis.__THREE_MATCH__`（`game`/`boardView`/`hud`/`input`）。
-- 移除 `vite.config.js` 中的 `threeMatch` 多入口，改用独立 `vite.three-match.config.js`（`emptyOutDir: false`）叠加构建，避免产物互相覆盖。
-- 新增 Vite 插件 `scripts/vite-plugin-release-root.cjs`：在 `closeBundle` 阶段以三消页生成发布根 `dist/index.html`，改写标题/身份 meta 与资源引用，并断言不得泄漏任何贪吃蛇身份。
-- `package.json` 新增 `three-match` 构建脚本。
+- D1（构建流水线不自洽，systemic）：`npm run build` 仅执行 `vite build`，默认配置已不再
+  产出 `dist/three-match/index.html`，发布根 `dist/index.html` 仍为历史贪吃蛇页面；
+  全新构建后黑盒套件 17 项因 `ENOENT dist/three-match/index.html` 失败（33/50）。
+- 修复 S1：`package.json` 的 `build` 改为 `vite build && npm run three-match`，
+  使一次构建即产出完整可发布的 dist。
+- 修复 S2：`vite.config.js` 默认构建输入移除 `main`（三消入口），只保留 `legacySnake`，
+  避免默认构建与三消构建在 `dist/index.html` 上互相覆盖。
 
 ## 验证矩阵
 
@@ -31,17 +25,19 @@
 | --- | --- | --- |
 | lint | `npm run lint` | 通过（exit 0） |
 | typecheck | `npm run typecheck` | 通过（exit 0） |
-| unit_tests | `npm run test` | 61/61 通过 |
-| build | `npm run build` + `npm run three-match` | 通过 |
-| e2e（黑盒） | `npm run test:e2e` | 50/50 通过（原 9 条失败） |
-| preview_http_200 | `vite preview` + `request_preview` | 本地与外部预览均 HTTP 200，含三消 workflow marker |
+| unit_tests | `npm test` | 61/61 通过 |
+| build | `npm run build` | 通过，单一命令自洽产出发布根 |
+| e2e（黑盒） | `npm run test:e2e` | 50/50 通过（修复前 33/50） |
 
 ## 产物
 
-- 发布根：`dist/index.html`（sha256=6812c6340e3a0087055717f6226908ae14ba91147be8ab92d8b13b3559981cd6，byte_size=2659）
+- 发布根：`dist/index.html`（sha256=6812c6340e3a0087055717f6226908ae14ba91147be8ab92d8b13b3559981cd6）
+- 三消页别名：`dist/three-match/index.html`（sha256 同上，逐字节相同）
+- 历史贪吃蛇页：`dist/legacy-snake/index.html`（sha256=0259238b29f1677a32dffc07241e65aad82ba9767c8bb2c2f45b549c0c295639）
 - 三消 JS bundle：`dist/assets/threeMatch-Bwqb6rX7.js`（sha256=7f6e7a392c7d1f7a55561fc1546a48ab0a25ea51d9ca33c688dffe011ba978c9）
 - 三消 CSS：`dist/assets/threeMatch-i5Vbh66S.css`（sha256=fff67ee6204fb04ef0c18606fa907cabee81660b94ffa6cf02928190e4f7a8dd）
 
 ## 谱系
 
-- 上游基线：technical_design 制品 c5bfcefa89c7147ffe79229f3f78600cd6a33d1a174842f95c164b1810817745（commit f118de507bc28434dc2af933bed2eeb87fdeb107）
+- 上游 release_candidate：2c3ee8053fd06d367e59f022209a087ee12721ec028c71ec4432b17848e8f65f（commit 7b219474…）
+- 本 release_candidate 的 parent_artifact_hashes 包含上述上游 SHA-256。

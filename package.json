@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "vite",
     "prebuild": "node scripts/ensure-rollup-wasm.cjs",
-    "build": "vite build",
+    "build": "vite build && npm run three-match",
     "predev": "node scripts/ensure-rollup-wasm.cjs",
     "preview": "vite preview --host 0.0.0.0 --port 4173",
     "prepreview": "node scripts/ensure-rollup-wasm.cjs",
