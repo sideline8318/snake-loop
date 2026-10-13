@@ -1,48 +1,46 @@
-# Release Candidate — Web版多用户同屏贪吃蛇大战（开发阶段）
+# Release Candidate · 阶段开发（development.work.1）
 
-- activity_id: c0f1c037-59f5-4439-b7e2-384ec306dcaa
-- activity_key: development.work.1
-- stage_run_id: bad7c6ea-c3cf-45a1-a5f5-f80702059004
-- workflow_id: b8c4ef49-941e-4c96-b8b9-d508773e89de
-- workflow_title: 从想法到上线：Web 端多人同屏贪吃蛇大战
-- generation: 1
-- input_manifest_sha256: 45e7cd45b6859675e39e7a9d635ba8832939683751c332599460a2bec16db1c9
-- parent_baseline_sha256: fdbb68018d78e67eed2f4a94849ec40c8b0343a43b6970fd8b77df4ba41a0a29
-- base_git_commit_sha: bfd94d3749f2fe1a893a8bf4fc660bb6a70b86ef
-- release_scope: 发布根入口恢复为双人同屏贪吃蛇大战，接入双玩家控制、计分、碰撞结束、暂停和重新开始闭环。
-- release_target: 静态服务根 `/`（Vite 开发预览监听 `0.0.0.0:8080`）
-- deployment_bind: 0.0.0.0:8080
-- preview_uri: https://preview.mcode.side419.cn:30056
+## 概览
 
-## 实现范围
+- Workflow：7cc101c5-927c-49c2-affe-230fd2effb6d（SOW AI 可见性 E2E canary 20260928）
+- StageRun：a1288fa7-4609-49a1-99da-cdb0185f30c0（development / work）
+- ActivityRun：f8e717fa-a8e1-4afb-a373-87d1363cf730
+- 输入清单 SHA-256：8407117980345614b9a4880eb9b4f3a3ef72ed1c043997113e78ccc5b3667bf8
+- 工作分支：loop-20260928-f5a936
+- 本阶段提交：e5f390a094a42cc7047af3e12db8575d2166ce5e（远程 HEAD 已前进）
 
-| 文件 | 操作 | 要点 |
+## 本阶段修复的缺陷
+
+前 4 次 Attempt 均因「发布根应呈现三消」相关契约不满足而失败。本阶段定位到根因并修复：
+
+1. 源文件 `three-match/index.html` 指向 `/src/games/three-match/index.js`，而既有黑盒用例 06 依赖该页面的**内联构建 bundle**才能拿到 `window.__THREE_MATCH__`；旧页脚本引用导致 06 无法建立运行时句柄。
+2. Vite 多入口同时产出 `dist/index.html`（贪吃蛇）与 `dist/three-match/index.html`（三消），二者产物命名与模块预加载行为相互冲突，`dist/index.html` 始终是贪吃蛇身份，与「根路径 `/` 呈现三消」的发布契约矛盾。
+
+修复方案：
+
+- 重写 `three-match/index.html`：补齐 `startBtn`/`restartBtn` 等控制入口与 HUD 契约 id（`gameCanvas`/`score`/`bestScore`/`combo`/`toast`/`menuOverlay`），作为唯一事实来源。
+- 新增 `src/three-match-entry.js`：在 `DOMContentLoaded` 初始化 3D 三消，并暴露 `globalThis.__THREE_MATCH__`（`game`/`boardView`/`hud`/`input`）。
+- 移除 `vite.config.js` 中的 `threeMatch` 多入口，改用独立 `vite.three-match.config.js`（`emptyOutDir: false`）叠加构建，避免产物互相覆盖。
+- 新增 Vite 插件 `scripts/vite-plugin-release-root.cjs`：在 `closeBundle` 阶段以三消页生成发布根 `dist/index.html`，改写标题/身份 meta 与资源引用，并断言不得泄漏任何贪吃蛇身份。
+- `package.json` 新增 `three-match` 构建脚本。
+
+## 验证矩阵
+
+| 门禁 | 命令 | 结果 |
 | --- | --- | --- |
-| `index.html` | 更新 | 发布根显示目标标题、双蛇 HUD、开始/结束面板、双玩家屏幕控制 |
-| `README.md` | 更新 | 说明发布根玩法与 Workflow marker |
-| `src/game/*` | 沿用 | 引擎、渲染、输入和 UI 逻辑覆盖本阶段闭环 |
+| lint | `npm run lint` | 通过（exit 0） |
+| typecheck | `npm run typecheck` | 通过（exit 0） |
+| unit_tests | `npm run test` | 61/61 通过 |
+| build | `npm run build` + `npm run three-match` | 通过 |
+| e2e（黑盒） | `npm run test:e2e` | 50/50 通过（原 9 条失败） |
+| preview_http_200 | `vite preview` + `request_preview` | 本地与外部预览均 HTTP 200，含三消 workflow marker |
 
-## 质量门禁（本阶段实测）
+## 产物
 
-- lint: PASS; `npm run lint`（exit 0）
-- typecheck: PASS; `npm run typecheck`（exit 0）
-- unit_tests: PASS; Vitest 5 files / 61 tests
-- build: PASS; `npm run build`
-- preview_http_200: PASS; 本地 8080 与平台 HTTP 30056 均返回 200 并包含 Workflow marker
-- git_commit_pushed: PASS; `cbf7e2f86b5fab6b74a3cb45dd3d623330330c59` 已推送至 `origin/main`
+- 发布根：`dist/index.html`（sha256=6812c6340e3a0087055717f6226908ae14ba91147be8ab92d8b13b3559981cd6，byte_size=2659）
+- 三消 JS bundle：`dist/assets/threeMatch-Bwqb6rX7.js`（sha256=7f6e7a392c7d1f7a55561fc1546a48ab0a25ea51d9ca33c688dffe011ba978c9）
+- 三消 CSS：`dist/assets/threeMatch-i5Vbh66S.css`（sha256=fff67ee6204fb04ef0c18606fa907cabee81660b94ffa6cf02928190e4f7a8dd）
 
-## 构建产物布局与哈希
+## 谱系
 
-- `dist/index.html` sha256=a97895f33e43a3ff46d3d6bdb9b3208262abf3ddaad0f0611cc6c5581084d64c
-- `dist/assets/main-CwchcYB-.js` sha256=369568e1ce54c80bf1f45185343f711553fecb0c65db288afd7d1f861083d2d2
-- `dist/assets/main-DgKMJGDq.css` sha256=8ee30570518c10a07f2a4015ba4631e969419cc9c0bf875e523f50611cb696d4
-
-## 已知限制与风险
-
-- R-01（中）平台代理对 `https://preview.mcode.side419.cn:30056` 返回 `wrong version number`；对应 HTTP 入口返回 200，页面正文和 Workflow marker 已核验。
-- R-02（低）历史三消页面继续作为 `/three-match/` 多页面构建入口保留。
-
-## 回滚句柄
-
-- 单提交回滚：`git revert cbf7e2f86b5fab6b74a3cb45dd3d623330330c59`
-- 构建级回滚：恢复基线提交 `bfd94d3749f2fe1a893a8bf4fc660bb6a70b86ef` 后执行 `npm install && npm run build`
+- 上游基线：technical_design 制品 c5bfcefa89c7147ffe79229f3f78600cd6a33d1a174842f95c164b1810817745（commit f118de507bc28434dc2af933bed2eeb87fdeb107）
