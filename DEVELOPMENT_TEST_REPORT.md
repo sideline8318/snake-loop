@@ -1,45 +1,26 @@
-# 开发阶段测试报告（Web版多用户同屏贪吃蛇大战）
+# 开发阶段测试报告 · development.work.1
 
-- activity_id: c0f1c037-59f5-4439-b7e2-384ec306dcaa
-- stage_run_id: bad7c6ea-c3cf-45a1-a5f5-f80702059004
-- workflow_id: b8c4ef49-941e-4c96-b8b9-d508773e89de
-- input_manifest_sha256: 45e7cd45b6859675e39e7a9d635ba8832939683751c332599460a2bec16db1c9
-- parent_baseline_sha256: fdbb68018d78e67eed2f4a94849ec40c8b0343a43b6970fd8b77df4ba41a0a29
-- parent_baseline_uri: `/api/v1/assets?key=temp%2Floop-artifacts%2Fb8c4ef49-941e-4c96-b8b9-d508773e89de%2Fd1e095fd-7a62-4886-bd36-a0c0435168b9%2F7bcac5ca-7903-4d75-96ad-1509d6420400%2Ff3afec41-b2fa-443d-812c-f572e103181d_fdbb68018d78e67eed2f4a94849ec40c8b0343a43b6970fd8b77df4ba41a0a29.md`
+- Workflow：7cc101c5-927c-49c2-affe-230fd2effb6d
+- StageRun：a1288fa7-4609-49a1-99da-cdb0185f30c0
+- ActivityRun：f8e717fa-a8e1-4afb-a373-87d1363cf730
+- 输入清单 SHA-256：8407117980345614b9a4880eb9b4f3a3ef72ed1c043997113e78ccc5b3667bf8
+- release_candidate 提交：369b7613c23a35803206c0745fdbe462a1804993
 
-## 本阶段范围
+## 门禁结果
 
-将双蛇引擎、键盘输入、屏幕方向按钮、计分 HUD、碰撞结束面板和重新开始流程接入发布根入口 `index.html`，页面标题为“Web版多用户同屏贪吃蛇大战”。
+- lint：`npm run lint` → exit 0
+- typecheck：`npm run typecheck` → exit 0
+- unit_tests：`npm run test` → 61 passed / 61
+- build：`npm run build`（贪吃蛇）+ `npm run three-match`（三消）→ exit 0
+- e2e：`npm run test:e2e` → 50 passed / 50（修复前 41 passed / 9 failed）
+- preview_http_200：本地 `http://127.0.0.1:4173/` = 200；外部 `http://preview.mcode.side419.cn:30099/` = 200，含三消 workflow marker
 
-## 检查结果
+## 覆盖验收标准
 
-- lint: PASS；`npm run lint` 退出码 0
-- typecheck: PASS；`npm run typecheck` 退出码 0
-- unit_tests: PASS；`npm test` 5 个测试文件、61 项全部通过
-- build: PASS；`npm run build` 生成根入口和多页面产物
-- local_preview: PASS；`http://127.0.0.1:8080/` HTTP 200，正文包含当前 Workflow marker
-- platform_preview_http: PASS；`http://preview.mcode.side419.cn:30056/` HTTP 200，正文包含当前 Workflow marker
+- AC-001（一次点击进入正确 Task）：发布根 `/` 与别名 `/three-match/` 均渲染同一三消应用，`<title>消消乐 · 3D 三消</title>`，`startBtn`/`restartBtn` 控件齐备，无贪吃蛇身份残留。
+- AC-002（T0 起 60 秒内收敛）：黑盒 06 在真实 pointer/click 事件链上验证一次点击（两次相邻点选）即进入 `swapping`，`swapCount===1`；无效交换回退到 `idle` 并给出 toast。
+- AC-003（Stage retry 建立新 Attempt 并保留历史）：本轮为第 5 次 Attempt，历史 Attempt 的失败证据保留在平台上；本 Attempt 以新提交 369b761 推进远程 HEAD。
 
-## 验收标准覆盖
+## 缺陷闭环
 
-- AC-001：根页面展示用户可读标题“Web版多用户同屏贪吃蛇大战”
-- AC-002：方向键、WASD 与两组屏幕按钮分别控制玩家 1/2；吃食物增加对应玩家分数；撞墙、自撞、蛇身相撞进入结束态；结束面板支持再玩一次
-- AC-003：阶段输入上下文、活动 ID、父制品哈希和 release candidate 提交保持可追溯
-- AC-004：开发预览在 Runner 中以 `0.0.0.0:8080` 持久进程运行
-
-## 构建产物（release_candidate 引用）
-
-- `dist/index.html` sha256=`a97895f33e43a3ff46d3d6bdb9b3208262abf3ddaad0f0611cc6c5581084d64c`
-- `dist/assets/main-CwchcYB-.js` sha256=`369568e1ce54c80bf1f45185343f711553fecb0c65db288afd7d1f861083d2d2`
-- `dist/assets/main-DgKMJGDq.css` sha256=`8ee30570518c10a07f2a4015ba4631e969419cc9c0bf875e523f50611cb696d4`
-
-## 预览证据
-
-- request_preview 返回：`http://preview.mcode.side419.cn:30056`
-- 契约要求的 HTTPS 变体：`https://preview.mcode.side419.cn:30056`
-- HTTPS 探测返回 OpenSSL `wrong version number`；平台代理对该端口提供 HTTP 服务，HTTP 入口实际返回 200。该平台 TLS 限制作为 open risk 记录。
-
-## release_candidate
-
-- git_commit_sha: `cbf7e2f86b5fab6b74a3cb45dd3d623330330c59`
-- git_commit_pushed: PASS；已推送 `origin/main`
+原 9 条失败用例（root 身份、HUD 契约 id、服务类型、部署 marker、AC-001/AC-003、AC-006）全部修复并通过。根因是 Vite 多入口产物冲突与三消页脚本引用方式，详见 RELEASE_CANDIDATE.md。
