@@ -238,6 +238,19 @@ describe('Engine', () => {
     }
   });
 
+  it('generateFood covers every free cell and excludes both snakes', () => {
+    const engine = fresh();
+    engine.rivalSnake = [{ x: 12, y: 10 }];
+    const seen = new Set();
+    for (let i = 0; i < 4000; i++) {
+      const food = engine.generateFood();
+      expect(engine.occupies(food, [...engine.snake, ...engine.rivalSnake])).toBe(false);
+      seen.add(food.y * CONFIG.GRID_SIZE + food.x);
+    }
+    const free = CONFIG.GRID_SIZE * CONFIG.GRID_SIZE - engine.snake.length - engine.rivalSnake.length;
+    expect(seen.size).toBe(free);
+  });
+
   it('generateFood reports a full board', () => {
     const engine = fresh();
     const all = [];

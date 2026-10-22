@@ -20,6 +20,53 @@ test.after(() => {
   if (server) server.close();
 });
 
+// Deterministic food queue for the straight-line player-one run.
+// Player one starts as (8,10) (9,10) (10,10) heading right while the rival
+// drives left on row 15, so the reachable cells are (11,10)...(19,10) and then
+// row 11. Handing Math.random raw index guesses is brittle: the free-cell pool
+// length changes on every meal. Plan the target cells, replay the engine loop,
+// and emit the exact raw value that selects each target, so the run eats five
+// foods (level 2) and keeps going instead of expiring against the right wall.
+function straightLineFoodQueue(meals = 20) {
+  const GRID = 20;
+  const body = [];
+  const rival = [];
+  for (let i = 0; i < 3; i++) body.push([10 - i, 10]);
+  for (let i = 0; i < 3; i++) rival.push([10 + i, 15]);
+  const path = [];
+  for (let x = 11; x < GRID; x++) path.push([x, 10]);
+  for (let y = 11; y < GRID; y++) for (let x = 0; x < GRID; x++) path.push([x, y]);
+  const queue = [];
+  const pick = (target) => {
+    const occupied = new Set([...body, ...rival].map(([x, y]) => y * GRID + x));
+    const free = [];
+    for (let i = 0; i < GRID * GRID; i++) if (!occupied.has(i)) free.push(i);
+    const index = free.indexOf(target[1] * GRID + target[0]);
+    queue.push((index + 0.5) / free.length);
+  };
+  let head = [10, 10];
+  let rivalHead = [10, 15];
+  let eaten = 0;
+  pick(path[0]);
+  while (eaten < meals) {
+    const next = [head[0] + 1, head[1]];
+    const rivalNext = [rivalHead[0] - 1, rivalHead[1]];
+    if (next[0] >= GRID || rivalNext[0] < 0) break;
+    rival.unshift(rivalNext);
+    rival.pop();
+    rivalHead = rivalNext;
+    const ate = next[0] === path[eaten][0] && next[1] === path[eaten][1];
+    body.unshift(next);
+    if (!ate) body.pop();
+    head = next;
+    if (ate) {
+      eaten += 1;
+      pick(path[Math.min(eaten, path.length - 1)]);
+    }
+  }
+  return queue;
+}
+
 function press(dom, key) {
   dom.window.document.dispatchEvent(
     new dom.window.KeyboardEvent('keydown', { key, bubbles: true, cancelable: true })
@@ -252,8 +299,7 @@ test('restart button returns to menu', async () => {
 });
 
 test('eating raises score/level, records and persists the new high score end-to-end', async () => {
-  const foodQueue = [];
-  for (let k = 0; k < 20; k++) foodQueue.push((211 + k) / 400);
+  const foodQueue = straightLineFoodQueue();
   const dom = await openSnake({ mathRandom: foodQueue });
   try {
     const d = doc(dom);
@@ -310,8 +356,7 @@ test('space toggles pause and R restarts from keyboard', async () => {
 });
 
 test('settlement modal shows score-descending ranking and play-again label', async () => {
-  const foodQueue = [];
-  for (let k = 0; k < 20; k++) foodQueue.push((211 + k) / 400);
+  const foodQueue = straightLineFoodQueue();
   const dom = await openSnake({ mathRandom: foodQueue });
   try {
     const d = doc(dom);

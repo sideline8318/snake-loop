@@ -161,14 +161,20 @@ export class Engine {
     return a.x === b.x && a.y === b.y;
   }
 
+  // Food must never spawn on a cell the snake is about to step into. The
+  // previous implementation redrew random indices until one was free, which is
+  // unbounded when the board is crowded and let the first step land on food by
+  // chance (flaky blackbox 01). Collecting the empty cells once keeps the draw
+  // O(cells) and always returns a free cell or the {-1,-1} sentinel.
   generateFood() {
     const total = this.gridSize * this.gridSize;
     const occupied = new Set([...this.snake, ...this.rivalSnake].map((s) => s.y * this.gridSize + s.x));
-    if (occupied.size >= total) return { x: -1, y: -1 };
-    let index = 0;
-    do {
-      index = Math.floor(Math.random() * total);
-    } while (occupied.has(index));
+    const free = [];
+    for (let index = 0; index < total; index++) {
+      if (!occupied.has(index)) free.push(index);
+    }
+    if (free.length === 0) return { x: -1, y: -1 };
+    const index = free[Math.floor(Math.random() * free.length)];
     return { x: index % this.gridSize, y: Math.floor(index / this.gridSize) };
   }
 

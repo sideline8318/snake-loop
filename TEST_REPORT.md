@@ -1,85 +1,78 @@
-# 测试阶段报告 — 消消乐 · 3D 三消（发布构建自洽修复版）
+# 测试阶段报告 — 结算排名与再来一局体验交付
 
-- activity_id: d0cdf9d0-4c7c-450e-90f1-bdd2f89d5d54
+- artifact_type: test_report
+- workflow_id: 4685ae3a-d06a-4da9-aee8-63a819398d73
+- stage_run_id: cde242ef-9b03-489c-9395-c8e420120835
+- activity_id: 3973046b-0772-41a6-a64a-7fd299778cf8
 - activity_key: test.work.1
-- activity_run_id: d0cdf9d0-4c7c-450e-90f1-bdd2f89d5d54
-- stage_run_id: 38efffa5-25a5-41c8-afef-85d771273d2d
-- workflow_id: 7cc101c5-927c-49c2-affe-230fd2effb6d
-- input_manifest_sha256: 37a9255aa4ccbcfecfc10adbf09f0d2e9bca8009ea76ef2ef5e8da4ecde3215b
-- parent_release_candidate_sha256: 2c3ee8053fd06d367e59f022209a087ee12721ec028c71ec4432b17848e8f65f
-- parent_release_candidate_git: 7b219474d604c7585c0f491a4332b7b85ac77cb4
+- generation: 1
+- input_manifest_sha256: a5911faa6adbd6d7bb3af727649ebd44323d4b056467b108d852bae48e1b8cad
+- parent_release_candidate_sha256: 41a8b8ca91467009ade6816378e0ef17b965b6d682efef6f78b5e351800e8068
+- upstream_release_candidate_commit: 39a2f4cd77e81d505230d9cfa0978131219d6b63
+- work_branch: loop-20261021-178786
+- primary_repo: https://github.com/sideline8318/snake-loop
 
 ## 测试范围
 
-针对测试阶段目标「修复在线发布产物错误」，验证单一 `npm run build` 即可自洽产出
-发布根 `dist/index.html` 呈现「消消乐 · 3D 三消」，并回归全部游戏功能（8x8 棋盘、
-点击/拖拽交换相邻方块、三连及以上消除计分、无效交换回退、消除后下落补位连锁、
-无解自动洗牌、分数与最高分、重开）。
+针对测试阶段目标「结算排名与再来一局体验交付」，在开发阶段交付的
+`39a2f4cd` 基线上执行全量质量门禁，覆盖结算排名降序、并列名次标注、
+再来一局复位、食物投放、双人对战结束与历史三消子页面回归。
 
-## 本轮发现的缺陷与修复（就地修改代码并提交新 release_candidate）
+## 本轮发现的缺陷与就地修复
 
-- 缺陷 D1（构建流水线不自洽，systemic）：`npm run build` 仅执行 `vite build`，
-  默认配置不再产出 `dist/three-match/index.html`，发布根 `dist/index.html` 仍是历史
-  贪吃蛇页面。前序开发阶段依赖手工串联 `npm run three-match` 才能得到正确发布根，
-  导致黑盒测试套件（04/06 依赖 `dist/three-match/index.html`）在全新构建后 17 项失败：
-  `ENOENT: no such file or directory, open '/workspace/dist/three-match/index.html'`。
-- 修复 S1：`package.json` 的 `build` 改为 `vite build && npm run three-match`，
-  使一次构建即产出完整、可发布的 dist（三消发布根 + 三消别名 + 历史贪吃蛇子路径）。
-- 修复 S2：`vite.config.js` 默认构建输入移除 `main`（三消入口），只保留
-  `legacySnake`，避免与三消构建产物在 `dist/index.html` 上互相覆盖，职责单一。
+- 缺陷 D1（引擎食物投放不稳定，systemic）：`Engine.generateFood()` 用
+  `do { index = Math.floor(Math.random() * total) } while (occupied.has(index))`
+  在整块棋盘上重抽，直到抽到空格。棋盘只剩少量空格时重抽次数无界，且首帧食物
+  有概率落在蛇头即将进入的格子，导致黑盒 01「start lays snake right at centre;
+  step keeps length moving right」间歇性断言失败（实测 3 次中出现 1 次
+  `'ate' !== 'none'`）。
+  - 修复 S1：先一次性收集全部空格，再从空格集合中随机取一个；无空格时返回
+    `{-1,-1}` 哨兵。投放结果与占用集合在同一快照内计算，抽取为常数开销。
+  - 修复 S2：新增单测 `generateFood covers every free cell and excludes both snakes`，
+    以 4000 次抽样验证食物覆盖全部空格且不落在任意一条蛇身上。
+- 缺陷 D2（黑盒用例随机序列脆弱，occasional）：`tests/blackbox/02_integration.test.cjs`
+  中两处用例手工构造 `(211 + k) / 400` 的随机队列，依赖「整块棋盘索引」假设。
+  空格池长度随每次进食变化，序列失效导致玩家一在第 9 步撞右墙，等级停在 1，
+  「eating raises score/level...」用例断言 `level should reach 2 after 5 foods` 失败。
+  - 修复 S3：新增 `straightLineFoodQueue()` 辅助函数，先规划玩家一直线可达的目标格，
+    再按引擎真实演进反推每餐应喂给 `Math.random` 的精确原始值，使随机队列与空格池
+    长度解耦，两处用例改用该构造器。
+- 修复 S4：README 记录食物投放规则并校正发布根 workflow 标识；`index.html` 与
+  `legacy-snake/index.html` 的阶段 marker 对齐到 `test.work.1 attempt 1`。
 
 ## 测试结果
 
 - required_check artifact_identity_verified: PASS；本报告声明输入清单 SHA-256
-  （37a9255a…）、上游 release_candidate 哈希（2c3ee805…）与当前 Activity ID（d0cdf9d0…）。
-- required_check test_suite_passed: PASS；单元 61/61、黑盒 50/50，全绿。
-- required_check git_commit_pushed: PASS；测试证据提交并推送至工作分支与 main，远程 HEAD 前进。
-- npm run lint: PASS，退出码 0。
-- npm run typecheck: PASS，退出码 0。
-- npx vitest run: PASS，5 个文件 61 项全过（threeMatch 24 项）。
-- npm run build（单一命令，自洽）: PASS，先出 dist/legacy-snake/index.html，
-  再由 three-match 构建出 dist/three-match/index.html 并经插件提升为发布根
-  dist/index.html（标题「消消乐 · 3D 三消」）。
-- npm run test:e2e: PASS，6 个黑盒文件 50 项全过（修复前 33/50，17 项因 D1 失败）。
+  `a5911faa…`、上游 release_candidate 哈希 `41a8b8ca…` 与当前 Activity ID
+  `3973046b-0772-41a6-a64a-7fd299778cf8`。
+- required_check test_suite_passed: PASS；lint exit 0、typecheck exit 0、单测 77/77、
+  黑盒 52/52。
+- required_check git_commit_pushed: PASS；修复与报告提交推送至
+  `origin/loop-20261021-178786`，远程 HEAD 由 `39a2f4cd` 前进至本阶段提交。
 
-## 发布根排他性验证（AC-001~AC-003）
+| 门禁 | 命令 | 结果 |
+| --- | --- | --- |
+| lint | `npm run lint` | PASS，exit 0 |
+| typecheck | `npm run typecheck` | PASS，exit 0 |
+| unit_tests | `npm test` | PASS，6 文件 77 用例（engine 24） |
+| build | `npm run build` | PASS，dist 含发布根与 `/legacy-snake/`、`/three-match/` |
+| blackbox_tests | `npm run test:e2e` | PASS，52/52 |
+| blackbox_stability | `npm run test:e2e` 连续 3 次 | PASS，每次 52/52 |
+| legacy_01_stability | `node --test tests/blackbox/01_engine_shipped.test.cjs` 连续 8 次 | PASS，每次 8/8 |
+| marker_check | 构建产物 grep | PASS，`test.work.1 attempt 1` |
 
-- dist/index.html 的 `<title>` 为「消消乐 · 3D 三消」，「贪吃蛇」出现次数为 0。
-- dist/index.html 与 dist/three-match/index.html 内容逐字节相同，
-  sha256 均为 6812c6340e3a0087055717f6226908ae14ba91147be8ab92d8b13b3559981cd6。
-- dist 根目录仅存在一个 index.html；历史贪吃蛇页面位于 dist/legacy-snake/index.html
-  （sha256 0259238b…），不占用发布根默认文档。
-- 页面 head 含 workflow marker `消消乐 · 3D 三消 | workflow a3d16e35-bd65-41e1-b430-995f7151e2a6`。
-- 黑盒 03/04 断言：`/`、`/three-match/`、`/three-match/index.html` 均返回消消乐；
-  `/` 正文不含「贪吃蛇」「snake-loop-competition」；`/legacy-snake/` 可达且含历史贪吃蛇标识。
+## 验收标准映射
 
-## 功能验收（AC-004~AC-008，黑盒 05/06）
+- 45312663-f315-44a4-a6de-3f5e7c7dc022「对战结束后，房间内玩家均可查看按得分降序
+  排列的本局排名，且可从结算页触发再来一局」：`settlement.test.js`（8 例）与
+  `ui.test.js`（11 例）覆盖降序、并列名次（1,2,2,4）、`data-tied` 与 `aria-label`
+  标注；黑盒
+  `settlement modal shows score-descending ranking and play-again label` 与
+  `draw settlement marks tied rows with data-tied and aria-label` 在真实 dist 产物上
+  验证渲染、降序、点击「再来一局」后排行清空与分数复位。
 
-- AC-002 PASS：25 次确定性构造均为 8x8，初始无现成三连且至少存在一步可消除组合。
-- AC-003/AC-004 PASS：非相邻交换被拒；无匹配交换被拒（reason=no-match）；合法交换被接受，
-  结算后消除、下落补位、得分 >0、连锁计数、回到 idle、无残留匹配且仍可行动。
-- AC-005 PASS：构造真死局后触发一次洗牌，洗牌后无现成三连、有解并输出提示
-  「没有可消除的组合，已自动洗牌」。
-- AC-006 PASS：构建产物内嵌 HUD 接线、最高分持久化键 `three-match-best-score`、
-  自动洗牌与无效交换提示文案、BOARD_SIZE 常量。
-- AC-002（交互）PASS：真实 pointer/click 事件链下，相邻两次点击完成交换并进入 swapping；
-  拖拽阈值跨越亦完成交换；无效点击交换保持棋盘不变。
-- AC-008 PASS：黑盒 jsdom 运行时驱动游戏初始化与交互，未触发 window error。
+## 已知风险与后续动作
 
-## 制品哈希
-
-- release_candidate: RELEASE_CANDIDATE.md（本阶段新提交，git_commit_sha 见下）
-- test_report: 本文件
-- 构建产物（dist，可由单一 npm run build 复现）:
-  - dist/index.html sha256 6812c6340e3a0087055717f6226908ae14ba91147be8ab92d8b13b3559981cd6
-  - dist/three-match/index.html sha256 6812c6340e3a0087055717f6226908ae14ba91147be8ab92d8b13b3559981cd6
-  - dist/legacy-snake/index.html sha256 0259238b29f1677a32dffc07241e65aad82ba9767c8bb2c2f45b549c0c295639
-  - dist/assets/threeMatch-Bwqb6rX7.js sha256 7f6e7a392c7d1f7a55561fc1546a48ab0a25ea51d9ca33c688dffe011ba978c9
-  - dist/assets/threeMatch-i5Vbh66S.css sha256 fff67ee6204fb04ef0c18606fa907cabee81660b94ffa6cf02928190e4f7a8dd
-
-## 缺陷与限制
-
-- 本轮修复实现缺陷 1 项（D1 构建流水线不自洽），修复后单元/黑盒/lint/typecheck/build 全绿。
-- 已知平台限制（沿用上游 open_risk，非本轮新增）：沙箱无 GPU/真实浏览器，
-  three.js WebGL 像素渲染需在真实浏览器最终确认；逻辑层已由单测与 GameState/事件链运行时驱动覆盖。
-- 历史贪吃蛇页面保留在 `/legacy-snake/` 非根子路径，不占用发布根默认文档。
+- 平台预览 HTTPS 入口仍返回 SSL wrong version number（承接上游 open_risk），测试阶段
+  以 HTTP 入口与本地静态服务为准，部署/验收阶段需再次确认可用预览入口。
+- 360x640 小屏结算弹层内部滚动仍待部署/验收阶段目视确认。
