@@ -14,8 +14,8 @@
 - input_context_baseline_ref: technical_design sha256 `6d82d988f9bf2877318cef552ebb05cf11f3efc94078e661d95689816a599c74`
 - upstream_baseline_commit: c28857358a3aa0bd7231682bf1eef76c44ceeaaa
 - base_head_before_stage: 5330c18ccff97042e1d320e1b2e32ee192df6d9e
-- release_candidate_commit: 436d272e1cc12014057da27d893a74dea2852508
-- release_candidate_commit_sha256: d27e84135a600d796b6a6a177148774b1bd8373a4a7930594f893c313155978a
+- release_candidate_commit: b2ca2fcf4daa7e299f1e37d7472706f5d238bb71
+- release_candidate_commit_sha256: 3621ebb32ad5ae9035b06cde3b01a34628e163c3c72939223a1e0740f0cf2cd9
 
 ## 本轮目的：修复发布候选锚点不可追溯
 
@@ -28,8 +28,8 @@
    `workflow-id-current`），保证构建产物与源码声明一致，且不破坏既有身份隔离断言。
 3. `DEVELOPMENT_REPORT.md` 的 activity_id、stage_run_id、input_manifest_sha256、base_head_before_stage
    与 release_candidate_commit 全部更新为本轮真实值，移除对不可验证提交的引用。
-4. 本文件登记的 `release_candidate_commit` 与 `release_candidate_commit_sha256` 由同一真实提交计算，
-   并可由 `git cat-file -e <sha>` 与远程分支 HEAD 双向核验。
+4. 本文件登记的 `release_candidate_commit` 与 `release_candidate_commit_sha256` 一一对应，
+   并可由 `git cat-file -e <commit>` 与 `git cat-file -p <commit> | sha256sum` 双向核验。
 
 ## 功能范围（承接技术设计，交由本轮门禁复核）
 
