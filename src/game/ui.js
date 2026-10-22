@@ -19,9 +19,16 @@ export class UI {
       this.startGame();
     });
     gameOverModal.addEventListener('click', (event) => {
-      if (event.target === gameOverModal) this.startGame();
+      if (event.target === gameOverModal) this.playAgain();
     });
     this.refreshScores();
+  }
+
+  playAgain() {
+    const button = this.dom.playAgainBtn;
+    if (button && button.disabled) return;
+    if (button) button.disabled = true;
+    this.startGame();
   }
 
   startGame() {

@@ -31,6 +31,20 @@ function makeClickable(element, disabled) {
   return element;
 }
 
+function makeBackdropStub() {
+  const listeners = [];
+  const element = {
+    classList: classListSpy(),
+    addEventListener(type, listener) {
+      if (type === 'click') listeners.push(listener);
+    },
+    click(event) {
+      for (const listener of listeners) listener(event);
+    },
+  };
+  return element;
+}
+
 function makeDomStub() {
   const dom = {
     score: { textContent: '0' },
@@ -207,5 +221,35 @@ describe('UI settlement ranking', () => {
     button.click();
     expect(engine.scene).toBe(SCENES.PLAYING);
     expect(dom.rankingList.children).toHaveLength(0);
+  });
+});
+
+describe('UI play-again entry points share idempotency', () => {
+  it('backdrop click triggers play again and starts a fresh game', () => {
+    const engine = new Engine();
+    Object.assign(engine, { scene: SCENES.GAME_OVER, scores: { player1: 7, player2: 2 } });
+    const dom = makeDomStub();
+    dom.gameOverModal = makeBackdropStub();
+    const ui = new UI({ engine, dom });
+    ui.init();
+    ui.onGameOver();
+    expect(dom.rankingList.children).toHaveLength(2);
+    dom.gameOverModal.click({ target: dom.gameOverModal });
+    expect(engine.scene).toBe(SCENES.PLAYING);
+    expect(dom.rankingList.children).toHaveLength(0);
+    expect(dom.playAgainBtn.disabled).toBe(false);
+  });
+
+  it('backdrop click is ignored while the play-again button is disabled', () => {
+    const engine = new Engine();
+    Object.assign(engine, { scene: SCENES.GAME_OVER, scores: { player1: 7, player2: 2 } });
+    const dom = makeDomStub();
+    dom.gameOverModal = makeBackdropStub();
+    const ui = new UI({ engine, dom });
+    ui.init();
+    ui.onGameOver();
+    dom.playAgainBtn.disabled = true;
+    dom.gameOverModal.click({ target: dom.gameOverModal });
+    expect(engine.scene).toBe(SCENES.GAME_OVER);
   });
 });
