@@ -1,4 +1,5 @@
 import { CONFIG, SCENES, DIRECTIONS, isReverse } from './config.js';
+import { buildSettlement } from './settlement.js';
 
 export class Engine {
   constructor() {
@@ -183,6 +184,10 @@ export class Engine {
     this.scene = SCENES.MENU;
     this.pendingDirection = null;
     this.rivalPendingDirection = null;
+  }
+
+  getSettlement() {
+    return buildSettlement(this.scores);
   }
 
   get isGameOver() {

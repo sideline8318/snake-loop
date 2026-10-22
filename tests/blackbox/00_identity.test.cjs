@@ -83,6 +83,8 @@ test('legacy snake page is preserved off the release root with its own identity'
     'finalScore',
     'finalLevel',
     'finalReason',
+    'ranking',
+    'rankingList',
   ]) {
     assert.ok(html.includes('id="' + id + '"'), LEGACY_PAGE + ' missing #' + id);
   }

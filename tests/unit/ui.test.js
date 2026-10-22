@@ -35,7 +35,23 @@ function makeDomStub() {
     finalScore: { textContent: '0' },
     finalLevel: { textContent: '1' },
     finalReason: { textContent: '' },
+    rankingList: makeListStub(),
   };
+}
+
+function makeListStub() {
+  const children = [];
+  const list = {
+    children,
+    replaceChildren(...nodes) {
+      children.length = 0;
+      children.push(...nodes);
+    },
+    append(node) {
+      children.push(node);
+    },
+  };
+  return list;
 }
 
 beforeEach(() => {
@@ -106,5 +122,62 @@ describe('UI game-over flow [regression for bug B: finalScore/finalLevel wired i
     expect(dom.pauseBtn.textContent).toBe('暂停');
     ui.restart();
     expect(engine.scene).toBe(SCENES.MENU);
+  });
+});
+
+describe('UI settlement ranking', () => {
+  it('renders ranking rows in snapshot order using textContent only', () => {
+    const engine = new Engine();
+    Object.assign(engine, { scene: SCENES.GAME_OVER, scores: { player1: 10, player2: 40 }, collisionReason: '撞墙' });
+    engine.score = 50;
+    const dom = makeDomStub();
+    const ui = new UI({ engine, dom });
+    ui.onGameOver();
+    const rows = dom.rankingList.children;
+    expect(rows).toHaveLength(2);
+    expect(rows[0].getAttribute('data-rank')).toBe('1');
+    expect(rows[0].getAttribute('data-player')).toBe('player2');
+    expect(rows[0].querySelector('.rank-name').textContent).toBe('玩家 2');
+    expect(rows[0].querySelector('.rank-score').textContent).toBe('40');
+    expect(rows[1].getAttribute('data-rank')).toBe('2');
+    expect(rows[1].getAttribute('aria-label')).toContain('第 2 名');
+    expect(rows[0].querySelector('.rank-name').children).toHaveLength(0);
+  });
+
+  it('marks tied rows with data-tied and aria-label', () => {
+    const engine = new Engine();
+    Object.assign(engine, { scene: SCENES.GAME_OVER, scores: { player1: 0, player2: 0 } });
+    const dom = makeDomStub();
+    const ui = new UI({ engine, dom });
+    ui.onGameOver();
+    const rows = dom.rankingList.children;
+    expect(rows).toHaveLength(2);
+    for (const row of rows) {
+      expect(row.getAttribute('data-tied')).toBe('true');
+      expect(row.getAttribute('aria-label')).toContain('并列');
+    }
+  });
+
+  it('does not throw when ranking DOM is absent', () => {
+    const engine = new Engine();
+    Object.assign(engine, { scene: SCENES.GAME_OVER, scores: { player1: 5, player2: 1 } });
+    const dom = makeDomStub();
+    delete dom.rankingList;
+    const ui = new UI({ engine, dom });
+    expect(() => ui.onGameOver()).not.toThrow();
+    expect(() => ui.startGame()).not.toThrow();
+  });
+
+  it('play again resets scores and clears ranking rows', () => {
+    const engine = new Engine();
+    Object.assign(engine, { scene: SCENES.GAME_OVER, scores: { player1: 5, player2: 1 } });
+    const dom = makeDomStub();
+    const ui = new UI({ engine, dom });
+    ui.onGameOver();
+    expect(dom.rankingList.children).toHaveLength(2);
+    ui.startGame();
+    expect(engine.scene).toBe(SCENES.PLAYING);
+    expect(engine.scores).toEqual({ player1: 0, player2: 0 });
+    expect(dom.rankingList.children).toHaveLength(0);
   });
 });

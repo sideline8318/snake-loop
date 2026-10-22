@@ -70,6 +70,14 @@ button { font: inherit; }
 .panel .btn { margin-top: 25px; padding-inline: 27px; }
 .result-row { display: flex; justify-content: center; gap: 26px; color: var(--muted); }
 .result-row strong { margin-left: 4px; color: var(--ink); font-size: 1.4rem; }
+.ranking { margin: 14px 0 0; text-align: left; }
+.ranking-title { margin-bottom: 6px; color: var(--muted); font-size: 0.72rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
+.ranking-list { display: grid; gap: 2px; list-style: none; margin: 0; padding: 0; }
+.ranking-row { display: grid; grid-template-columns: 2.2rem 1fr auto; align-items: center; gap: 8px; min-height: 1.9rem; padding: 0 4px; border-top: 1px solid rgba(244, 241, 232, 0.12); color: var(--muted); font-size: 0.9rem; }
+.ranking-row[data-rank="1"] { color: var(--gold); font-weight: 800; }
+.ranking-row[data-tied="true"] .rank-no::after { content: "="; margin-left: 1px; font-size: 0.72rem; }
+.rank-no { font-variant-numeric: tabular-nums; font-weight: 800; }
+.rank-score { font-variant-numeric: tabular-nums; font-weight: 800; }
 .record { margin-top: 16px; color: var(--gold); font-weight: 800; }
 .record.hidden { display: none; }
 .footer { margin-top: 15px; color: rgba(244,241,232,0.35); font-size: 0.7rem; letter-spacing: 0.12em; text-align: center; }
@@ -88,4 +96,6 @@ button { font: inherit; }
   .stats { margin-top: 16px; }
   .stat { padding: 10px; }
   .value { font-size: 1.25rem; }
+  .panel { max-height: min(86vh, 640px); overflow-y: auto; }
+  .ranking-row { font-size: 0.86rem; }
 }

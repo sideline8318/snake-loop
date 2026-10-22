@@ -308,3 +308,55 @@ test('space toggles pause and R restarts from keyboard', async () => {
     dom.window.close();
   }
 });
+
+test('settlement modal shows score-descending ranking and play-again label', async () => {
+  const foodQueue = [];
+  for (let k = 0; k < 20; k++) foodQueue.push((211 + k) / 400);
+  const dom = await openSnake({ mathRandom: foodQueue });
+  try {
+    const d = doc(dom);
+    d.getElementById('playBtn').click();
+    const shown = await waitFor(() =>
+      d.getElementById('gameOverModal').classList.contains('show') ? d.getElementById('gameOverModal') : null
+    );
+    assert.ok(shown, 'game-over modal must appear');
+    const rows = [...d.querySelectorAll('#rankingList .ranking-row')];
+    assert.ok(rows.length >= 2, 'ranking must list both players');
+    const scores = rows.map((r) => Number(r.querySelector('.rank-score').textContent));
+    const sorted = [...scores].sort((a, b) => b - a);
+    assert.deepEqual(scores, sorted, 'ranking must be sorted by score desc');
+    assert.equal(rows[0].getAttribute('data-rank'), '1');
+    const finalScore = Number(d.getElementById('finalScore').textContent);
+    assert.equal(scores.reduce((a, b) => a + b, 0), finalScore, 'ranking scores sum to final score');
+    assert.equal(d.getElementById('playAgainBtn').textContent, '再来一局');
+
+    d.getElementById('playAgainBtn').click();
+    assert.ok(!d.getElementById('gameOverModal').classList.contains('show'), 'modal hides after play again');
+    assert.ok(d.getElementById('menuScreen').classList.contains('hidden'));
+    assert.equal(d.getElementById('score').textContent, '0');
+    assert.equal(d.querySelectorAll('#rankingList .ranking-row').length, 0, 'ranking cleared on replay');
+  } finally {
+    dom.window.close();
+  }
+});
+
+test('draw settlement marks tied rows with data-tied and aria-label', async () => {
+  const dom = await openSnake({ mathRandom: [0.999999] });
+  try {
+    const d = doc(dom);
+    d.getElementById('playBtn').click();
+    const shown = await waitFor(() =>
+      d.getElementById('gameOverModal').classList.contains('show') ? d.getElementById('gameOverModal') : null
+    );
+    assert.ok(shown, 'game-over modal must appear');
+    const rows = [...d.querySelectorAll('#rankingList .ranking-row')];
+    assert.equal(rows.length, 2);
+    for (const row of rows) {
+      assert.equal(row.getAttribute('data-tied'), 'true');
+      assert.match(row.getAttribute('aria-label'), /并列/);
+      assert.equal(row.querySelector('.rank-no').textContent, '1');
+    }
+  } finally {
+    dom.window.close();
+  }
+});

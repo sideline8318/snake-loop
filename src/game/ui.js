@@ -13,7 +13,10 @@ export class UI {
     pauseBtn.addEventListener('click', () => this.togglePause());
     restartBtn.addEventListener('click', () => this.restart());
     playBtn.addEventListener('click', () => this.startGame());
-    playAgainBtn.addEventListener('click', () => this.startGame());
+    playAgainBtn.addEventListener('click', () => {
+      playAgainBtn.disabled = true;
+      this.startGame();
+    });
     gameOverModal.addEventListener('click', (event) => {
       if (event.target === gameOverModal) this.startGame();
     });
@@ -21,6 +24,8 @@ export class UI {
   }
 
   startGame() {
+    if (this.dom.playAgainBtn) this.dom.playAgainBtn.disabled = false;
+    this.clearRanking();
     this.engine.start();
     this.dom.gameOverModal.classList.remove('show');
     this.dom.gameOverModal.classList.add('hidden');
@@ -61,9 +66,51 @@ export class UI {
     } else {
       this.dom.recordBadge.classList.add('hidden');
     }
+    this.renderRanking(this.engine.getSettlement());
     this.dom.gameOverModal.classList.remove('hidden');
     this.dom.gameOverModal.classList.add('show');
     this.dom.pauseBtn.textContent = '暂停';
+  }
+
+  renderRanking(settlement) {
+    const list = this.dom.rankingList;
+    if (!list) return;
+    if (typeof list.replaceChildren === 'function') list.replaceChildren();
+    else while (list.firstChild) list.removeChild(list.firstChild);
+    if (!settlement || !Array.isArray(settlement.entries)) return;
+    const doc = list.ownerDocument || (typeof document !== 'undefined' ? document : null);
+    if (!doc) return;
+    for (const entry of settlement.entries) {
+      const row = doc.createElement('li');
+      row.className = 'ranking-row';
+      row.setAttribute('data-rank', String(entry.rank));
+      row.setAttribute('data-player', entry.playerId);
+      if (entry.tied) {
+        row.setAttribute('data-tied', 'true');
+        row.classList.add('rank-tied');
+        row.setAttribute('aria-label', `第 ${entry.rank} 名（并列）· ${entry.label} · ${entry.score} 分`);
+      } else {
+        row.setAttribute('aria-label', `第 ${entry.rank} 名 · ${entry.label} · ${entry.score} 分`);
+      }
+      const rankNo = doc.createElement('span');
+      rankNo.className = 'rank-no';
+      rankNo.textContent = String(entry.rank);
+      const name = doc.createElement('span');
+      name.className = 'rank-name';
+      name.textContent = entry.label;
+      const score = doc.createElement('span');
+      score.className = 'rank-score';
+      score.textContent = String(entry.score);
+      row.append(rankNo, name, score);
+      list.append(row);
+    }
+  }
+
+  clearRanking() {
+    const list = this.dom.rankingList;
+    if (!list) return;
+    if (typeof list.replaceChildren === 'function') list.replaceChildren();
+    else while (list.firstChild) list.removeChild(list.firstChild);
   }
 
   refreshScores() {
