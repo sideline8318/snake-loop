@@ -50,4 +50,24 @@ describe('buildSettlement', () => {
     expect(a).toEqual(b);
     expect(a.entries.map((e) => e.playerId)).toEqual(['player1', 'player2']);
   });
+
+  it('mid-table tie yields competition ranks 1, 2, 2, 4', () => {
+    const s = buildSettlement({ player1: 30, player2: 40, player3: 30, player4: 10 });
+    expect(s.entries.map((e) => [e.playerId, e.rank, e.tied])).toEqual([
+      ['player2', 1, false],
+      ['player1', 2, true],
+      ['player3', 2, true],
+      ['player4', 4, false],
+    ]);
+    expect(s.draw).toBe(false);
+    expect(s.topPlayerId).toBe('player2');
+    expect(s.margin).toBe(30);
+  });
+
+  it('ranks stay monotonic when the leading scores are tied', () => {
+    const s = buildSettlement({ player1: 50, player2: 50, player3: 20 });
+    expect(s.entries.map((e) => e.rank)).toEqual([1, 1, 3]);
+    expect(s.entries.map((e) => e.tied)).toEqual([true, true, false]);
+    expect(s.topPlayerId).not.toBeNull();
+  });
 });

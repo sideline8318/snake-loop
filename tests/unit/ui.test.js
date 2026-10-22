@@ -20,8 +20,19 @@ function classListSpy() {
   };
 }
 
+function makeClickable(element, disabled) {
+  const listeners = [];
+  element.disabled = disabled;
+  element.addEventListener = (type, listener) => listeners.push(listener);
+  element.click = () => {
+    if (element.disabled) return;
+    for (const listener of listeners) listener();
+  };
+  return element;
+}
+
 function makeDomStub() {
-  return {
+  const dom = {
     score: { textContent: '0' },
     level: { textContent: '1' },
     highScore: { textContent: '0' },
@@ -37,6 +48,8 @@ function makeDomStub() {
     finalReason: { textContent: '' },
     rankingList: makeListStub(),
   };
+  makeClickable(dom.playAgainBtn, false);
+  return dom;
 }
 
 function makeListStub() {
@@ -178,6 +191,21 @@ describe('UI settlement ranking', () => {
     ui.startGame();
     expect(engine.scene).toBe(SCENES.PLAYING);
     expect(engine.scores).toEqual({ player1: 0, player2: 0 });
+    expect(dom.rankingList.children).toHaveLength(0);
+  });
+
+  it('ignores a repeated play-again click while the button stays disabled', () => {
+    const engine = new Engine();
+    Object.assign(engine, { scene: SCENES.GAME_OVER, scores: { player1: 5, player2: 1 } });
+    const dom = makeDomStub();
+    const ui = new UI({ engine, dom });
+    ui.init();
+    const button = dom.playAgainBtn;
+    button.click();
+    expect(engine.scene).toBe(SCENES.PLAYING);
+    expect(dom.rankingList.children).toHaveLength(0);
+    button.click();
+    expect(engine.scene).toBe(SCENES.PLAYING);
     expect(dom.rankingList.children).toHaveLength(0);
   });
 });

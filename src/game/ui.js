@@ -14,6 +14,7 @@ export class UI {
     restartBtn.addEventListener('click', () => this.restart());
     playBtn.addEventListener('click', () => this.startGame());
     playAgainBtn.addEventListener('click', () => {
+      if (playAgainBtn.disabled) return;
       playAgainBtn.disabled = true;
       this.startGame();
     });
@@ -88,7 +89,7 @@ export class UI {
       if (entry.tied) {
         row.setAttribute('data-tied', 'true');
         row.classList.add('rank-tied');
-        row.setAttribute('aria-label', `第 ${entry.rank} 名（并列）· ${entry.label} · ${entry.score} 分`);
+        row.setAttribute('aria-label', `第 ${entry.rank} 名 · 并列 · ${entry.label} · ${entry.score} 分`);
       } else {
         row.setAttribute('aria-label', `第 ${entry.rank} 名 · ${entry.label} · ${entry.score} 分`);
       }

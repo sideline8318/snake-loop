@@ -3,12 +3,14 @@ export const RANK_MAX = 2;
 const LABELS = {
   player1: '玩家 1',
   player2: '玩家 2',
+  player3: '玩家 3',
+  player4: '玩家 4',
 };
 
 /**
  * 构建结算排名快照（纯函数，不触碰 DOM 与 localStorage）。
  *
- * @param {{player1?: number, player2?: number}} [scores]
+ * @param {Record<string, number>} [scores]
  * @returns {{entries: Array<{rank: number, playerId: string, label: string, score: number, tied: boolean}>, topPlayerId: string|null, draw: boolean, margin: number}}
  */
 export function buildSettlement(scores = {}) {
@@ -20,8 +22,9 @@ export function buildSettlement(scores = {}) {
     .map((playerId) => ({ playerId, label: LABELS[playerId], score: scores[playerId] }))
     .sort((a, b) => b.score - a.score || a.playerId.localeCompare(b.playerId));
 
+  const ranks = competitionRanks(sorted);
   const entries = sorted.map((row, index) => ({
-    rank: competitionRank(sorted, index),
+    rank: ranks[index],
     playerId: row.playerId,
     label: row.label,
     score: row.score,
@@ -35,10 +38,15 @@ export function buildSettlement(scores = {}) {
   return { entries, topPlayerId, draw, margin };
 }
 
-function competitionRank(sorted, index) {
-  let rank = index + 1;
-  while (rank > 1 && sorted[rank - 2].score === sorted[index].score) {
-    rank -= 1;
+function competitionRanks(sorted) {
+  const ranks = [];
+  let rank = 0;
+  for (let index = 0; index < sorted.length; index++) {
+    if (index > 0 && sorted[index - 1].score === sorted[index].score) ranks.push(rank);
+    else {
+      rank = index + 1;
+      ranks.push(rank);
+    }
   }
-  return rank;
+  return ranks;
 }
