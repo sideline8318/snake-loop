@@ -6,7 +6,7 @@ const path = require('node:path');
 const THREE_MATCH_WORKFLOW_ID = 'a3d16e35-bd65-41e1-b430-995f7151e2a6';
 const RELEASE_WORKFLOW_ID = '86ed0cf8-a021-46c5-9639-81871d2b2463';
 const LEGACY_WORKFLOW_ID = '82cd3989-8762-4d92-9ad5-8f0218ce2863';
-// 交付 workflow：结算排名与再来一局体验（development.work.1 attempt 6）。
+// 交付 workflow：结算排名与再来一局体验（development.work.1 attempt 7）。
 // 发布根与 legacy 页面都携带该标记，供 preview/部署门禁比对当前 Workflow。
 const DELIVERY_WORKFLOW_ID = '4685ae3a-d06a-4da9-aee8-63a819398d73';
 
@@ -41,7 +41,7 @@ function releaseRootPlugin() {
         'workflow-release': `${RELEASE_WORKFLOW_ID} / release-root-fix`,
         description:
           '消消乐 · 3D 三消 Web 小游戏，交换相邻宝石连成三个以上即可消除得分',
-        'workflow-marker-current': `消消乐 · 3D 三消 | workflow ${DELIVERY_WORKFLOW_ID} | development.work.1 attempt 6`,
+        'workflow-marker-current': `消消乐 · 3D 三消 | workflow ${DELIVERY_WORKFLOW_ID} | development.work.1 attempt 7`,
         'workflow-id-current': DELIVERY_WORKFLOW_ID,
       };
       for (const [name, content] of Object.entries(meta)) {

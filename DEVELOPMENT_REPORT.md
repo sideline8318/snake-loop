@@ -1,19 +1,19 @@
 开发交付记录：结算排名与再来一局
 
 - artifact_type: development_report
-- activity_id: b53d288f-0410-4432-8bf4-2e5019ebbea7
+- activity_id: c93ea179-2132-4324-9348-0020e2350b9b
 - activity_key: development.work.1
 - stage: development
-- stage_run_id: 7b50bcc8-1cb1-4bad-8212-2894380056fa
+- stage_run_id: b3600d50-bdc3-40f9-af35-ccceb2e5218d
 - workflow_id: 4685ae3a-d06a-4da9-aee8-63a819398d73
 - generation: 1
-- input_manifest_sha256: 36d3fe0abe300f6e85e3bcc7ec0536fd863b0cb0ac36368f7fdf1c44d568816f
+- input_manifest_sha256: 4a48ecc2f607984e987aeab62f1f29bf9511322156730f2891494a6ce4fbbb1e
 - upstream_technical_design_sha256: 6d82d988f9bf2877318cef552ebb05cf11f3efc94078e661d95689816a599c74
 - upstream_technical_design_commit: c28857358a3aa0bd7231682bf1eef76c44ceeaaa
 - primary_repo: https://github.com/sideline8318/snake-loop
 - work_branch: loop-20261021-178786
 - functional_commit_anchor: 与本报告同一功能提交，即 StageResult 的 git_commit_sha
-- stage_attempt: 6
+- stage_attempt: 7
 - release_candidate_commit: 由 StageResult 的 git_commit_sha 给出，为本报告所在的功能提交
 - anchor_policy: release_candidate / DEVELOPMENT_REPORT / RELEASE_CANDIDATE_DEVELOPMENT / StageResult 的 git_commit_sha 完全相同，均为本阶段功能提交的完整 SHA
 
