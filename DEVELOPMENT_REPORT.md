@@ -32,7 +32,7 @@
 - unit_tests：npm test，6 个文件 76 条用例全部通过。
 - build：npm run build，exit 0，dist 含贪吃蛇与三消双入口。
 - 黑盒回归：npm run test:e2e，52 条全部通过，fail 0。
-- preview_http_200：vite preview 常驻 0.0.0.0:8080；本地 / 与 /legacy-snake/index.html 均 200 且含 marker 4685ae3a-d06a-4da9-aee8-63a819398d73；request_preview(8080) 返回 http://preview.mcode.side419.cn:30148，其 / 与 /legacy-snake/index.html 均 HTTP 200，marker 与 attempt 5 均命中。
+- preview_http_200：vite preview 常驻 0.0.0.0:8080；本地 / 与 /legacy-snake/index.html 均 200 且含 marker 4685ae3a-d06a-4da9-aee8-63a819398d73；request_preview(8080) 返回 http://preview.mcode.side419.cn:30155，其 / 与 /legacy-snake/index.html 均 HTTP 200，正文命中 workflow marker 4685ae3a 与 attempt 7。
 - git_commit_pushed：git push origin HEAD 后远程 loop-20261021-178786 HEAD 前进到本阶段功能提交，与本地 HEAD 一致，可用 git ls-remote 复核。
 
 ## 3. 验收标准映射
