@@ -14,7 +14,7 @@
 - work_branch: loop-20261021-178786
 - base_head_before_stage: 5330c18ccff97042e1d320e1b2e32ee192df6d9e
 - stage_attempt: 2
-- 923c26466d04969b96501f8288c79a6af4fd13
+- release_candidate_commit: 77923c26466d04969b96501f8288c79a6af4fd13
 
 ## 1. 交付内容（T1–T5 全部完成）
 
