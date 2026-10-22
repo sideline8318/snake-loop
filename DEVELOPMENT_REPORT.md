@@ -1,19 +1,20 @@
 # 开发交付记录：结算排名与再来一局
 
 - artifact_type: development_report
-- activity_id: 07bced0b-9b49-4db2-829b-c2a1e009666c
+- activity_id: 68eedcb5-43bd-44df-87cc-e8af037367c5
 - activity_key: development.work.1
 - stage: development
-- stage_run_id: 03e7b8df-11ea-4702-8938-eba2ec18c3a8
+- stage_run_id: 43a6d69c-22ad-4ddb-a8dc-d4c556e80833
 - workflow_id: 4685ae3a-d06a-4da9-aee8-63a819398d73
 - generation: 1
-- input_manifest_sha256: 4d3a5689ed6fd648284791512c97b2542b2df907bac758d7d67635a74ff20a36
+- input_manifest_sha256: 364a58b4daceb1e984238161b9e9b20e2289116791934f53acfca37098fc7ebf
 - upstream_technical_design_sha256: 6d82d988f9bf2877318cef552ebb05cf11f3efc94078e661d95689816a599c74
 - upstream_technical_design_commit: c28857358a3aa0bd7231682bf1eef76c44ceeaaa
 - primary_repo: https://github.com/sideline8318/snake-loop
 - work_branch: loop-20261021-178786
-- base_head_before_stage: 8c081dffe0cf5c86462a3382fbe6f019f27527cf
-- release_candidate_commit: 15cef6a814f7598d99be843f963e2a0f3c2c0e54
+- base_head_before_stage: 5330c18ccff97042e1d320e1b2e32ee192df6d9e
+- stage_attempt: 2
+- release_candidate_commit: 8021cc5f284c454e12e3323deb2fecd6c222f06d
 
 ## 1. 交付内容（T1–T5 全部完成）
 
@@ -34,14 +35,14 @@
 | unit_tests | `npm test` | 6 个文件 71 条用例全部通过 |
 | build | `npm run build` | 通过，产出 dist/ 含贪吃蛇与三消双入口 |
 | unit 黑盒 | `npm run test:e2e` | 52 条用例全部通过（fail 0） |
-| preview_http_200 | `curl http://127.0.0.1:8080` 与预览 URL | HTTP 200，正文含 `rankingList` 与「再来一局」 |
-| git_commit_pushed | `git push origin HEAD` | 远程 `loop-20261021-178786` 由 8c081df 前进到 15cef6a |
+| preview_http_200 | `curl http://127.0.0.1:4173/` 与 `http://preview.mcode.side419.cn:30134/` | 本地与外部均 HTTP 200，正文含 workflow marker `4685ae3a-d06a-4da9-aee8-63a819398d73` 与 `rankingList` |
+| git_commit_pushed | `git push origin HEAD` | 远程 `loop-20261021-178786` 由 5330c18 前进到 `7be3615` |
 
 ## 3. 预览说明
 
-- 应用以 `vite --host 0.0.0.0 --port 8080` 后台进程常驻，本地 `http://127.0.0.1:8080/legacy-snake/index.html` 返回 200 且含本阶段新增标记。
-- `request_preview(8080)` 返回 `http://preview.mcode.side419.cn:30128`；该地址 HTTP 访问返回 200 并包含 `rankingList` 与「再来一局」。
-- 该预览端点在本环境不支持 TLS（`openssl s_client` 报 `wrong version number`，https 访问返回 000），因此 preview_http_200 以已验证的 HTTP 预览地址为准，属平台隧道限制，非应用缺陷。
+- 应用以 `vite preview --host 0.0.0.0 --port 4173` 后台进程常驻，本地 `http://127.0.0.1:4173/` 与 `/legacy-snake/` 均返回 200，且均含产物内嵌的当前 Workflow marker `4685ae3a-d06a-4da9-aee8-63a819398d73`。
+- `request_preview(4173)` 返回 `http://preview.mcode.side419.cn:30134`；该地址根路径与 `/legacy-snake/` 均返回 200，正文含同一 marker 与 `rankingList`。
+- 该预览端点的 HTTPS 变体在本环境不可用（`curl https://…:30134` 返回 000，`openssl s_client` 报 `wrong version number`），因此 preview_http_200 以已验证的 HTTP 预览地址为准，属平台隧道限制，非应用缺陷。
 
 ## 4. 验收标准映射
 
