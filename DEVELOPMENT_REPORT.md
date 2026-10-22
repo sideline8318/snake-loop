@@ -14,7 +14,7 @@
 - work_branch: loop-20261021-178786
 - base_head_before_stage: 5330c18ccff97042e1d320e1b2e32ee192df6d9e
 - stage_attempt: 2
-- release_candidate_commit: 1a778e5d3e65e7abc292f9d36402270e1e9aba9d
+- release_candidate_commit: fc68621624f936e9951619c722ffc80e8f30def3
 
 ## 1. 交付内容（T1–T5 全部完成）
 
@@ -36,7 +36,7 @@
 | build | `npm run build` | 通过，产出 dist/ 含贪吃蛇与三消双入口 |
 | unit 黑盒 | `npm run test:e2e` | 52 条用例全部通过（fail 0） |
 | preview_http_200 | `curl http://127.0.0.1:4173/` 与 `http://preview.mcode.side419.cn:30134/` | 本地与外部均 HTTP 200，正文含 workflow marker `4685ae3a-d06a-4da9-aee8-63a819398d73` 与 `rankingList` |
-| git_commit_pushed | `git push origin HEAD` | 远程 `loop-20261021-178786` 由 5330c18 前进到 `1a778e5` |
+| git_commit_pushed | `git push origin HEAD` | 远程 `loop-20261021-178786` 由 5330c18 前进到 `fc68621` |
 
 ## 3. 预览说明
 

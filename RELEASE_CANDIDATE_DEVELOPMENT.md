@@ -14,8 +14,8 @@
 - input_context_baseline_ref: technical_design sha256 `6d82d988f9bf2877318cef552ebb05cf11f3efc94078e661d95689816a599c74`
 - upstream_baseline_commit: c28857358a3aa0bd7231682bf1eef76c44ceeaaa
 - base_head_before_stage: 5330c18ccff97042e1d320e1b2e32ee192df6d9e
-- release_candidate_commit: 1a778e5d3e65e7abc292f9d36402270e1e9aba9d
-- release_candidate_commit_sha256: af29334a128e06912aee0057fd77571a3ca6a6e12edd9ba133dec73959dce979
+- release_candidate_commit: fc68621624f936e9951619c722ffc80e8f30def3
+- release_candidate_commit_sha256: 90fbdfdc8ac3164476321984f092cad48667e0838d5a5acc48925c84d97c09de
 
 ## 本轮目的：修复发布候选锚点不可追溯
 
