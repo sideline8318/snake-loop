@@ -25,7 +25,7 @@
   `git cat-file -t 5330c18ccff97042e1d320e1b2e32ee192df6d9e` 验证。
 - 本轮代码修复提交为 `8ac430c`，是 `5330c18` 的直接后裔；发布候选锚点提交 `c160cb36762d08806cdce9b5b8a75fd1176e59d5`
   又是 `8ac430c` 的直接后裔，三者同处 `loop-20261021-178786` 祖先链上。
-- 发布候选提交对象 SHA-256 为 `f98ac35bcb909027de05fa1f370789acfeb6fcf6c7f1c5a03fee7e2156d35f43`，
+- 发布候选提交对象 SHA-256 为 `8e6137c3fbad9325af336e21a1b14eb54b8d94fea66a5e66c93267e5763aa64e`，
   可由 `git cat-file -p <release_candidate_commit> | sha256sum` 复算。
 - 不再引用不可验证的 `15cef6a`、`8c081df`、`a354f04`。
 
