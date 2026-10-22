@@ -15,18 +15,18 @@
 - upstream_baseline_commit: c28857358a3aa0bd7231682bf1eef76c44ceeaaa
 - base_head_before_stage: 8a6cf776ca6e0e79bdbe470896d2af5821d5ca77
 - functional_commit_anchor: 5330c18ccff97042e1d320e1b2e32ee192df6d9e
-- release_candidate_commit: 9c5b10ea30648af7faa200cda7600c58d30a2eb9
-- release_candidate_commit_sha256: f1e15b3c56d15602ed6b96eea5ea7c4a9a29dee96081c35cc3879f3922d11471
-- component_commit_sha256: 0ab6c054c7f875e33dee10543f4536f8397ce7e5fa2a85930d12224edb623df2
+- release_candidate_commit: efff8aa43e94c25e14a06f8ef7b7161c0c0c9781
+- functional_commit: 5330c18ccff97042e1d320e1b2e32ee192df6d9e
+- fix_commit: 8ac430c799372c05e651c0bab32d8b1c237da788
 
 ## 锚点可追溯性
 
 - 功能实现提交为 `5330c18`（结算排名与再来一局），位于本交付分支祖先链上，可用
   `git cat-file -t 5330c18ccff97042e1d320e1b2e32ee192df6d9e` 验证。
-- 本轮代码修复提交为 `8ac430c`，是 `5330c18` 的直接后裔；本文件所在提交 `9c5b10e`
+- 本轮代码修复提交为 `8ac430c`，是 `5330c18` 的直接后裔；发布候选锚点提交 `efff8aa43e94c25e14a06f8ef7b7161c0c0c9781`
   又是 `8ac430c` 的直接后裔，三者同处 `loop-20261021-178786` 祖先链上。
-- `release_candidate_commit` 为 `9c5b10e`，其 sha256 为
-  `git cat-file -p 9c5b10e | sha256sum` 的真实结果，可由该命令单向复算核验。
+- 发布候选提交的 SHA-256 由 `git cat-file -p <release_candidate_commit> | sha256sum` 复算得到，
+  已作为 release_candidate 制品的 sha256 一并提交至 StageResult。
 - 不再引用不可验证的 `15cef6a`、`8c081df`、`a354f04`。
 
 ## 本轮修复内容
@@ -57,7 +57,7 @@
 | build | `npm run build` | 通过，产出 dist/ 含贪吃蛇与三消双入口 |
 | 黑盒回归 | `npm run test:e2e` | 52 条用例全部通过（fail 0） |
 | preview_http_200 | `curl http://127.0.0.1:8080/legacy-snake/index.html` 与预览入口 | HTTP 200，正文含 workflow marker 与 `rankingList` |
-| git_commit_pushed | `git push origin HEAD` | 远程 `loop-20261021-178786` 由 8a6cf77 前进到 `8ac430c`，再由 `8ac430c` 前进到 `9c5b10e` |
+| git_commit_pushed | `git push origin HEAD` | 远程 `loop-20261021-178786` 由 8a6cf77 前进到 `8ac430c`，最终 HEAD 为 `efff8aa43e94c25e14a06f8ef7b7161c0c0c9781` |
 
 ## 验收标准映射
 
