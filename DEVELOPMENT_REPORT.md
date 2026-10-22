@@ -15,7 +15,7 @@
 - base_head_before_stage: 8a6cf776ca6e0e79bdbe470896d2af5821d5ca77
 - functional_commit_anchor: 5330c18ccff97042e1d320e1b2e32ee192df6d9e
 - stage_attempt: 3
-- release_candidate_commit: 2988c5fd9acdfca6451fea0fc65fe191734b4267
+- release_candidate_commit: d344e1d42d56afc22ad3d81eeeec396b804c9836
 - fix_commit: 8ac430c799372c05e651c0bab32d8b1c237da788
 
 ## 1. 交付内容（T1–T5 全部完成）
@@ -38,7 +38,7 @@
 | build | `npm run build` | 通过，产出 dist/ 含贪吃蛇与三消双入口 |
 | unit 黑盒 | `npm run test:e2e` | 52 条用例全部通过（fail 0） |
 | preview_http_200 | `curl http://127.0.0.1:8080/legacy-snake/index.html` 与 `http://preview.mcode.side419.cn:30142/legacy-snake/index.html` | 本地与外部均 HTTP 200，正文含 workflow marker `4685ae3a-d06a-4da9-aee8-63a819398d73` 与 `rankingList` |
-| git_commit_pushed | `git push origin HEAD` | 远程 `loop-20261021-178786` 由 8a6cf77 前进到 `8ac430c`，最终 HEAD 为 `2988c5f` |
+| git_commit_pushed | `git push origin HEAD` | 远程 `loop-20261021-178786` 由 8a6cf77 前进到 `8ac430c`，最终 HEAD 为 `d344e1d` |
 
 ## 3. 预览说明
 
