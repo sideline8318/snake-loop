@@ -42,6 +42,7 @@ test('release root markup carries settlement ranking and replay controls', () =>
   for (const id of ['gameCanvas', 'score', 'player1Score', 'player2Score', 'ranking', 'rankingList', 'playAgainBtn']) {
     assert.ok(html.includes('id="' + id + '"'), 'dist/index.html missing #' + id);
   }
+  assert.match(html, /id="rankingList"[^>]*aria-live="polite"[^>]*aria-atomic="true"/);
 });
 
 test('release root bundle is valid JS and carries the snake engine', () => {
