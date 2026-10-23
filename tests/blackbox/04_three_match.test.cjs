@@ -87,12 +87,12 @@ test('serves the three-match page and its assets over HTTP', async () => {
   assert.match(cssRes.type, /text\/css/);
 });
 
-test('release root serves three-match while the legacy snake entry stays reachable off-root', async () => {
+test('release root serves snake while three-match stays reachable off-root', async () => {
   const root = await get('/');
   assert.equal(root.status, 200);
   const rootBody = root.body.toString('utf8');
-  assert.match(rootBody, /消消乐 · 3D 三消/);
-  assert.doesNotMatch(rootBody, /Web版多用户同屏贪吃蛇大战/);
+  assert.match(rootBody, /Web版多用户同屏贪吃蛇大战/);
+  assert.doesNotMatch(rootBody, /消消乐 · 3D 三消/);
   const alias = await get('/three-match/index.html');
   assert.equal(alias.status, 200);
   assert.match(alias.body.toString('utf8'), /消消乐 · 3D 三消/);

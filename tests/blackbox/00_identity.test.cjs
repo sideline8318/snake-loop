@@ -8,8 +8,7 @@ const { DIST, DIST_LEGACY, distAssets, distAssetsFor, sha256 } = require('../bla
 const BASELINE_RC1_SHA256 = '90d739db3dc6cd7f15cbc9645b870311cec115b437ebc0db6256d033451aaf05';
 const BASELINE_RC1_GIT = '48fea910d1e6f4755bcbbef31d8d2584d730eb3b';
 const SNAKE_WORKFLOW_ID = '82cd3989-8762-4d92-9ad5-8f0218ce2863';
-const THREE_MATCH_WORKFLOW_ID = 'a3d16e35-bd65-41e1-b430-995f7151e2a6';
-const RELEASE_WORKFLOW_ID = '86ed0cf8-a021-46c5-9639-81871d2b2463';
+const DELIVERY_WORKFLOW_ID = '4685ae3a-d06a-4da9-aee8-63a819398d73';
 const LEGACY_PAGE = 'legacy-snake/index.html';
 
 test('artifact identity: baseline RC1 archive hash was verified against upstream', () => {
@@ -17,7 +16,7 @@ test('artifact identity: baseline RC1 archive hash was verified against upstream
   assert.match(BASELINE_RC1_GIT, /^[0-9a-f]{40}$/);
 });
 
-test('release root dist exists with three-match layout', () => {
+test('release root dist exists with snake layout', () => {
   const { html, js, css } = distAssets();
   const jsFile = path.join(DIST, 'assets', js);
   const cssFile = path.join(DIST, 'assets', css);
@@ -29,34 +28,31 @@ test('release root dist exists with three-match layout', () => {
   console.log('[dist] css_sha256=' + sha256(fs.readFileSync(cssFile)));
 });
 
-test('release root markup is the three-match app, free of any other app identity', () => {
+test('release root markup is the multiplayer snake app', () => {
   const html = fs.readFileSync(path.join(DIST, 'index.html'), 'utf8');
-  assert.match(html, /<title>消消乐 · 3D 三消<\/title>/);
-  assert.match(html, /消消乐 · 3D 三消/);
-  assert.match(html, new RegExp(THREE_MATCH_WORKFLOW_ID));
-  assert.match(html, new RegExp(RELEASE_WORKFLOW_ID));
-  assert.doesNotMatch(html, /Web版多用户同屏贪吃蛇大战/);
-  assert.doesNotMatch(html, /snake-loop-competition/);
-  assert.doesNotMatch(html, new RegExp(SNAKE_WORKFLOW_ID));
-  assert.doesNotMatch(html, /postdeploy/);
+  assert.match(html, /<title>Web版多用户同屏贪吃蛇大战<\/title>/);
+  assert.match(html, /Web版多用户同屏贪吃蛇大战/);
+  assert.match(html, /snake-loop-competition/);
+  assert.match(html, new RegExp(DELIVERY_WORKFLOW_ID));
+  assert.doesNotMatch(html, /消消乐 · 3D 三消/);
 });
 
-test('release root markup carries the three-match HUD contract ids', () => {
+test('release root markup carries settlement ranking and replay controls', () => {
   const html = fs.readFileSync(path.join(DIST, 'index.html'), 'utf8');
-  for (const id of ['gameCanvas', 'score', 'bestScore', 'combo', 'toast', 'restartBtn', 'startBtn', 'menuOverlay']) {
+  for (const id of ['gameCanvas', 'score', 'player1Score', 'player2Score', 'ranking', 'rankingList', 'playAgainBtn']) {
     assert.ok(html.includes('id="' + id + '"'), 'dist/index.html missing #' + id);
   }
 });
 
-test('release root bundle is valid JS and carries the three-match engine', () => {
+test('release root bundle is valid JS and carries the snake engine', () => {
   const { jsFiles } = distAssetsFor('index.html');
   const primary = jsFiles.find((f) => !f.startsWith('modulepreload')) || jsFiles[0];
   const buf = fs.readFileSync(path.join(DIST, 'assets', primary));
   const src = buf.toString('utf8');
-  assert.match(src, /BOARD_SIZE/);
-  assert.match(src, /three-match-best-score/);
-  assert.match(src, /没有可消除的组合，已自动洗牌/);
-  assert.ok(buf.length > 100000, 'bundle should embed three.js');
+  assert.match(src, /snake-loop-high-score/);
+  assert.match(src, /getSettlement/);
+  assert.match(src, /并列/);
+  assert.ok(buf.length > 5000, 'bundle should contain the snake application');
   const evaluable = src.replace(/^import[^;]+;/gm, '');
   assert.doesNotThrow(() => new Function(evaluable.replaceAll('</', '<\\/')), 'bundle syntax error');
 });

@@ -6,8 +6,8 @@ const path = require('path');
 const { spawnSync } = require('child_process');
 const { ROOT, DIST, distAssetsFor, sha256 } = require('../blackbox/helpers.cjs');
 
-const PAGE = 'index.html';
-const ALIAS_PAGE = 'three-match/index.html';
+const PAGE = 'three-match/index.html';
+const ROOT_PAGE = 'index.html';
 
 // 通过 node 子进程导入 ESM 源码模块，避免在 blackbox（CJS）中直接 import。
 function runEsm(script) {
@@ -21,24 +21,22 @@ function runEsm(script) {
   return JSON.parse(result.stdout.trim().split('\n').pop());
 }
 
-test('AC-001: release root opens directly as three-match with start/restart controls', () => {
-  const { html } = distAssetsFor(PAGE);
-  assert.match(html, /<title>消消乐 · 3D 三消<\/title>/);
-  assert.doesNotMatch(html, /Web版多用户同屏贪吃蛇大战/);
-  assert.match(html, /<button id="restartBtn"/);
-  assert.match(html, /<button id="startBtn"/);
+test('AC-001: release root opens directly as multiplayer snake with settlement controls', () => {
+  const { html } = distAssetsFor(ROOT_PAGE);
+  assert.match(html, /<title>Web版多用户同屏贪吃蛇大战<\/title>/);
+  assert.doesNotMatch(html, /消消乐 · 3D 三消/);
+  assert.match(html, /<button id="playAgainBtn"/);
+  assert.match(html, /id="rankingList"/);
   assert.match(html, /id="gameCanvas"/);
-  // 发布根入口独立可访问，不依赖外部构建命令
-  assert.ok(fs.existsSync(path.join(DIST, PAGE)));
+  assert.ok(fs.existsSync(path.join(DIST, ROOT_PAGE)));
 });
 
-test('AC-001/AC-003: release root and the three-match alias render the same app', () => {
-  const root = distAssetsFor(PAGE).html;
-  const alias = distAssetsFor(ALIAS_PAGE).html;
+test('AC-001/AC-003: three-match remains available only on its non-root path', () => {
+  const root = distAssetsFor(ROOT_PAGE).html;
+  const alias = distAssetsFor(PAGE).html;
   assert.match(alias, /<title>消消乐 · 3D 三消<\/title>/);
-  // 两者复用同一套 HUD 契约与控制入口
+  assert.doesNotMatch(root, /<title>消消乐 · 3D 三消<\/title>/);
   for (const id of ['gameCanvas', 'score', 'bestScore', 'combo', 'startBtn', 'restartBtn']) {
-    assert.ok(root.includes('id="' + id + '"'), 'release root missing #' + id);
     assert.ok(alias.includes('id="' + id + '"'), 'alias missing #' + id);
   }
 });

@@ -33,7 +33,7 @@ function get(rel) {
   });
 }
 
-test('serves the release root (three-match) over HTTP with correct types', async () => {
+test('serves the multiplayer snake release root over HTTP with correct types', async () => {
   const { js, css } = distAssets();
   const html = await get('/');
   assert.equal(html.status, 200);
@@ -45,9 +45,9 @@ test('serves the release root (three-match) over HTTP with correct types', async
   assert.equal(cssRes.status, 200);
   assert.match(cssRes.type, /text\/css/);
   const body = html.body.toString('utf8');
-  assert.match(body, /消消乐 · 3D 三消/);
-  assert.doesNotMatch(body, /Web版多用户同屏贪吃蛇大战/);
-  assert.doesNotMatch(body, /snake-loop-competition/);
+  assert.match(body, /Web版多用户同屏贪吃蛇大战/);
+  assert.match(body, /snake-loop-competition/);
+  assert.doesNotMatch(body, /消消乐 · 3D 三消/);
 });
 
 test('all assets referenced by index.html resolve 200', async () => {
@@ -64,11 +64,11 @@ test('unknown routes 404', async () => {
   assert.equal((await get('/nope.js')).status, 404);
 });
 
-test('deployment smoke: release-root marker present in the served HTML head', async () => {
+test('deployment smoke: snake workflow marker present in the served HTML head', async () => {
   const html = await get('/index.html');
   assert.equal(html.status, 200);
   const body = html.body.toString('utf8');
-  assert.match(body, /<meta name="workflow-marker" content="消消乐 · 3D 三消/);
+  assert.match(body, /<meta name="workflow-marker" content="Web版多用户同屏贪吃蛇大战 \| workflow 4685ae3a-d06a-4da9-aee8-63a819398d73/);
 });
 
 test('legacy snake page is isolated off the release root and its assets resolve', async () => {
