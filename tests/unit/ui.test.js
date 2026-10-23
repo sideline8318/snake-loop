@@ -164,6 +164,7 @@ describe('UI settlement ranking', () => {
     expect(rows).toHaveLength(2);
     expect(rows[0].getAttribute('data-rank')).toBe('1');
     expect(rows[0].getAttribute('data-player')).toBe('player2');
+    expect(rows[0].getAttribute('data-score')).toBe('40');
     expect(rows[0].querySelector('.rank-name').textContent).toBe('玩家 2');
     expect(rows[0].querySelector('.rank-score').textContent).toBe('40');
     expect(rows[1].getAttribute('data-rank')).toBe('2');

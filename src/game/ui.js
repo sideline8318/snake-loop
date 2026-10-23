@@ -93,6 +93,7 @@ export class UI {
       row.className = 'ranking-row';
       row.setAttribute('data-rank', String(entry.rank));
       row.setAttribute('data-player', entry.playerId);
+      row.setAttribute('data-score', String(entry.score));
       if (entry.tied) {
         row.setAttribute('data-tied', 'true');
         row.classList.add('rank-tied');
