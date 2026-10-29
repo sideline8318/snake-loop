@@ -9,7 +9,7 @@ const BASELINE_RC1_SHA256 = '90d739db3dc6cd7f15cbc9645b870311cec115b437ebc0db625
 const BASELINE_RC1_GIT = '48fea910d1e6f4755bcbbef31d8d2584d730eb3b';
 const SNAKE_WORKFLOW_ID = '82cd3989-8762-4d92-9ad5-8f0218ce2863';
 const DELIVERY_WORKFLOW_ID = '4685ae3a-d06a-4da9-aee8-63a819398d73';
-const DEVELOPMENT_ACTIVITY_ID = '991321c4-db46-4409-b501-4157283a50cb';
+const DEPLOYMENT_ACTIVITY_ID = '0f3c2457-b41d-4656-b044-76b9c0e13a7d';
 const LEGACY_PAGE = 'legacy-snake/index.html';
 
 test('artifact identity: baseline RC1 archive hash was verified against upstream', () => {
@@ -35,7 +35,7 @@ test('release root markup is the multiplayer snake app', () => {
   assert.match(html, /Web版多用户同屏贪吃蛇大战/);
   assert.match(html, /snake-loop-competition/);
   assert.match(html, new RegExp(DELIVERY_WORKFLOW_ID));
-  assert.match(html, new RegExp(DEVELOPMENT_ACTIVITY_ID));
+  assert.match(html, new RegExp(DEPLOYMENT_ACTIVITY_ID));
   assert.doesNotMatch(html, /消消乐 · 3D 三消/);
 });
 
